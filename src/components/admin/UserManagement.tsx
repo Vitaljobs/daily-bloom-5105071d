@@ -184,6 +184,7 @@ export const UserManagement = () => {
                         <Switch
                           checked={profile.premium_tier === "premium" || profile.premium_tier === "vip"}
                           onCheckedChange={() => handlePremiumToggle(profile)}
+                          className="data-[state=unchecked]:bg-muted-foreground/30 data-[state=unchecked]:border-muted-foreground/50 data-[state=checked]:bg-amber-500 border-2"
                         />
                         {(profile.premium_tier === "premium" || profile.premium_tier === "vip") && (
                           <Crown className="w-4 h-4 text-amber-400" />
@@ -201,6 +202,7 @@ export const UserManagement = () => {
                         <Switch
                           checked={(profile.lab_visits || 0) >= 30}
                           onCheckedChange={() => handleLocalGuideToggle(profile)}
+                          className="data-[state=unchecked]:bg-muted-foreground/30 data-[state=unchecked]:border-muted-foreground/50 data-[state=checked]:bg-neon-green border-2"
                         />
                         {(profile.lab_visits || 0) >= 30 && (
                           <MapPin className="w-4 h-4 text-neon-green" />
