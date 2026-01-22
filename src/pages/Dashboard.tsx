@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SocialRadar } from "@/components/dashboard/SocialRadar";
 import { SkillsWidget } from "@/components/dashboard/SkillsWidget";
@@ -9,6 +10,8 @@ import { LocationSelector } from "@/components/dashboard/LocationSelector";
 import { MatchRevealOverlay } from "@/components/dashboard/MatchRevealOverlay";
 import { WelcomeOverlay } from "@/components/dashboard/WelcomeOverlay";
 import { ChatOverlay } from "@/components/chat/ChatOverlay";
+import { MyNetworkWidget } from "@/components/dashboard/MyNetworkWidget";
+import { OnboardingFlow } from "@/components/onboarding/OnboardingFlow";
 import { CommonGroundProvider, useCommonGround } from "@/contexts/CommonGroundContext";
 
 // Staggered animation for grid items
@@ -52,6 +55,8 @@ const itemVariants = {
 };
 
 const DashboardContent = () => {
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  
   const { 
     currentLocation, 
     setCurrentLocation, 
@@ -68,6 +73,19 @@ const DashboardContent = () => {
     chatPartner,
     closeChat,
   } = useCommonGround();
+
+  // Check if first visit for onboarding
+  useEffect(() => {
+    const hasSeenOnboarding = localStorage.getItem("cg-onboarding-complete");
+    if (!hasSeenOnboarding) {
+      setShowOnboarding(true);
+    }
+  }, []);
+
+  const handleOnboardingClose = () => {
+    setShowOnboarding(false);
+    localStorage.setItem("cg-onboarding-complete", "true");
+  };
 
   // Current user mock data
   const currentUser = {
@@ -130,7 +148,7 @@ const DashboardContent = () => {
 
               {/* Row 2 */}
               <motion.div variants={itemVariants}>
-                <SocialRadar />
+                <SmartMatch />
               </motion.div>
               
               <motion.div variants={itemVariants}>
@@ -141,13 +159,9 @@ const DashboardContent = () => {
                 <TableTent />
               </motion.div>
 
-              {/* Row 3 */}
-              <motion.div variants={itemVariants}>
-                <TableTent />
-              </motion.div>
-              
-              <motion.div variants={itemVariants}>
-                <SmartMatch />
+              {/* Row 3 - My Network Widget */}
+              <motion.div variants={itemVariants} className="lg:col-span-2">
+                <MyNetworkWidget />
               </motion.div>
               
               <motion.div variants={itemVariants}>
@@ -180,6 +194,12 @@ const DashboardContent = () => {
         onClose={closeChat}
         chatPartner={chatPartner}
         currentLabName={currentLab?.name}
+      />
+
+      {/* Onboarding Flow */}
+      <OnboardingFlow
+        isOpen={showOnboarding}
+        onClose={handleOnboardingClose}
       />
     </div>
   );
