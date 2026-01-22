@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,6 @@ import { Coffee, Loader2, ArrowLeft } from "lucide-react";
 
 const Auth = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,13 +20,16 @@ const Auth = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // Check if this is a password reset callback
+  // Listen for PASSWORD_RECOVERY event from Supabase
   useEffect(() => {
-    const type = searchParams.get("type");
-    if (type === "recovery") {
-      setShowResetPassword(true);
-    }
-  }, [searchParams]);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "PASSWORD_RECOVERY") {
+        setShowResetPassword(true);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
