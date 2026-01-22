@@ -18,6 +18,7 @@ import { UpgradeButton } from "@/components/premium/UpgradeButton";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { AdminLink } from "@/components/admin/AdminLink";
 import { BottomNav } from "@/components/navigation/BottomNav";
+import { QRWelcomeAnimation } from "@/components/dashboard/QRWelcomeAnimation";
 import { CommonGroundProvider, useCommonGround } from "@/contexts/CommonGroundContext";
 import { PremiumProvider } from "@/contexts/PremiumContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
@@ -80,6 +81,8 @@ const DashboardContent = () => {
     isChatOpen,
     chatPartner,
     closeChat,
+    showQRWelcome,
+    closeQRWelcome,
   } = useCommonGround();
 
   // Check if first visit for onboarding
@@ -202,6 +205,13 @@ const DashboardContent = () => {
         onClose={closeChat}
         chatPartner={chatPartner}
         currentLabName={currentLab?.name}
+      />
+
+      {/* QR Check-in Welcome Animation */}
+      <QRWelcomeAnimation
+        isVisible={showQRWelcome}
+        labName={currentLab?.name || ""}
+        onComplete={closeQRWelcome}
       />
 
       {/* Onboarding Flow */}

@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useState, useMemo, ReactNode, useCallback } from "react";
+import React, { createContext, useContext, useState, useMemo, ReactNode, useCallback, useEffect } from "react";
 import { UserProfile, UserStatus, AggregatedSkill } from "@/types/common-ground";
 import { checkedInUsers as mockUsers } from "@/data/mock-users";
 import { labs, Lab, getLabById } from "@/data/labs";
+import { useSearchParams } from "react-router-dom";
 
 interface CommonGroundContextType {
   // Current user
@@ -48,6 +49,11 @@ interface CommonGroundContextType {
   closeWelcome: () => void;
   visitedLabs: Set<string>;
 
+  // QR Check-in
+  isQRCheckIn: boolean;
+  showQRWelcome: boolean;
+  closeQRWelcome: () => void;
+
   // Chat
   isChatOpen: boolean;
   chatPartner: UserProfile | null;
@@ -60,6 +66,7 @@ interface CommonGroundContextType {
 const CommonGroundContext = createContext<CommonGroundContextType | undefined>(undefined);
 
 export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [currentUserStatus, setCurrentUserStatus] = useState<UserStatus>("open");
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
   const [checkedInUsers] = useState<UserProfile[]>(mockUsers);
@@ -78,10 +85,43 @@ export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
   const [showWelcome, setShowWelcome] = useState(true);
   const [visitedLabs, setVisitedLabs] = useState<Set<string>>(new Set());
 
+  // QR Check-in state
+  const [isQRCheckIn, setIsQRCheckIn] = useState(false);
+  const [showQRWelcome, setShowQRWelcome] = useState(false);
+
   // Chat state
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatPartner, setChatPartner] = useState<UserProfile | null>(null);
   const [hasActiveChat, setHasActiveChat] = useState(false);
+
+  // Handle QR deep-link on mount
+  useEffect(() => {
+    const labParam = searchParams.get("lab");
+    if (labParam) {
+      const lab = getLabById(labParam);
+      if (lab) {
+        // Check if this is a first-time QR check-in
+        const qrCheckIns = localStorage.getItem("cg-qr-checkins");
+        const previousCheckIns: string[] = qrCheckIns ? JSON.parse(qrCheckIns) : [];
+        const isFirstQRCheckIn = !previousCheckIns.includes(labParam);
+
+        if (isFirstQRCheckIn) {
+          setIsQRCheckIn(true);
+          setShowQRWelcome(true);
+          // Save this check-in
+          localStorage.setItem("cg-qr-checkins", JSON.stringify([...previousCheckIns, labParam]));
+        }
+
+        // Set the location
+        setCurrentLocationState(labParam);
+        setVisitedLabs((prev) => new Set([...prev, labParam]));
+        setShowWelcome(false); // Don't show regular welcome for QR
+        
+        // Clear the URL param
+        setSearchParams({}, { replace: true });
+      }
+    }
+  }, [searchParams, setSearchParams]);
 
   // Current lab
   const currentLab = useMemo(() => getLabById(currentLocation), [currentLocation]);
@@ -190,6 +230,12 @@ export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
     setShowWelcome(false);
   }, []);
 
+  // Close QR welcome animation
+  const closeQRWelcome = useCallback(() => {
+    setShowQRWelcome(false);
+    setIsQRCheckIn(false);
+  }, []);
+
   // Chat functions
   const openChat = useCallback((user: UserProfile) => {
     setChatPartner(user);
@@ -235,6 +281,9 @@ export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
         showWelcome,
         closeWelcome,
         visitedLabs,
+        isQRCheckIn,
+        showQRWelcome,
+        closeQRWelcome,
         isChatOpen,
         chatPartner,
         openChat,
