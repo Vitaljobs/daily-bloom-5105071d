@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import { Coffee, Loader2, ArrowLeft } from "lucide-react";
 
 const Auth = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,16 +21,29 @@ const Auth = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // Listen for PASSWORD_RECOVERY event from Supabase
+  // Password recovery: prefer the PASSWORD_RECOVERY event, but also fall back
+  // to checking existing session when landing on /auth?type=recovery.
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const type = searchParams.get("type");
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event) => {
       if (event === "PASSWORD_RECOVERY") {
         setShowResetPassword(true);
       }
     });
 
+    // Fallback: if we missed the event (e.g. session already stored) we can still
+    // show the reset form when the URL indicates recovery.
+    if (type === "recovery") {
+      supabase.auth.getSession().then(({ data }) => {
+        if (data.session) setShowResetPassword(true);
+      });
+    }
+
     return () => subscription.unsubscribe();
-  }, []);
+  }, [searchParams]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,7 +120,7 @@ const Auth = () => {
     setIsLoading(true);
 
     try {
-      const redirectUrl = `${window.location.origin}/auth`;
+      const redirectUrl = `${window.location.origin}/auth?type=recovery`;
       
       // Use custom Resend edge function to bypass rate limits
       const { data, error } = await supabase.functions.invoke('send-reset-email', {
