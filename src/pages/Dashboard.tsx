@@ -12,7 +12,11 @@ import { WelcomeOverlay } from "@/components/dashboard/WelcomeOverlay";
 import { ChatOverlay } from "@/components/chat/ChatOverlay";
 import { MyNetworkWidget } from "@/components/dashboard/MyNetworkWidget";
 import { OnboardingFlow } from "@/components/onboarding/OnboardingFlow";
+import { PremiumOverlay } from "@/components/premium/PremiumOverlay";
+import { PaywallPopup } from "@/components/premium/PaywallPopup";
+import { UpgradeButton } from "@/components/premium/UpgradeButton";
 import { CommonGroundProvider, useCommonGround } from "@/contexts/CommonGroundContext";
+import { PremiumProvider } from "@/contexts/PremiumContext";
 
 // Staggered animation for grid items
 const containerVariants = {
@@ -201,15 +205,22 @@ const DashboardContent = () => {
         isOpen={showOnboarding}
         onClose={handleOnboardingClose}
       />
+
+      {/* Premium Components */}
+      <UpgradeButton />
+      <PremiumOverlay />
+      <PaywallPopup />
     </div>
   );
 };
 
 const Dashboard = () => {
   return (
-    <CommonGroundProvider>
-      <DashboardContent />
-    </CommonGroundProvider>
+    <PremiumProvider>
+      <CommonGroundProvider>
+        <DashboardContent />
+      </CommonGroundProvider>
+    </PremiumProvider>
   );
 };
 

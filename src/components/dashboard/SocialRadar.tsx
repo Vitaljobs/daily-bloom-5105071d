@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, X, Coffee } from "lucide-react";
+import { Sparkles, X, Coffee, Crown } from "lucide-react";
 import { useCommonGround } from "@/contexts/CommonGroundContext";
 import { UserProfile } from "@/types/common-ground";
+
+// Mock premium users for demo
+const premiumUserIds = ["emma", "thomas"];
 
 export const SocialRadar = () => {
   const { checkedInUsers, openUsers, setSelectedUser, selectedUser } = useCommonGround();
@@ -57,7 +60,17 @@ export const SocialRadar = () => {
             `}
           >
             {user.avatar}
-            {user.status === "open" && (
+            {/* Premium Badge */}
+            {premiumUserIds.includes(user.id) && (
+              <motion.div
+                animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
+                transition={{ repeat: Infinity, duration: 3 }}
+                className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-gradient-to-br from-primary to-gold-dark flex items-center justify-center shadow-md"
+              >
+                <Crown className="w-2.5 h-2.5 text-primary-foreground" />
+              </motion.div>
+            )}
+            {user.status === "open" && !premiumUserIds.includes(user.id) && (
               <motion.span 
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ repeat: Infinity, duration: 2 }}
