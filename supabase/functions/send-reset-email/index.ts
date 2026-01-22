@@ -114,7 +114,29 @@ const handler = async (req: Request): Promise<Response> => {
       `,
     });
 
-    console.log("Email sent successfully:", emailResponse);
+    console.log("Resend response:", JSON.stringify(emailResponse));
+
+    // Check for Resend errors
+    if (emailResponse.error) {
+      console.error("Resend error:", emailResponse.error);
+      
+      // Handle domain verification error specifically
+      if (emailResponse.error.message?.includes("verify a domain")) {
+        return new Response(
+          JSON.stringify({ 
+            error: "Email kon niet verstuurd worden. Resend vereist een geverifieerd domein om naar dit adres te sturen." 
+          }),
+          { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
+      
+      return new Response(
+        JSON.stringify({ error: emailResponse.error.message }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    console.log("Email sent successfully");
 
     return new Response(
       JSON.stringify({ success: true, message: "Reset email sent" }),
