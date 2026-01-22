@@ -1,32 +1,48 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock, Crown, X, Sparkles } from "lucide-react";
 import { usePremium } from "@/contexts/PremiumContext";
-
-const featureDescriptions: Record<string, { title: string; description: string; icon: string }> = {
-  "ai-icebreaker": {
-    title: "AI Ijsbrekers",
-    description: "Krijg toegang tot slimme gespreksstarters gebaseerd op jullie gedeelde interesses en vaardigheden.",
-    icon: "💡",
-  },
-  "contact-share": {
-    title: "Contact Delen",
-    description: "Deel je LinkedIn en e-mail met één klik en bouw moeiteloos je professionele netwerk uit.",
-    icon: "📇",
-  },
-  "smart-topics": {
-    title: "Smart Topics",
-    description: "Ontvang AI-gegenereerde gespreksonderwerpen om het ijs te breken.",
-    icon: "✨",
-  },
-  "unlimited-invites": {
-    title: "Onbeperkte Uitnodigingen",
-    description: "Stuur zoveel koffie-uitnodigingen als je wilt zonder limiet.",
-    icon: "☕",
-  },
-};
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export const PaywallPopup = () => {
   const { showPaywall, paywallFeature, closePaywall, openPremiumOverlay } = usePremium();
+  const { t, language } = useLanguage();
+
+  const featureDescriptions: Record<string, { title: string; description: string; icon: string }> = {
+    "ai-icebreaker": {
+      title: t.paywall.aiIcebreaker.title,
+      description: t.paywall.aiIcebreaker.description,
+      icon: "💡",
+    },
+    "contact-share": {
+      title: t.paywall.contactShare.title,
+      description: t.paywall.contactShare.description,
+      icon: "📇",
+    },
+    "smart-topics": {
+      title: t.paywall.smartTopics.title,
+      description: t.paywall.smartTopics.description,
+      icon: "✨",
+    },
+    "unlimited-invites": {
+      title: language === "nl" ? "Onbeperkte Uitnodigingen" : "Unlimited Invites",
+      description: language === "nl" 
+        ? "Stuur zoveel koffie-uitnodigingen als je wilt zonder limiet."
+        : "Send as many coffee invitations as you want without limits.",
+      icon: "☕",
+    },
+    "chatTranslation": {
+      title: t.paywall.chatTranslation.title,
+      description: t.paywall.chatTranslation.description,
+      icon: "🌐",
+    },
+    "smart-filter": {
+      title: language === "nl" ? "Smart Industry Filter" : "Smart Industry Filter",
+      description: language === "nl"
+        ? "Filter de Social Radar op specifieke industrieën om de perfecte connectie te vinden."
+        : "Filter the Social Radar by specific industries to find your perfect connection.",
+      icon: "🎯",
+    },
+  };
 
   const feature = paywallFeature ? featureDescriptions[paywallFeature] : null;
 
@@ -89,7 +105,7 @@ export const PaywallPopup = () => {
             {/* Premium badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/20 border border-primary/30 mb-6">
               <Crown className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Premium Functie</span>
+              <span className="text-sm font-medium text-primary">{t.paywall.premiumFeature}</span>
             </div>
 
             {/* Upgrade button */}
@@ -100,14 +116,14 @@ export const PaywallPopup = () => {
               className="w-full py-3 rounded-xl bg-gradient-to-r from-primary to-gold-dark text-primary-foreground font-medium flex items-center justify-center gap-2"
             >
               <Sparkles className="w-4 h-4" />
-              Ontgrendel met Premium
+              {t.paywall.unlock}
             </motion.button>
 
             <button
               onClick={closePaywall}
               className="w-full mt-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              Misschien later
+              {t.paywall.maybeLater}
             </button>
           </motion.div>
         </motion.div>

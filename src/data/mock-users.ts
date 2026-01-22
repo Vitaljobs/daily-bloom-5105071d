@@ -1,6 +1,6 @@
-import { UserProfile } from "@/types/common-ground";
+import { UserProfile, Industry } from "@/types/common-ground";
 
-// Mock data for checked-in professionals
+// Mock data for checked-in professionals with industry and labVisits
 export const checkedInUsers: UserProfile[] = [
   {
     id: "1",
@@ -11,6 +11,9 @@ export const checkedInUsers: UserProfile[] = [
     status: "open",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
     labId: "roastery",
+    industry: "tech",
+    labVisits: 47, // Local Guide
+    preferredLanguage: "nl",
   },
   {
     id: "2",
@@ -21,6 +24,9 @@ export const checkedInUsers: UserProfile[] = [
     status: "open",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
     labId: "library",
+    industry: "creative",
+    labVisits: 12,
+    preferredLanguage: "nl",
   },
   {
     id: "3",
@@ -31,6 +37,9 @@ export const checkedInUsers: UserProfile[] = [
     status: "focus",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
     labId: "espresso",
+    industry: "creative",
+    labVisits: 8,
+    preferredLanguage: "nl",
   },
   {
     id: "4",
@@ -41,6 +50,9 @@ export const checkedInUsers: UserProfile[] = [
     status: "open",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 10).toISOString(),
     labId: "roastery",
+    industry: "tech",
+    labVisits: 35, // Local Guide
+    preferredLanguage: "en",
   },
   {
     id: "5",
@@ -51,6 +63,9 @@ export const checkedInUsers: UserProfile[] = [
     status: "open",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 20).toISOString(),
     labId: "greenhouse",
+    industry: "creative",
+    labVisits: 22,
+    preferredLanguage: "nl",
   },
   {
     id: "6",
@@ -61,6 +76,9 @@ export const checkedInUsers: UserProfile[] = [
     status: "focus",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 35).toISOString(),
     labId: "library",
+    industry: "tech",
+    labVisits: 5,
+    preferredLanguage: "nl",
   },
   {
     id: "7",
@@ -71,6 +89,9 @@ export const checkedInUsers: UserProfile[] = [
     status: "open",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 25).toISOString(),
     labId: "rooftop",
+    industry: "creative",
+    labVisits: 18,
+    preferredLanguage: "en",
   },
   {
     id: "8",
@@ -81,6 +102,9 @@ export const checkedInUsers: UserProfile[] = [
     status: "open",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 40).toISOString(),
     labId: "roastery",
+    industry: "tech",
+    labVisits: 31, // Local Guide
+    preferredLanguage: "nl",
   },
   {
     id: "9",
@@ -91,6 +115,9 @@ export const checkedInUsers: UserProfile[] = [
     status: "open",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 50).toISOString(),
     labId: "espresso",
+    industry: "creative",
+    labVisits: 14,
+    preferredLanguage: "nl",
   },
   {
     id: "10",
@@ -101,6 +128,9 @@ export const checkedInUsers: UserProfile[] = [
     status: "focus",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 55).toISOString(),
     labId: "greenhouse",
+    industry: "tech",
+    labVisits: 9,
+    preferredLanguage: "nl",
   },
   {
     id: "11",
@@ -111,6 +141,9 @@ export const checkedInUsers: UserProfile[] = [
     status: "open",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 12).toISOString(),
     labId: "library",
+    industry: "tech",
+    labVisits: 28,
+    preferredLanguage: "en",
   },
   {
     id: "12",
@@ -121,6 +154,35 @@ export const checkedInUsers: UserProfile[] = [
     status: "open",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 8).toISOString(),
     labId: "rooftop",
+    industry: "creative",
+    labVisits: 42, // Local Guide
+    preferredLanguage: "nl",
+  },
+  {
+    id: "13",
+    name: "James Wilson",
+    avatar: "JW",
+    role: "FinTech Consultant",
+    skills: ["Finance", "Strategy", "Data Analysis"],
+    status: "open",
+    checkedInAt: new Date(Date.now() - 1000 * 60 * 18).toISOString(),
+    labId: "roastery",
+    industry: "finance",
+    labVisits: 15,
+    preferredLanguage: "en",
+  },
+  {
+    id: "14",
+    name: "Sarah Chen",
+    avatar: "SC",
+    role: "Investment Analyst",
+    skills: ["Finance", "Data Analysis", "Python"],
+    status: "open",
+    checkedInAt: new Date(Date.now() - 1000 * 60 * 22).toISOString(),
+    labId: "library",
+    industry: "finance",
+    labVisits: 7,
+    preferredLanguage: "en",
   },
 ];
 

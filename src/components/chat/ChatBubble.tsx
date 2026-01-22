@@ -1,16 +1,22 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Coffee, Clock } from "lucide-react";
 import { ChatMessage } from "@/types/chat";
 import { format } from "date-fns";
-import { nl } from "date-fns/locale";
+import { nl, enUS } from "date-fns/locale";
+import { TranslateButton } from "./TranslateButton";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ChatBubbleProps {
   message: ChatMessage;
   isOwn: boolean;
   senderName?: string;
+  senderLanguage?: "nl" | "en";
 }
 
-export const ChatBubble = ({ message, isOwn, senderName }: ChatBubbleProps) => {
+export const ChatBubble = ({ message, isOwn, senderName, senderLanguage }: ChatBubbleProps) => {
+  const [translatedText, setTranslatedText] = useState<string | null>(null);
+  const { language } = useLanguage();
   const getMessageIcon = () => {
     switch (message.type) {
       case "location":
@@ -63,9 +69,15 @@ export const ChatBubble = ({ message, isOwn, senderName }: ChatBubbleProps) => {
           </div>
         );
       default:
-        return <span>{message.content}</span>;
+        return <span>{translatedText || message.content}</span>;
     }
   };
+
+  // Check if message needs translation option (different language from user's preference)
+  const showTranslateButton = !isOwn && 
+    message.type === "text" && 
+    senderLanguage && 
+    senderLanguage !== language;
 
   if (message.type === "system") {
     return (
@@ -101,13 +113,24 @@ export const ChatBubble = ({ message, isOwn, senderName }: ChatBubbleProps) => {
           <p className="text-xs text-primary mb-1 font-medium">{senderName}</p>
         )}
         <div className="text-sm">{getMessageContent()}</div>
-        <p
-          className={`text-[10px] mt-1 ${
-            isOwn ? "text-primary-foreground/70" : "text-muted-foreground"
-          }`}
-        >
-          {format(message.timestamp, "HH:mm", { locale: nl })}
-        </p>
+        
+        {/* Translate button and timestamp row */}
+        <div className={`flex items-center gap-2 mt-1 ${isOwn ? "justify-end" : "justify-start"}`}>
+          {showTranslateButton && (
+            <TranslateButton
+              text={message.content}
+              fromLanguage={senderLanguage}
+              onTranslate={setTranslatedText}
+            />
+          )}
+          <p
+            className={`text-[10px] ${
+              isOwn ? "text-primary-foreground/70" : "text-muted-foreground"
+            }`}
+          >
+            {format(message.timestamp, "HH:mm", { locale: language === "nl" ? nl : enUS })}
+          </p>
+        </div>
       </div>
     </motion.div>
   );
