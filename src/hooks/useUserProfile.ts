@@ -18,6 +18,8 @@ export interface UserProfile {
   current_lab_id: string | null;
   checked_in_at: string | null;
   preferred_language: string | null;
+  linkedin_url: string | null;
+  portfolio_url: string | null;
   created_at: string;
   updated_at: string;
 }
