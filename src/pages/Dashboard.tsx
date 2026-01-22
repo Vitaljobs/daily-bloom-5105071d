@@ -1,113 +1,156 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { SocialRadar } from "@/components/dashboard/SocialRadar";
 import { SkillsWidget } from "@/components/dashboard/SkillsWidget";
 import { UsersWidget } from "@/components/dashboard/UsersWidget";
 import { RecentWidget } from "@/components/dashboard/RecentWidget";
 import { TableTent } from "@/components/dashboard/TableTent";
 import { SmartMatch } from "@/components/dashboard/SmartMatch";
-import { CommonGroundProvider } from "@/contexts/CommonGroundContext";
+import { LocationSelector } from "@/components/dashboard/LocationSelector";
+import { MatchRevealOverlay } from "@/components/dashboard/MatchRevealOverlay";
+import { CommonGroundProvider, useCommonGround } from "@/contexts/CommonGroundContext";
 import cafeBg from "@/assets/cafe-bg.jpg";
 
+// Staggered animation for grid items
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      staggerChildren: 0.05,
+      staggerDirection: -1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "spring" as const,
+      stiffness: 300,
+      damping: 25,
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: -20,
+    scale: 0.95,
+    transition: {
+      duration: 0.2,
+    },
+  },
+};
+
 const DashboardContent = () => {
+  const { 
+    currentLocation, 
+    setCurrentLocation, 
+    isChangingLocation,
+    showMatchReveal,
+    matchedUser,
+    closeMatchReveal,
+  } = useCommonGround();
+
+  // Current user mock data
+  const currentUser = {
+    name: "Jij",
+    avatar: "JIJ",
+    role: "Developer",
+  };
+
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
       {/* Blurred Café Background */}
-      <div
+      <motion.div
+        animate={{ 
+          filter: showMatchReveal ? "blur(24px)" : "blur(8px)",
+        }}
+        transition={{ duration: 0.4 }}
         className="fixed inset-0 bg-cover bg-center scale-110"
         style={{ 
           backgroundImage: `url(${cafeBg})`,
-          filter: "blur(8px)",
         }}
       />
       <div className="fixed inset-0 bg-background/60" />
 
       {/* Main Content */}
-      <main className="relative z-10 min-h-screen flex items-center justify-center p-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="w-full max-w-5xl"
-        >
-          {/* Bento Grid matching reference */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {/* Row 1 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-            >
-              <SocialRadar />
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15 }}
-            >
-              <SkillsWidget />
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <UsersWidget />
-            </motion.div>
+      <main className="relative z-10 min-h-screen flex flex-col items-center justify-center p-8">
+        {/* Location Selector */}
+        <LocationSelector 
+          currentLocation={currentLocation}
+          onLocationChange={setCurrentLocation}
+        />
 
-            {/* Row 2 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25 }}
-            >
-              <SocialRadar />
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              <RecentWidget />
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35 }}
-            >
-              <TableTent />
-            </motion.div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentLocation}
+            variants={containerVariants}
+            initial="hidden"
+            animate={isChangingLocation ? "exit" : "visible"}
+            exit="exit"
+            className="w-full max-w-5xl"
+          >
+            {/* Bento Grid matching reference */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {/* Row 1 */}
+              <motion.div variants={itemVariants}>
+                <SocialRadar />
+              </motion.div>
+              
+              <motion.div variants={itemVariants}>
+                <SkillsWidget />
+              </motion.div>
+              
+              <motion.div variants={itemVariants}>
+                <UsersWidget />
+              </motion.div>
 
-            {/* Row 3 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <TableTent />
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.45 }}
-            >
-              <SmartMatch />
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <TableTent />
-            </motion.div>
-          </div>
-        </motion.div>
+              {/* Row 2 */}
+              <motion.div variants={itemVariants}>
+                <SocialRadar />
+              </motion.div>
+              
+              <motion.div variants={itemVariants}>
+                <RecentWidget />
+              </motion.div>
+              
+              <motion.div variants={itemVariants}>
+                <TableTent />
+              </motion.div>
+
+              {/* Row 3 */}
+              <motion.div variants={itemVariants}>
+                <TableTent />
+              </motion.div>
+              
+              <motion.div variants={itemVariants}>
+                <SmartMatch />
+              </motion.div>
+              
+              <motion.div variants={itemVariants}>
+                <TableTent />
+              </motion.div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </main>
+
+      {/* Match Reveal Overlay */}
+      <MatchRevealOverlay
+        isVisible={showMatchReveal}
+        currentUser={currentUser}
+        matchedUser={matchedUser}
+        onClose={closeMatchReveal}
+      />
     </div>
   );
 };

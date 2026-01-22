@@ -2,6 +2,40 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Coffee, Focus, BellOff, Lightbulb, User } from "lucide-react";
 import { useCommonGround } from "@/contexts/CommonGroundContext";
 
+// Enhanced breathing pulse animation
+const breathingPulse = {
+  initial: {
+    boxShadow: "0 20px 60px hsl(20 40% 4% / 0.6)",
+  },
+  breathing: {
+    boxShadow: [
+      "0 20px 60px hsl(20 40% 4% / 0.6), 0 0 0px hsl(35 85% 58% / 0)",
+      "0 20px 60px hsl(20 40% 4% / 0.6), 0 0 60px hsl(35 85% 58% / 0.5), 0 0 100px hsl(35 85% 58% / 0.2)",
+      "0 20px 60px hsl(20 40% 4% / 0.6), 0 0 30px hsl(35 85% 58% / 0.3), 0 0 50px hsl(35 85% 58% / 0.1)",
+      "0 20px 60px hsl(20 40% 4% / 0.6), 0 0 60px hsl(35 85% 58% / 0.5), 0 0 100px hsl(35 85% 58% / 0.2)",
+      "0 20px 60px hsl(20 40% 4% / 0.6), 0 0 0px hsl(35 85% 58% / 0)",
+    ],
+    transition: {
+      repeat: Infinity,
+      duration: 4,
+      ease: "easeInOut" as const,
+    },
+  },
+};
+
+const borderBreathing = {
+  initial: { opacity: 0 },
+  breathing: {
+    opacity: [0.3, 0.7, 0.5, 0.7, 0.3],
+    scale: [1, 1.02, 1.01, 1.02, 1],
+    transition: {
+      repeat: Infinity,
+      duration: 4,
+      ease: "easeInOut" as const,
+    },
+  },
+};
+
 export const TableTent = () => {
   const { currentUserStatus, setCurrentUserStatus, openUsers } = useCommonGround();
   const isOpen = currentUserStatus === "open";
@@ -9,16 +43,9 @@ export const TableTent = () => {
   return (
     <motion.div
       layout
-      animate={isOpen ? {
-        boxShadow: [
-          "0 20px 60px hsl(20 40% 4% / 0.6), 0 0 0px hsl(35 85% 58% / 0)",
-          "0 20px 60px hsl(20 40% 4% / 0.6), 0 0 40px hsl(35 85% 58% / 0.4)",
-          "0 20px 60px hsl(20 40% 4% / 0.6), 0 0 0px hsl(35 85% 58% / 0)",
-        ]
-      } : {
-        boxShadow: "0 20px 60px hsl(20 40% 4% / 0.6)"
-      }}
-      transition={isOpen ? { repeat: Infinity, duration: 2, ease: "easeInOut" } : {}}
+      initial="initial"
+      animate={isOpen ? "breathing" : "initial"}
+      variants={breathingPulse}
       className={`wood-card p-5 h-full relative transition-all duration-500 ${
         isOpen ? "border-primary/50" : ""
       }`}
@@ -26,26 +53,36 @@ export const TableTent = () => {
         borderColor: "hsl(35 85% 58% / 0.5)",
       } : {}}
     >
-      {/* Glowing border overlay for Open status */}
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="absolute inset-0 rounded-[1.5rem] pointer-events-none"
-          style={{
-            background: "linear-gradient(135deg, hsl(35 85% 58% / 0.1), transparent, hsl(35 85% 58% / 0.05))",
-          }}
-        />
-      )}
+      {/* Breathing border overlay for Open status */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            variants={borderBreathing}
+            animate="breathing"
+            exit={{ opacity: 0, scale: 0.98 }}
+            className="absolute inset-0 rounded-[1.5rem] pointer-events-none border-2 border-primary/50"
+            style={{
+              background: "linear-gradient(135deg, hsl(35 85% 58% / 0.08), transparent, hsl(35 85% 58% / 0.04))",
+            }}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Header */}
       <div className="flex items-center gap-3 mb-4 relative z-10">
         <motion.div
           animate={isOpen ? { 
-            scale: [1, 1.1, 1],
-            boxShadow: ["0 0 10px hsl(35 85% 58% / 0.3)", "0 0 25px hsl(35 85% 58% / 0.6)", "0 0 10px hsl(35 85% 58% / 0.3)"]
+            scale: [1, 1.15, 1.05, 1.15, 1],
+            boxShadow: [
+              "0 0 10px hsl(35 85% 58% / 0.3)", 
+              "0 0 30px hsl(35 85% 58% / 0.7)", 
+              "0 0 20px hsl(35 85% 58% / 0.5)",
+              "0 0 30px hsl(35 85% 58% / 0.7)", 
+              "0 0 10px hsl(35 85% 58% / 0.3)"
+            ]
           } : {}}
-          transition={{ repeat: Infinity, duration: 2 }}
+          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
           className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
             isOpen ? "bg-primary/30" : "bg-muted/50"
           }`}
@@ -76,9 +113,16 @@ export const TableTent = () => {
           <div className="flex items-center gap-3">
             <motion.div 
               animate={isOpen ? { 
-                boxShadow: ["0 0 10px hsl(35 85% 58% / 0.2)", "0 0 25px hsl(35 85% 58% / 0.5)", "0 0 10px hsl(35 85% 58% / 0.2)"]
+                boxShadow: [
+                  "0 0 10px hsl(35 85% 58% / 0.2)", 
+                  "0 0 30px hsl(35 85% 58% / 0.6)", 
+                  "0 0 20px hsl(35 85% 58% / 0.4)",
+                  "0 0 30px hsl(35 85% 58% / 0.6)", 
+                  "0 0 10px hsl(35 85% 58% / 0.2)"
+                ],
+                scale: [1, 1.05, 1.02, 1.05, 1],
               } : {}}
-              transition={{ repeat: Infinity, duration: 2 }}
+              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
               className={`w-10 h-10 rounded-full flex items-center justify-center ${
                 isOpen 
                   ? "bg-gradient-to-br from-primary to-gold-dark" 
@@ -92,9 +136,21 @@ export const TableTent = () => {
               )}
             </motion.div>
             <div>
-              <p className={`font-medium ${isOpen ? "text-primary" : "text-foreground"}`}>
+              <motion.p 
+                animate={isOpen ? {
+                  textShadow: [
+                    "0 0 8px hsl(35 85% 58% / 0)",
+                    "0 0 16px hsl(35 85% 58% / 0.5)",
+                    "0 0 8px hsl(35 85% 58% / 0.3)",
+                    "0 0 16px hsl(35 85% 58% / 0.5)",
+                    "0 0 8px hsl(35 85% 58% / 0)",
+                  ],
+                } : {}}
+                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                className={`font-medium ${isOpen ? "text-primary" : "text-foreground"}`}
+              >
                 {isOpen ? "Open voor koffie" : "Focus Mode"}
-              </p>
+              </motion.p>
               <p className="text-xs text-muted-foreground">
                 {isOpen ? `${openUsers.length} anderen ook beschikbaar` : "Je bent onzichtbaar"}
               </p>
@@ -108,7 +164,15 @@ export const TableTent = () => {
               className="mt-3 pt-3 border-t border-border/30"
             >
               <div className="flex items-start gap-2">
-                <Lightbulb className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                <motion.div
+                  animate={{
+                    rotate: [0, 10, -10, 10, 0],
+                    scale: [1, 1.1, 1, 1.1, 1],
+                  }}
+                  transition={{ repeat: Infinity, duration: 3 }}
+                >
+                  <Lightbulb className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                </motion.div>
                 <p className="text-xs text-muted-foreground">
                   Er is een AI-expert aanwezig die open staat voor een gesprek.
                 </p>
@@ -135,9 +199,17 @@ export const TableTent = () => {
         <motion.button
           whileTap={{ scale: 0.98 }}
           onClick={() => setCurrentUserStatus("open")}
+          animate={isOpen ? {
+            boxShadow: [
+              "0 0 15px hsl(35 85% 58% / 0.3)",
+              "0 0 25px hsl(35 85% 58% / 0.5)",
+              "0 0 15px hsl(35 85% 58% / 0.3)",
+            ],
+          } : {}}
+          transition={{ repeat: Infinity, duration: 2 }}
           className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-medium transition-all ${
             isOpen
-              ? "bg-primary/20 text-primary border border-primary/40 shadow-[0_0_15px_hsl(35_85%_58%/0.3)]"
+              ? "bg-primary/20 text-primary border border-primary/40"
               : "bg-transparent text-muted-foreground hover:bg-muted/30"
           }`}
         >
