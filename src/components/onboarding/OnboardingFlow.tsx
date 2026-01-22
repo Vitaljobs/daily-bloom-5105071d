@@ -1,38 +1,40 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Radar, Coffee, ArrowRight, X, Sparkles } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface OnboardingFlowProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const onboardingSteps = [
-  {
-    icon: MapPin,
-    title: "Kies je Lab",
-    description: "Begin met inchecken bij een van de vijf unieke Labs. Elk Lab heeft zijn eigen sfeer en type professionals.",
-    tip: "The Roastery is ideaal voor creatieve gesprekken, terwijl The Library Vault perfect is voor focus.",
-    illustration: "🏛️",
-  },
-  {
-    icon: Radar,
-    title: "Ontdek de Social Radar",
-    description: "Zie wie er aanwezig is en welke skills er in de ruimte zijn. Klik op een profiel om meer te ontdekken.",
-    tip: "Goudkleurige skills zijn het meest populair in jouw Lab.",
-    illustration: "📡",
-  },
-  {
-    icon: Coffee,
-    title: "Verstuur je Eerste Uitnodiging",
-    description: "Vond je iemand interessant? Stuur een 'Coffee Invite' en start een gesprek over gemeenschappelijke interesses.",
-    tip: "De AI helpt je met gespreksstarters gebaseerd op jullie gedeelde vaardigheden.",
-    illustration: "☕",
-  },
-];
-
 export const OnboardingFlow = ({ isOpen, onClose }: OnboardingFlowProps) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const { t } = useLanguage();
+
+  const onboardingSteps = [
+    {
+      icon: MapPin,
+      title: t.onboarding.step1Title,
+      description: t.onboarding.step1Desc,
+      tip: t.onboarding.step1Tip,
+      illustration: "🏛️",
+    },
+    {
+      icon: Radar,
+      title: t.onboarding.step2Title,
+      description: t.onboarding.step2Desc,
+      tip: t.onboarding.step2Tip,
+      illustration: "📡",
+    },
+    {
+      icon: Coffee,
+      title: t.onboarding.step3Title,
+      description: t.onboarding.step3Desc,
+      tip: t.onboarding.step3Tip,
+      illustration: "☕",
+    },
+  ];
 
   const handleNext = () => {
     if (currentStep < onboardingSteps.length - 1) {
@@ -204,11 +206,11 @@ export const OnboardingFlow = ({ isOpen, onClose }: OnboardingFlowProps) => {
                 {isLastStep ? (
                   <>
                     <Coffee className="w-4 h-4" />
-                    Start met Netwerken
+                    {t.onboarding.startNetworking}
                   </>
                 ) : (
                   <>
-                    Volgende
+                    {t.onboarding.next}
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}
@@ -216,7 +218,7 @@ export const OnboardingFlow = ({ isOpen, onClose }: OnboardingFlowProps) => {
 
               {/* Step counter */}
               <p className="text-xs text-muted-foreground mt-4">
-                Stap {currentStep + 1} van {onboardingSteps.length}
+                {t.onboarding.stepOf.replace("{current}", String(currentStep + 1)).replace("{total}", String(onboardingSteps.length))}
               </p>
             </div>
           </motion.div>

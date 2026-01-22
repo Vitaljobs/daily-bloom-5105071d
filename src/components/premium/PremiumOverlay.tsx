@@ -1,32 +1,39 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Crown, Sparkles, MessageSquare, Share2, Zap, Check } from "lucide-react";
+import { X, Crown, Sparkles, MessageSquare, Share2, Zap, Check, Languages } from "lucide-react";
 import { usePremium } from "@/contexts/PremiumContext";
-
-const premiumFeatures = [
-  {
-    icon: Sparkles,
-    title: "AI Ijsbrekers",
-    description: "Slimme gespreksstarters op basis van jullie profielen",
-  },
-  {
-    icon: MessageSquare,
-    title: "Onbeperkte Uitnodigingen",
-    description: "Stuur zoveel koffie-uitnodigingen als je wilt",
-  },
-  {
-    icon: Share2,
-    title: "Digital Business Card",
-    description: "Deel je LinkedIn en contactgegevens met één klik",
-  },
-  {
-    icon: Zap,
-    title: "Priority Matching",
-    description: "Verschijn bovenaan in de Social Radar",
-  },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export const PremiumOverlay = () => {
   const { showPremiumOverlay, closePremiumOverlay, setIsPremium } = usePremium();
+  const { t } = useLanguage();
+
+  const premiumFeatures = [
+    {
+      icon: Sparkles,
+      title: t.premium.feature1Title,
+      description: t.premium.feature1Desc,
+    },
+    {
+      icon: MessageSquare,
+      title: t.premium.feature2Title,
+      description: t.premium.feature2Desc,
+    },
+    {
+      icon: Share2,
+      title: t.premium.feature3Title,
+      description: t.premium.feature3Desc,
+    },
+    {
+      icon: Zap,
+      title: t.premium.feature4Title,
+      description: t.premium.feature4Desc,
+    },
+    {
+      icon: Languages,
+      title: t.premium.feature5Title,
+      description: t.premium.feature5Desc,
+    },
+  ];
 
   const handleUpgrade = () => {
     // Simulate premium upgrade
@@ -85,10 +92,10 @@ export const PremiumOverlay = () => {
                 </motion.div>
 
                 <h2 className="font-serif text-3xl text-center text-foreground mb-2">
-                  Common Ground Premium
+                  {t.premium.title}
                 </h2>
                 <p className="text-center text-muted-foreground">
-                  Haal het maximale uit je netwerk-momenten
+                  {t.premium.subtitle}
                 </p>
               </div>
 
@@ -119,10 +126,10 @@ export const PremiumOverlay = () => {
                 <div className="text-center mb-4">
                   <div className="flex items-baseline justify-center gap-1">
                     <span className="text-4xl font-serif text-foreground">€9,99</span>
-                    <span className="text-muted-foreground">/maand</span>
+                    <span className="text-muted-foreground">{t.premium.perMonth}</span>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Of €79,99/jaar (bespaar 33%)
+                    {t.premium.perYear}
                   </p>
                 </div>
 
@@ -133,11 +140,11 @@ export const PremiumOverlay = () => {
                   className="w-full py-4 rounded-xl bg-gradient-to-r from-primary to-gold-dark text-primary-foreground font-medium text-lg flex items-center justify-center gap-2 shadow-lg"
                 >
                   <Crown className="w-5 h-5" />
-                  Upgrade naar Premium
+                  {t.premium.upgradeButton}
                 </motion.button>
 
                 <p className="text-center text-xs text-muted-foreground mt-3">
-                  7 dagen gratis proberen • Annuleer wanneer je wilt
+                  {t.premium.freeTrial}
                 </p>
               </div>
             </div>

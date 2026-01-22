@@ -15,8 +15,10 @@ import { OnboardingFlow } from "@/components/onboarding/OnboardingFlow";
 import { PremiumOverlay } from "@/components/premium/PremiumOverlay";
 import { PaywallPopup } from "@/components/premium/PaywallPopup";
 import { UpgradeButton } from "@/components/premium/UpgradeButton";
+import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { CommonGroundProvider, useCommonGround } from "@/contexts/CommonGroundContext";
 import { PremiumProvider } from "@/contexts/PremiumContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 // Staggered animation for grid items
 const containerVariants = {
@@ -210,17 +212,22 @@ const DashboardContent = () => {
       <UpgradeButton />
       <PremiumOverlay />
       <PaywallPopup />
+      
+      {/* Language Toggle */}
+      <LanguageToggle />
     </div>
   );
 };
 
 const Dashboard = () => {
   return (
-    <PremiumProvider>
-      <CommonGroundProvider>
-        <DashboardContent />
-      </CommonGroundProvider>
-    </PremiumProvider>
+    <LanguageProvider>
+      <PremiumProvider>
+        <CommonGroundProvider>
+          <DashboardContent />
+        </CommonGroundProvider>
+      </PremiumProvider>
+    </LanguageProvider>
   );
 };
 
