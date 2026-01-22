@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, CheckCircle, Lightbulb, Share2, Lock } from "lucide-react";
+import { X, Send, CheckCircle, Lightbulb, Share2, Lock, Loader2 } from "lucide-react";
 import { UserProfile } from "@/types/common-ground";
 import { ChatMessage, QuickReply } from "@/types/chat";
 import { ChatBubble } from "./ChatBubble";
@@ -13,8 +13,11 @@ import { ContactShareModal } from "./ContactShareModal";
 import { MeetingCompleteModal } from "./MeetingCompleteModal";
 import { useCommonGround } from "@/contexts/CommonGroundContext";
 import { usePremium } from "@/contexts/PremiumContext";
-import { calculateMatchScore } from "@/lib/match-scoring";
+import { calculateMatchScore, MatchAnalysis } from "@/lib/match-scoring";
 import { useToast } from "@/hooks/use-toast";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { useAIIcebreaker } from "@/hooks/useAIIcebreaker";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ChatOverlayProps {
   isOpen: boolean;
@@ -22,13 +25,6 @@ interface ChatOverlayProps {
   chatPartner: UserProfile | null;
   currentLabName?: string;
 }
-
-// Mock current user for demo
-const currentUserProfile = {
-  id: "current-user",
-  skills: ["React", "TypeScript", "AI/ML", "Node.js"],
-  labId: "roastery",
-};
 
 export const ChatOverlay = ({
   isOpen,
@@ -39,6 +35,10 @@ export const ChatOverlay = ({
   const { endChatSession, currentLocation } = useCommonGround();
   const { isPremium, triggerPaywall } = usePremium();
   const { toast } = useToast();
+  const { profile: userProfile, skills: userSkills, currentLabId } = useUserProfile();
+  const { generateIcebreaker, isLoading: isLoadingIcebreaker } = useAIIcebreaker();
+  const { language } = useLanguage();
+  
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isPartnerTyping, setIsPartnerTyping] = useState(false);
@@ -46,17 +46,43 @@ export const ChatOverlay = ({
   const [showTopicsPopup, setShowTopicsPopup] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [showMeetingComplete, setShowMeetingComplete] = useState(false);
+  const [aiMatchAnalysis, setAiMatchAnalysis] = useState<MatchAnalysis | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Calculate match analysis
+  // Calculate match analysis using real user skills from database
   const matchAnalysis = useMemo(() => {
     if (!chatPartner) return null;
     return calculateMatchScore(
-      { ...currentUserProfile, labId: currentLocation },
+      { skills: userSkills, labId: currentLabId || currentLocation },
       { skills: chatPartner.skills, labId: chatPartner.labId }
     );
-  }, [chatPartner, currentLocation]);
+  }, [chatPartner, userSkills, currentLabId, currentLocation]);
+
+  // Fetch AI-generated icebreaker when chat opens (premium only)
+  useEffect(() => {
+    if (isOpen && chatPartner && isPremium && userSkills.length > 0) {
+      generateIcebreaker(
+        userSkills,
+        chatPartner.skills,
+        chatPartner.name,
+        language as "nl" | "en"
+      ).then((result) => {
+        if (result) {
+          // Merge AI results with calculated match analysis
+          setAiMatchAnalysis({
+            ...matchAnalysis!,
+            icebreaker: result.icebreaker,
+            topics: result.topics,
+            sharedSkills: result.sharedSkills.length > 0 ? result.sharedSkills : matchAnalysis?.sharedSkills || [],
+          });
+        }
+      });
+    }
+  }, [isOpen, chatPartner, isPremium, userSkills, language]);
+
+  // Use AI-enhanced analysis if available, otherwise fall back to local calculation
+  const effectiveMatchAnalysis = aiMatchAnalysis || matchAnalysis;
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -116,7 +142,7 @@ export const ChatOverlay = ({
 
     const newMessage: ChatMessage = {
       id: `msg-${Date.now()}`,
-      senderId: currentUserProfile.id,
+      senderId: userProfile?.id || "current-user",
       content: content.trim(),
       timestamp: new Date(),
       type,
@@ -201,7 +227,7 @@ export const ChatOverlay = ({
     }, 1000);
   };
 
-  if (!chatPartner || !matchAnalysis) return null;
+  if (!chatPartner || !effectiveMatchAnalysis) return null;
 
   return (
     <AnimatePresence>
@@ -248,9 +274,9 @@ export const ChatOverlay = ({
               {/* Match Score Badge & Contact Share */}
               <div className="flex items-center gap-2">
                 <MatchScoreBadge
-                  score={matchAnalysis.score}
-                  sharedSkillsCount={matchAnalysis.sharedSkills.length}
-                  sameLocation={matchAnalysis.sameLocation}
+                  score={effectiveMatchAnalysis.score}
+                  sharedSkillsCount={effectiveMatchAnalysis.sharedSkills.length}
+                  sameLocation={effectiveMatchAnalysis.sameLocation}
                 />
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -284,10 +310,10 @@ export const ChatOverlay = ({
             {/* Icebreaker Banner - Premium Feature */}
             {isPremium ? (
               <IcebreakerBanner
-                matchAnalysis={matchAnalysis}
+                matchAnalysis={effectiveMatchAnalysis}
                 partnerName={chatPartner.name}
                 onDismiss={() => setShowIcebreaker(false)}
-                isVisible={showIcebreaker && messages.length <= 1}
+                isVisible={showIcebreaker && messages.length <= 1 && !isLoadingIcebreaker}
               />
             ) : (
               showIcebreaker && messages.length <= 1 && (
@@ -323,9 +349,9 @@ export const ChatOverlay = ({
                 <ChatBubble
                   key={message.id}
                   message={message}
-                  isOwn={message.senderId === currentUserProfile.id}
+                  isOwn={message.senderId === (userProfile?.id || "current-user")}
                   senderName={
-                    message.senderId !== currentUserProfile.id && message.senderId !== "system"
+                    message.senderId !== (userProfile?.id || "current-user") && message.senderId !== "system"
                       ? chatPartner.name
                       : undefined
                   }
@@ -344,7 +370,7 @@ export const ChatOverlay = ({
             {/* Smart Topics */}
             {messages.length <= 2 && (
               <SmartTopics
-                matchAnalysis={matchAnalysis}
+                matchAnalysis={effectiveMatchAnalysis}
                 onSelectTopic={handleTopicSelect}
               />
             )}
@@ -408,7 +434,7 @@ export const ChatOverlay = ({
               
               {/* Topics Popup */}
               <AnimatePresence>
-                {showTopicsPopup && matchAnalysis && (
+                {showTopicsPopup && effectiveMatchAnalysis && (
                   <motion.div
                     initial={{ opacity: 0, y: 10, height: 0 }}
                     animate={{ opacity: 1, y: 0, height: "auto" }}
@@ -417,7 +443,7 @@ export const ChatOverlay = ({
                   >
                     <p className="text-xs text-muted-foreground mb-2">💡 AI IJsbrekers:</p>
                     <div className="space-y-2">
-                      {matchAnalysis.topics.map((topic, index) => (
+                      {effectiveMatchAnalysis.topics.map((topic, index) => (
                         <motion.button
                           key={index}
                           initial={{ opacity: 0, x: -10 }}
