@@ -2,6 +2,19 @@ import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { useCommonGround } from "@/contexts/CommonGroundContext";
 
+// Floating animation variants for each skill
+const floatingVariants = {
+  float: (i: number) => ({
+    y: [0, -4, 0, 4, 0],
+    transition: {
+      repeat: Infinity,
+      duration: 4 + i * 0.5,
+      ease: "easeInOut" as const,
+      delay: i * 0.3,
+    },
+  }),
+};
+
 export const SkillsWidget = () => {
   const { aggregatedSkills } = useCommonGround();
   const topSkills = aggregatedSkills.slice(0, 5);
@@ -10,9 +23,19 @@ export const SkillsWidget = () => {
   return (
     <div className="wood-card p-5 h-full relative">
       <div className="flex items-center gap-3 mb-4 relative z-10">
-        <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
+        <motion.div
+          animate={{
+            boxShadow: [
+              "0 0 8px hsl(35 85% 58% / 0.2)",
+              "0 0 16px hsl(35 85% 58% / 0.4)",
+              "0 0 8px hsl(35 85% 58% / 0.2)",
+            ],
+          }}
+          transition={{ repeat: Infinity, duration: 3 }}
+          className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center"
+        >
           <Sparkles className="w-4 h-4 text-primary" />
-        </div>
+        </motion.div>
         <div>
           <h3 className="text-base font-serif text-foreground">Skills</h3>
           <p className="text-xs text-muted-foreground">Aanwezige expertise</p>
@@ -27,9 +50,11 @@ export const SkillsWidget = () => {
           return (
             <motion.div
               key={skill.name}
+              custom={index}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
+              variants={floatingVariants}
+              whileInView="float"
               layout
               className="flex items-center gap-3"
             >
@@ -37,16 +62,25 @@ export const SkillsWidget = () => {
                 <div className="flex items-center justify-between mb-1">
                   <motion.span 
                     animate={isTop ? { 
-                      textShadow: ["0 0 8px hsl(35 85% 58% / 0)", "0 0 8px hsl(35 85% 58% / 0.5)", "0 0 8px hsl(35 85% 58% / 0)"]
+                      textShadow: ["0 0 8px hsl(35 85% 58% / 0)", "0 0 12px hsl(35 85% 58% / 0.6)", "0 0 8px hsl(35 85% 58% / 0)"]
                     } : {}}
-                    transition={{ repeat: Infinity, duration: 2 }}
+                    transition={{ repeat: Infinity, duration: 2.5 }}
                     className={`text-sm ${isTop ? "text-primary font-semibold" : "text-foreground"}`}
                   >
                     {skill.name}
                     {isTop && (
                       <motion.span
                         initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: 1, scale: 1 }}
+                        animate={{ 
+                          opacity: 1, 
+                          scale: 1,
+                          boxShadow: [
+                            "0 0 5px hsl(35 85% 58% / 0.3)",
+                            "0 0 10px hsl(35 85% 58% / 0.5)",
+                            "0 0 5px hsl(35 85% 58% / 0.3)",
+                          ],
+                        }}
+                        transition={{ repeat: Infinity, duration: 2 }}
                         className="ml-1.5 text-[10px] px-1.5 py-0.5 rounded bg-primary/20 text-primary"
                       >
                         TOP
@@ -69,7 +103,7 @@ export const SkillsWidget = () => {
         })}
       </div>
 
-      {/* Dynamic indicator */}
+      {/* Dynamic indicator with enhanced breathing */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -77,8 +111,15 @@ export const SkillsWidget = () => {
         className="mt-4 flex items-center gap-2 text-xs text-muted-foreground relative z-10"
       >
         <motion.div
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ repeat: Infinity, duration: 2 }}
+          animate={{ 
+            scale: [1, 1.3, 1],
+            boxShadow: [
+              "0 0 4px hsl(35 85% 58% / 0.4)",
+              "0 0 12px hsl(35 85% 58% / 0.8)",
+              "0 0 4px hsl(35 85% 58% / 0.4)",
+            ],
+          }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
           className="w-2 h-2 rounded-full bg-primary"
         />
         <span>Live updates</span>

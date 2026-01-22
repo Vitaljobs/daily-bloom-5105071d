@@ -4,7 +4,7 @@ import { useCommonGround } from "@/contexts/CommonGroundContext";
 import { useToast } from "@/hooks/use-toast";
 
 export const SmartMatch = () => {
-  const { openUsers, selectedUser, setSelectedUser, sendInvite, lastInvitedUser } = useCommonGround();
+  const { openUsers, selectedUser, setSelectedUser, sendInvite, lastInvitedUser, triggerMatchReveal } = useCommonGround();
   const { toast } = useToast();
   
   // Use selected user from Social Radar, or default to first open user
@@ -18,6 +18,11 @@ export const SmartMatch = () => {
       title: "☕ Koffie-uitnodiging verzonden!",
       description: `Je uitnodiging is verzonden naar ${match.name}`,
     });
+    
+    // Trigger the match reveal animation after a short delay (simulating acceptance)
+    setTimeout(() => {
+      triggerMatchReveal(match);
+    }, 1500);
   };
 
   const isInvited = lastInvitedUser?.id === match?.id;

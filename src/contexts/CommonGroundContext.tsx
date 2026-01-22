@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useMemo, ReactNode } from "react";
+import React, { createContext, useContext, useState, useMemo, ReactNode, useCallback } from "react";
 import { UserProfile, UserStatus, AggregatedSkill } from "@/types/common-ground";
 import { checkedInUsers as mockUsers } from "@/data/mock-users";
 
@@ -28,6 +28,17 @@ interface CommonGroundContextType {
   // Invite functionality
   sendInvite: (user: UserProfile) => void;
   lastInvitedUser: UserProfile | null;
+
+  // Match reveal
+  showMatchReveal: boolean;
+  matchedUser: UserProfile | null;
+  triggerMatchReveal: (user: UserProfile) => void;
+  closeMatchReveal: () => void;
+
+  // Location
+  currentLocation: string;
+  setCurrentLocation: (locationId: string) => void;
+  isChangingLocation: boolean;
 }
 
 const CommonGroundContext = createContext<CommonGroundContextType | undefined>(undefined);
@@ -38,6 +49,14 @@ export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
   const [checkedInUsers] = useState<UserProfile[]>(mockUsers);
   const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
   const [lastInvitedUser, setLastInvitedUser] = useState<UserProfile | null>(null);
+  
+  // Match reveal state
+  const [showMatchReveal, setShowMatchReveal] = useState(false);
+  const [matchedUser, setMatchedUser] = useState<UserProfile | null>(null);
+
+  // Location state
+  const [currentLocation, setCurrentLocationState] = useState("1");
+  const [isChangingLocation, setIsChangingLocation] = useState(false);
 
   // Aggregate skills from all checked-in users
   const aggregatedSkills = useMemo(() => {
@@ -83,6 +102,28 @@ export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
     setTimeout(() => setLastInvitedUser(null), 3000);
   };
 
+  // Match reveal functions
+  const triggerMatchReveal = useCallback((user: UserProfile) => {
+    setMatchedUser(user);
+    setShowMatchReveal(true);
+  }, []);
+
+  const closeMatchReveal = useCallback(() => {
+    setShowMatchReveal(false);
+    setTimeout(() => setMatchedUser(null), 500);
+  }, []);
+
+  // Location change with animation trigger
+  const setCurrentLocation = useCallback((locationId: string) => {
+    setIsChangingLocation(true);
+    setTimeout(() => {
+      setCurrentLocationState(locationId);
+      setTimeout(() => {
+        setIsChangingLocation(false);
+      }, 100);
+    }, 400);
+  }, []);
+
   return (
     <CommonGroundContext.Provider
       value={{
@@ -98,6 +139,13 @@ export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
         setSelectedUser,
         sendInvite,
         lastInvitedUser,
+        showMatchReveal,
+        matchedUser,
+        triggerMatchReveal,
+        closeMatchReveal,
+        currentLocation,
+        setCurrentLocation,
+        isChangingLocation,
       }}
     >
       {children}
