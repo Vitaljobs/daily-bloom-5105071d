@@ -81,6 +81,18 @@ export default {
           light: "hsl(38 85% 70%)",
           dark: "hsl(32 75% 40%)",
         },
+        // Admin "Clean Tech" colors
+        neon: {
+          cyan: "hsl(var(--neon-cyan, 185 100% 50%))",
+          green: "hsl(var(--neon-green, 165 100% 45%))",
+          purple: "hsl(var(--neon-purple, 270 100% 65%))",
+          pink: "hsl(var(--neon-pink, 330 100% 60%))",
+        },
+        admin: {
+          dark: "hsl(220 15% 8%)",
+          elevated: "hsl(220 15% 12%)",
+          border: "hsl(220 12% 18%)",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

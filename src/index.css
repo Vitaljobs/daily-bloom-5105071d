@@ -66,6 +66,43 @@
     --sidebar-ring: 35 85% 58%;
   }
 
+  /* Admin "Clean Tech" Theme */
+  .admin-theme {
+    --background: 220 15% 8%;
+    --foreground: 210 20% 92%;
+    
+    --card: 220 15% 11%;
+    --card-foreground: 210 20% 92%;
+    
+    --popover: 220 15% 10%;
+    --popover-foreground: 210 20% 92%;
+    
+    /* Neon Cyan accent */
+    --primary: 185 100% 50%;
+    --primary-foreground: 220 15% 8%;
+    
+    --secondary: 220 15% 16%;
+    --secondary-foreground: 210 15% 85%;
+    
+    --muted: 220 12% 18%;
+    --muted-foreground: 210 10% 55%;
+    
+    --accent: 165 100% 45%;
+    --accent-foreground: 220 15% 8%;
+    
+    --border: 220 12% 18%;
+    --input: 220 12% 14%;
+    --ring: 185 100% 50%;
+    
+    /* Admin-specific tokens */
+    --neon-cyan: 185 100% 50%;
+    --neon-green: 165 100% 45%;
+    --neon-purple: 270 100% 65%;
+    --neon-pink: 330 100% 60%;
+    --dark-base: 220 15% 8%;
+    --dark-elevated: 220 15% 12%;
+  }
+
   .dark {
     --background: 20 25% 6%;
     --foreground: 35 30% 92%;

@@ -16,6 +16,7 @@ import { PremiumOverlay } from "@/components/premium/PremiumOverlay";
 import { PaywallPopup } from "@/components/premium/PaywallPopup";
 import { UpgradeButton } from "@/components/premium/UpgradeButton";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
+import { AdminLink } from "@/components/admin/AdminLink";
 import { CommonGroundProvider, useCommonGround } from "@/contexts/CommonGroundContext";
 import { PremiumProvider } from "@/contexts/PremiumContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
@@ -215,6 +216,9 @@ const DashboardContent = () => {
       
       {/* Language Toggle */}
       <LanguageToggle />
+      
+      {/* Admin Link (for admin users) */}
+      <AdminLink />
     </div>
   );
 };
