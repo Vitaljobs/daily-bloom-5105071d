@@ -9,14 +9,42 @@ export const TableTent = () => {
   return (
     <motion.div
       layout
+      animate={isOpen ? {
+        boxShadow: [
+          "0 20px 60px hsl(20 40% 4% / 0.6), 0 0 0px hsl(35 85% 58% / 0)",
+          "0 20px 60px hsl(20 40% 4% / 0.6), 0 0 40px hsl(35 85% 58% / 0.4)",
+          "0 20px 60px hsl(20 40% 4% / 0.6), 0 0 0px hsl(35 85% 58% / 0)",
+        ]
+      } : {
+        boxShadow: "0 20px 60px hsl(20 40% 4% / 0.6)"
+      }}
+      transition={isOpen ? { repeat: Infinity, duration: 2, ease: "easeInOut" } : {}}
       className={`wood-card p-5 h-full relative transition-all duration-500 ${
-        isOpen ? "wood-card-glow animate-pulse-glow" : ""
+        isOpen ? "border-primary/50" : ""
       }`}
+      style={isOpen ? {
+        borderColor: "hsl(35 85% 58% / 0.5)",
+      } : {}}
     >
+      {/* Glowing border overlay for Open status */}
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="absolute inset-0 rounded-[1.5rem] pointer-events-none"
+          style={{
+            background: "linear-gradient(135deg, hsl(35 85% 58% / 0.1), transparent, hsl(35 85% 58% / 0.05))",
+          }}
+        />
+      )}
+
       {/* Header */}
       <div className="flex items-center gap-3 mb-4 relative z-10">
         <motion.div
-          animate={isOpen ? { scale: [1, 1.1, 1] } : {}}
+          animate={isOpen ? { 
+            scale: [1, 1.1, 1],
+            boxShadow: ["0 0 10px hsl(35 85% 58% / 0.3)", "0 0 25px hsl(35 85% 58% / 0.6)", "0 0 10px hsl(35 85% 58% / 0.3)"]
+          } : {}}
           transition={{ repeat: Infinity, duration: 2 }}
           className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
             isOpen ? "bg-primary/30" : "bg-muted/50"
@@ -41,20 +69,28 @@ export const TableTent = () => {
           initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -5 }}
-          className="glass-inner p-4 mb-4 relative z-10"
+          className={`glass-inner p-4 mb-4 relative z-10 transition-all duration-300 ${
+            isOpen ? "border border-primary/30" : ""
+          }`}
         >
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-              isOpen 
-                ? "bg-gradient-to-br from-primary to-gold-dark" 
-                : "bg-muted"
-            }`}>
+            <motion.div 
+              animate={isOpen ? { 
+                boxShadow: ["0 0 10px hsl(35 85% 58% / 0.2)", "0 0 25px hsl(35 85% 58% / 0.5)", "0 0 10px hsl(35 85% 58% / 0.2)"]
+              } : {}}
+              transition={{ repeat: Infinity, duration: 2 }}
+              className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                isOpen 
+                  ? "bg-gradient-to-br from-primary to-gold-dark" 
+                  : "bg-muted"
+              }`}
+            >
               {isOpen ? (
                 <User className="w-5 h-5 text-primary-foreground" />
               ) : (
                 <Focus className="w-5 h-5 text-muted-foreground" />
               )}
-            </div>
+            </motion.div>
             <div>
               <p className={`font-medium ${isOpen ? "text-primary" : "text-foreground"}`}>
                 {isOpen ? "Open voor koffie" : "Focus Mode"}
@@ -101,7 +137,7 @@ export const TableTent = () => {
           onClick={() => setCurrentUserStatus("open")}
           className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-medium transition-all ${
             isOpen
-              ? "bg-primary/20 text-primary border border-primary/40"
+              ? "bg-primary/20 text-primary border border-primary/40 shadow-[0_0_15px_hsl(35_85%_58%/0.3)]"
               : "bg-transparent text-muted-foreground hover:bg-muted/30"
           }`}
         >
