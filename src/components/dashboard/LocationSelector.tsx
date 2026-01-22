@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { MapPin, ChevronDown, Check } from "lucide-react";
+import { MapPin } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -7,31 +7,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-export interface Location {
-  id: string;
-  name: string;
-  address: string;
-  usersCount: number;
-}
-
-const locations: Location[] = [
-  { id: "1", name: "The Coffee Lab", address: "Amsterdam Centrum", usersCount: 23 },
-  { id: "2", name: "Espresso Bar", address: "De Pijp", usersCount: 15 },
-  { id: "3", name: "Creative Hub", address: "NDSM Werf", usersCount: 31 },
-  { id: "4", name: "Work Café", address: "Zuidas", usersCount: 18 },
-];
+import { labs, Lab } from "@/data/labs";
 
 interface LocationSelectorProps {
   currentLocation: string;
   onLocationChange: (locationId: string) => void;
+  usersPerLab: Record<string, number>;
 }
 
 export const LocationSelector = ({
   currentLocation,
   onLocationChange,
+  usersPerLab,
 }: LocationSelectorProps) => {
-  const selectedLocation = locations.find((l) => l.id === currentLocation) || locations[0];
+  const selectedLab = labs.find((l) => l.id === currentLocation) || labs[0];
 
   return (
     <motion.div
@@ -57,37 +46,54 @@ export const LocationSelector = ({
         <span className="text-sm text-muted-foreground font-medium">Huidige Locatie:</span>
         
         <Select value={currentLocation} onValueChange={onLocationChange}>
-          <SelectTrigger className="w-auto min-w-[200px] bg-card/80 backdrop-blur-sm border-border/50 hover:border-primary/50 transition-colors">
+          <SelectTrigger className="w-auto min-w-[280px] bg-card/80 backdrop-blur-sm border-border/50 hover:border-primary/50 transition-colors">
             <SelectValue>
-              <div className="flex items-center gap-2">
-                <span className="font-serif text-foreground">{selectedLocation.name}</span>
-                <span className="text-xs text-muted-foreground">
-                  ({selectedLocation.usersCount} aanwezig)
-                </span>
+              <div className="flex items-center gap-3">
+                <span className="text-lg">{selectedLab.icon}</span>
+                <div className="text-left">
+                  <span className="font-serif text-foreground">{selectedLab.name}</span>
+                  <span className="text-xs text-muted-foreground ml-2">
+                    ({usersPerLab[currentLocation] || 0} aanwezig)
+                  </span>
+                </div>
               </div>
             </SelectValue>
           </SelectTrigger>
           <SelectContent className="bg-card/95 backdrop-blur-md border-border/50">
-            {locations.map((location) => (
+            {labs.map((lab) => (
               <SelectItem
-                key={location.id}
-                value={location.id}
-                className="cursor-pointer hover:bg-primary/10 focus:bg-primary/10"
+                key={lab.id}
+                value={lab.id}
+                className="cursor-pointer hover:bg-primary/10 focus:bg-primary/10 py-3"
               >
-                <div className="flex items-center justify-between w-full gap-4">
-                  <div>
-                    <p className="font-serif text-foreground">{location.name}</p>
-                    <p className="text-xs text-muted-foreground">{location.address}</p>
+                <div className="flex items-center gap-3">
+                  <span className="text-xl">{lab.icon}</span>
+                  <div className="flex-1">
+                    <p className="font-serif text-foreground">{lab.name}</p>
+                    <p className="text-xs text-muted-foreground">{lab.tagline}</p>
                   </div>
-                  <span className="text-xs text-primary">{location.usersCount} 👥</span>
+                  <span className="text-xs text-primary ml-4">
+                    {usersPerLab[lab.id] || 0} 👥
+                  </span>
                 </div>
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
+      
+      {/* Lab description */}
+      <motion.p
+        key={selectedLab.id}
+        initial={{ opacity: 0, y: 5 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center text-xs text-muted-foreground mt-2"
+      >
+        {selectedLab.description}
+      </motion.p>
     </motion.div>
   );
 };
 
-export { locations };
+export { labs };
+export type { Lab };

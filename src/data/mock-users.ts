@@ -10,6 +10,7 @@ export const checkedInUsers: UserProfile[] = [
     skills: ["React", "Node.js", "TypeScript", "Python"],
     status: "open",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
+    labId: "roastery",
   },
   {
     id: "2",
@@ -19,6 +20,7 @@ export const checkedInUsers: UserProfile[] = [
     skills: ["UX Design", "Figma", "User Research"],
     status: "open",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+    labId: "library",
   },
   {
     id: "3",
@@ -28,6 +30,7 @@ export const checkedInUsers: UserProfile[] = [
     skills: ["Marketing", "Copywriting", "Branding"],
     status: "focus",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
+    labId: "espresso",
   },
   {
     id: "4",
@@ -37,6 +40,7 @@ export const checkedInUsers: UserProfile[] = [
     skills: ["AI/ML", "Python", "React"],
     status: "open",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 10).toISOString(),
+    labId: "roastery",
   },
   {
     id: "5",
@@ -46,6 +50,7 @@ export const checkedInUsers: UserProfile[] = [
     skills: ["UX Design", "Figma", "Prototyping"],
     status: "open",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 20).toISOString(),
+    labId: "greenhouse",
   },
   {
     id: "6",
@@ -55,6 +60,7 @@ export const checkedInUsers: UserProfile[] = [
     skills: ["React", "TypeScript", "Node.js"],
     status: "focus",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 35).toISOString(),
+    labId: "library",
   },
   {
     id: "7",
@@ -64,6 +70,7 @@ export const checkedInUsers: UserProfile[] = [
     skills: ["Branding", "Marketing", "Copywriting"],
     status: "open",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 25).toISOString(),
+    labId: "rooftop",
   },
   {
     id: "8",
@@ -73,6 +80,7 @@ export const checkedInUsers: UserProfile[] = [
     skills: ["Python", "Node.js", "AI/ML"],
     status: "open",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 40).toISOString(),
+    labId: "roastery",
   },
   {
     id: "9",
@@ -82,6 +90,7 @@ export const checkedInUsers: UserProfile[] = [
     skills: ["Copywriting", "Marketing", "Branding"],
     status: "open",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 50).toISOString(),
+    labId: "espresso",
   },
   {
     id: "10",
@@ -91,6 +100,27 @@ export const checkedInUsers: UserProfile[] = [
     skills: ["React", "TypeScript", "Figma"],
     status: "focus",
     checkedInAt: new Date(Date.now() - 1000 * 60 * 55).toISOString(),
+    labId: "greenhouse",
+  },
+  {
+    id: "11",
+    name: "Nina Vermeer",
+    avatar: "NV",
+    role: "Data Scientist",
+    skills: ["Python", "AI/ML", "Data Analysis"],
+    status: "open",
+    checkedInAt: new Date(Date.now() - 1000 * 60 * 12).toISOString(),
+    labId: "library",
+  },
+  {
+    id: "12",
+    name: "Bram van der Berg",
+    avatar: "BB",
+    role: "Creative Director",
+    skills: ["Branding", "UX Design", "Figma"],
+    status: "open",
+    checkedInAt: new Date(Date.now() - 1000 * 60 * 8).toISOString(),
+    labId: "rooftop",
   },
 ];
 
