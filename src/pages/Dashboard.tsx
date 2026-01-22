@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { LogOut } from "lucide-react";
 import { SocialRadar } from "@/components/dashboard/SocialRadar";
 import { SkillsWidget } from "@/components/dashboard/SkillsWidget";
 import { UsersWidget } from "@/components/dashboard/UsersWidget";
@@ -22,6 +24,9 @@ import { QRWelcomeAnimation } from "@/components/dashboard/QRWelcomeAnimation";
 import { CommonGroundProvider, useCommonGround } from "@/contexts/CommonGroundContext";
 import { PremiumProvider } from "@/contexts/PremiumContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 // Staggered animation for grid items
 const containerVariants = {
@@ -64,6 +69,7 @@ const itemVariants = {
 };
 
 const DashboardContent = () => {
+  const navigate = useNavigate();
   const [showOnboarding, setShowOnboarding] = useState(false);
   
   const { 
@@ -98,6 +104,12 @@ const DashboardContent = () => {
     localStorage.setItem("cg-onboarding-complete", "true");
   };
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast.success("Je bent uitgelogd");
+    navigate("/auth");
+  };
+
   // Current user mock data
   const currentUser = {
     name: "Jij",
@@ -107,6 +119,16 @@ const DashboardContent = () => {
 
   return (
     <div className="min-h-screen w-full relative overflow-hidden pb-20 md:pb-0">
+      {/* Logout Button */}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={handleLogout}
+        className="fixed top-4 right-4 z-50 bg-background/80 backdrop-blur-sm hover:bg-background/90"
+        title="Uitloggen"
+      >
+        <LogOut className="h-5 w-5" />
+      </Button>
       {/* Dynamic Lab Background with cross-fade */}
       <AnimatePresence mode="wait">
         <motion.div
