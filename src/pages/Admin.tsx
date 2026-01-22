@@ -1,17 +1,10 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { 
-  Settings, 
-  Building2, 
-  TrendingUp, 
-  Users, 
-  Activity,
-} from "lucide-react";
 import { LabMonitor } from "@/components/admin/LabMonitor";
 import { RevenueTracker } from "@/components/admin/RevenueTracker";
 import { EngagementPulse } from "@/components/admin/EngagementPulse";
 import { UserManagement } from "@/components/admin/UserManagement";
 import { AdminHeader } from "@/components/admin/AdminHeader";
+import { QRCodeGenerator } from "@/components/admin/QRCodeGenerator";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -84,6 +77,11 @@ const Admin = () => {
             {/* User Management */}
             <motion.div variants={itemVariants}>
               <UserManagement />
+            </motion.div>
+
+            {/* QR Code Generator */}
+            <motion.div variants={itemVariants}>
+              <QRCodeGenerator />
             </motion.div>
           </motion.div>
         </main>
