@@ -1,12 +1,16 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, CheckCircle, MessageCircle } from "lucide-react";
+import { X, Send, CheckCircle } from "lucide-react";
 import { UserProfile } from "@/types/common-ground";
-import { ChatMessage, QuickReply, ChatSession } from "@/types/chat";
+import { ChatMessage, QuickReply } from "@/types/chat";
 import { ChatBubble } from "./ChatBubble";
 import { TypingIndicator } from "./TypingIndicator";
 import { QuickRepliesBar } from "./QuickRepliesBar";
+import { IcebreakerBanner } from "./IcebreakerBanner";
+import { SmartTopics } from "./SmartTopics";
+import { MatchScoreBadge } from "./MatchScoreBadge";
 import { useCommonGround } from "@/contexts/CommonGroundContext";
+import { calculateMatchScore } from "@/lib/match-scoring";
 
 interface ChatOverlayProps {
   isOpen: boolean;
@@ -15,31 +19,46 @@ interface ChatOverlayProps {
   currentLabName?: string;
 }
 
+// Mock current user for demo
+const currentUserProfile = {
+  id: "current-user",
+  skills: ["React", "TypeScript", "AI/ML", "Node.js"],
+  labId: "roastery",
+};
+
 export const ChatOverlay = ({
   isOpen,
   onClose,
   chatPartner,
   currentLabName,
 }: ChatOverlayProps) => {
-  const { endChatSession } = useCommonGround();
+  const { endChatSession, currentLocation } = useCommonGround();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isPartnerTyping, setIsPartnerTyping] = useState(false);
+  const [showIcebreaker, setShowIcebreaker] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Current user ID (mock)
-  const currentUserId = "current-user";
+  // Calculate match analysis
+  const matchAnalysis = useMemo(() => {
+    if (!chatPartner) return null;
+    return calculateMatchScore(
+      { ...currentUserProfile, labId: currentLocation },
+      { skills: chatPartner.skills, labId: chatPartner.labId }
+    );
+  }, [chatPartner, currentLocation]);
 
   // Scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Focus input when opened
+  // Focus input when opened and reset state
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 300);
+      setShowIcebreaker(true);
       
       // Add initial system message
       if (messages.length === 0 && chatPartner) {
@@ -66,6 +85,8 @@ export const ChatOverlay = ({
         "Perfect, ik zie je daar!",
         "Super! Ik neem een cappuccino 😊",
         "Top! Ik kom eraan!",
+        "Interessant! Daar wil ik meer over horen.",
+        "Goed idee, laten we dat bespreken!",
       ];
       const randomResponse = responses[Math.floor(Math.random() * responses.length)];
       setMessages((prev) => [
@@ -86,7 +107,7 @@ export const ChatOverlay = ({
 
     const newMessage: ChatMessage = {
       id: `msg-${Date.now()}`,
-      senderId: currentUserId,
+      senderId: currentUserProfile.id,
       content: content.trim(),
       timestamp: new Date(),
       type,
@@ -95,6 +116,7 @@ export const ChatOverlay = ({
 
     setMessages((prev) => [...prev, newMessage]);
     setInputValue("");
+    setShowIcebreaker(false); // Hide icebreaker after first message
     
     // Simulate partner response for demo
     if (Math.random() > 0.3) {
@@ -123,6 +145,10 @@ export const ChatOverlay = ({
     }
   };
 
+  const handleTopicSelect = (topic: string) => {
+    sendMessage(topic);
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -148,7 +174,7 @@ export const ChatOverlay = ({
     }, 1500);
   };
 
-  if (!chatPartner) return null;
+  if (!chatPartner || !matchAnalysis) return null;
 
   return (
     <AnimatePresence>
@@ -165,11 +191,11 @@ export const ChatOverlay = ({
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 400, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="w-full max-w-md h-[600px] max-h-[80vh] wood-card flex flex-col pointer-events-auto overflow-hidden"
+            className="w-full max-w-md h-[700px] max-h-[85vh] wood-card flex flex-col pointer-events-auto overflow-hidden"
           >
-            {/* Header */}
+            {/* Header with Match Score */}
             <div className="flex items-center justify-between p-4 border-b border-border/30">
-                <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3">
                 <motion.div
                   animate={{
                     boxShadow: [
@@ -191,13 +217,30 @@ export const ChatOverlay = ({
                   </p>
                 </div>
               </div>
-              <button
-                onClick={onClose}
-                className="w-8 h-8 rounded-full bg-muted/50 flex items-center justify-center hover:bg-muted transition-colors"
-              >
-                <X className="w-4 h-4 text-muted-foreground" />
-              </button>
+              
+              {/* Match Score Badge */}
+              <div className="flex items-center gap-3">
+                <MatchScoreBadge
+                  score={matchAnalysis.score}
+                  sharedSkillsCount={matchAnalysis.sharedSkills.length}
+                  sameLocation={matchAnalysis.sameLocation}
+                />
+                <button
+                  onClick={onClose}
+                  className="w-8 h-8 rounded-full bg-muted/50 flex items-center justify-center hover:bg-muted transition-colors"
+                >
+                  <X className="w-4 h-4 text-muted-foreground" />
+                </button>
+              </div>
             </div>
+
+            {/* Icebreaker Banner */}
+            <IcebreakerBanner
+              matchAnalysis={matchAnalysis}
+              partnerName={chatPartner.name}
+              onDismiss={() => setShowIcebreaker(false)}
+              isVisible={showIcebreaker && messages.length <= 1}
+            />
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-1">
@@ -205,9 +248,9 @@ export const ChatOverlay = ({
                 <ChatBubble
                   key={message.id}
                   message={message}
-                  isOwn={message.senderId === currentUserId}
+                  isOwn={message.senderId === currentUserProfile.id}
                   senderName={
-                    message.senderId !== currentUserId && message.senderId !== "system"
+                    message.senderId !== currentUserProfile.id && message.senderId !== "system"
                       ? chatPartner.name
                       : undefined
                   }
@@ -222,6 +265,14 @@ export const ChatOverlay = ({
               
               <div ref={messagesEndRef} />
             </div>
+
+            {/* Smart Topics */}
+            {messages.length <= 2 && (
+              <SmartTopics
+                matchAnalysis={matchAnalysis}
+                onSelectTopic={handleTopicSelect}
+              />
+            )}
 
             {/* Quick Replies */}
             <div className="px-4 py-2 border-t border-border/30">
