@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      labs: {
+        Row: {
+          atmosphere: string | null
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          tagline: string | null
+        }
+        Insert: {
+          atmosphere?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id: string
+          name: string
+          tagline?: string | null
+        }
+        Update: {
+          atmosphere?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          tagline?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -69,7 +99,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_profiles_current_lab"
+            columns: ["current_lab_id"]
+            isOneToOne: false
+            referencedRelation: "labs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {

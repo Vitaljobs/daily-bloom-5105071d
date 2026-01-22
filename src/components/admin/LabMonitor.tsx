@@ -1,33 +1,25 @@
 import { motion } from "framer-motion";
-import { Building2, Users, Zap, TrendingUp } from "lucide-react";
-import { labs } from "@/data/labs";
-import { checkedInUsers } from "@/data/mock-users";
+import { Building2, Users, Zap, Loader2 } from "lucide-react";
+import { useLabStats } from "@/hooks/useAdminData";
 
 export const LabMonitor = () => {
-  // Calculate stats per lab
-  const labStats = labs.map((lab) => {
-    const usersInLab = checkedInUsers.filter(
-      (user) => user.labId === lab.id && user.status !== "invisible"
-    );
-    
-    // Get most popular skill in this lab
-    const skillCounts: Record<string, number> = {};
-    usersInLab.forEach((user) => {
-      user.skills.forEach((skill) => {
-        skillCounts[skill] = (skillCounts[skill] || 0) + 1;
-      });
-    });
-    
-    const topSkill = Object.entries(skillCounts)
-      .sort((a, b) => b[1] - a[1])[0];
+  const { data: labStats, isLoading, error } = useLabStats();
 
-    return {
-      ...lab,
-      currentUsers: usersInLab.length,
-      topSkill: topSkill ? topSkill[0] : "N/A",
-      topSkillCount: topSkill ? topSkill[1] : 0,
-    };
-  });
+  if (isLoading) {
+    return (
+      <div className="rounded-2xl bg-card border border-admin-border p-12 flex items-center justify-center">
+        <Loader2 className="w-6 h-6 animate-spin text-neon-cyan" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="rounded-2xl bg-card border border-admin-border p-8 text-center text-destructive">
+        Fout bij laden van lab data
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-2xl bg-card border border-admin-border overflow-hidden">
@@ -45,7 +37,7 @@ export const LabMonitor = () => {
 
       <div className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-          {labStats.map((lab, index) => (
+          {labStats?.map((lab, index) => (
             <motion.div
               key={lab.id}
               initial={{ opacity: 0, scale: 0.95 }}
@@ -63,7 +55,7 @@ export const LabMonitor = () => {
                   </h3>
                   <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-neon-cyan/10 border border-neon-cyan/20">
                     <Users className="w-3 h-3 text-neon-cyan" />
-                    <span className="text-xs font-bold text-neon-cyan">{lab.currentUsers}</span>
+                    <span className="text-xs font-bold text-neon-cyan">{lab.checked_in_count}</span>
                   </div>
                 </div>
 
@@ -78,13 +70,8 @@ export const LabMonitor = () => {
                   </div>
                   <div className="mt-1 flex items-center justify-between">
                     <span className="text-sm font-medium text-neon-green truncate">
-                      {lab.topSkill}
+                      {lab.top_skill || "N/A"}
                     </span>
-                    {lab.topSkillCount > 0 && (
-                      <span className="text-xs text-muted-foreground">
-                        ({lab.topSkillCount})
-                      </span>
-                    )}
                   </div>
                 </div>
               </div>
