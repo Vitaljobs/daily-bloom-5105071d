@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, CheckCircle, Lightbulb, Share2 } from "lucide-react";
+import { X, Send, CheckCircle, Lightbulb, Share2, Lock } from "lucide-react";
 import { UserProfile } from "@/types/common-ground";
 import { ChatMessage, QuickReply } from "@/types/chat";
 import { ChatBubble } from "./ChatBubble";
@@ -12,6 +12,7 @@ import { MatchScoreBadge } from "./MatchScoreBadge";
 import { ContactShareModal } from "./ContactShareModal";
 import { MeetingCompleteModal } from "./MeetingCompleteModal";
 import { useCommonGround } from "@/contexts/CommonGroundContext";
+import { usePremium } from "@/contexts/PremiumContext";
 import { calculateMatchScore } from "@/lib/match-scoring";
 import { useToast } from "@/hooks/use-toast";
 
@@ -36,6 +37,7 @@ export const ChatOverlay = ({
   currentLabName,
 }: ChatOverlayProps) => {
   const { endChatSession, currentLocation } = useCommonGround();
+  const { isPremium, triggerPaywall } = usePremium();
   const { toast } = useToast();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState("");
@@ -253,11 +255,22 @@ export const ChatOverlay = ({
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setShowContactModal(true)}
-                  className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center hover:bg-primary/30 transition-colors"
+                  onClick={() => {
+                    if (isPremium) {
+                      setShowContactModal(true);
+                    } else {
+                      triggerPaywall("contact-share");
+                    }
+                  }}
+                  className="relative w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center hover:bg-primary/30 transition-colors"
                   title="Contact delen"
                 >
                   <Share2 className="w-4 h-4 text-primary" />
+                  {!isPremium && (
+                    <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-muted border border-border flex items-center justify-center">
+                      <Lock className="w-2.5 h-2.5 text-muted-foreground" />
+                    </div>
+                  )}
                 </motion.button>
                 <button
                   onClick={onClose}
@@ -268,13 +281,41 @@ export const ChatOverlay = ({
               </div>
             </div>
 
-            {/* Icebreaker Banner */}
-            <IcebreakerBanner
-              matchAnalysis={matchAnalysis}
-              partnerName={chatPartner.name}
-              onDismiss={() => setShowIcebreaker(false)}
-              isVisible={showIcebreaker && messages.length <= 1}
-            />
+            {/* Icebreaker Banner - Premium Feature */}
+            {isPremium ? (
+              <IcebreakerBanner
+                matchAnalysis={matchAnalysis}
+                partnerName={chatPartner.name}
+                onDismiss={() => setShowIcebreaker(false)}
+                isVisible={showIcebreaker && messages.length <= 1}
+              />
+            ) : (
+              showIcebreaker && messages.length <= 1 && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  className="overflow-hidden"
+                >
+                  <div 
+                    className="relative mx-4 mt-3 p-4 rounded-xl bg-muted/30 border border-border/50 cursor-pointer group"
+                    onClick={() => triggerPaywall("ai-icebreaker")}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-muted/50 flex items-center justify-center">
+                        <Lock className="w-5 h-5 text-muted-foreground" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-foreground">AI Ijsbrekers</p>
+                        <p className="text-xs text-muted-foreground">Ontgrendel slimme gespreksstarters</p>
+                      </div>
+                      <span className="px-2 py-1 text-xs rounded-full bg-primary/20 text-primary">Premium</span>
+                    </div>
+                    {/* Blur overlay hint */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-muted/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
+                  </div>
+                </motion.div>
+              )
+            )}
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-1">
@@ -319,19 +360,30 @@ export const ChatOverlay = ({
             {/* Input with Lightbulb */}
             <div className="p-4 border-t border-border/30">
               <div className="flex gap-2">
-                {/* Smart Topics Lightbulb Button */}
+                {/* Smart Topics Lightbulb Button - Premium Feature */}
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setShowTopicsPopup(!showTopicsPopup)}
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
-                    showTopicsPopup 
+                  onClick={() => {
+                    if (isPremium) {
+                      setShowTopicsPopup(!showTopicsPopup);
+                    } else {
+                      triggerPaywall("smart-topics");
+                    }
+                  }}
+                  className={`relative w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
+                    showTopicsPopup && isPremium
                       ? "bg-primary text-primary-foreground" 
                       : "bg-muted/50 text-muted-foreground hover:bg-primary/20 hover:text-primary"
                   }`}
                   title="Topic suggesties"
                 >
                   <Lightbulb className="w-4 h-4" />
+                  {!isPremium && (
+                    <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-muted border border-border flex items-center justify-center">
+                      <Lock className="w-2.5 h-2.5 text-muted-foreground" />
+                    </div>
+                  )}
                 </motion.button>
                 
                 <input
