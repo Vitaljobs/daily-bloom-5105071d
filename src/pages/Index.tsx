@@ -32,24 +32,24 @@ const Index = () => {
       <Hero />
 
       {/* Features Section */}
-      <section className="relative py-24 bg-background">
-        <div className="container mx-auto px-6">
+      <section className="relative py-16 md:py-24 bg-background">
+        <div className="container mx-auto px-4 md:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-12 md:mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-serif text-foreground mb-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif text-foreground mb-4">
               Networking, <span className="text-gradient-gold">Reimagined</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
               Built for the way modern professionals actually work — in coffee shops, 
               co-working spaces, and creative hubs.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
@@ -57,12 +57,12 @@ const Index = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bento-card text-center"
+                className="bento-card text-center p-6"
               >
                 <div className="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center mx-auto mb-4">
                   <feature.icon className="w-7 h-7 text-primary" />
                 </div>
-                <h3 className="text-xl font-serif text-foreground mb-2">{feature.title}</h3>
+                <h3 className="text-lg md:text-xl font-serif text-foreground mb-2">{feature.title}</h3>
                 <p className="text-muted-foreground text-sm">{feature.description}</p>
               </motion.div>
             ))}
@@ -71,18 +71,18 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="relative py-24">
-        <div className="container mx-auto px-6">
+      <section className="relative py-16 md:py-24 px-4">
+        <div className="container mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="glass-panel rounded-3xl p-12 text-center max-w-4xl mx-auto"
+            className="glass-panel rounded-2xl md:rounded-3xl p-8 md:p-12 text-center max-w-4xl mx-auto"
           >
-            <h2 className="text-3xl md:text-5xl font-serif text-foreground mb-4">
+            <h2 className="text-2xl md:text-3xl lg:text-5xl font-serif text-foreground mb-4">
               Ready to find your <span className="text-gradient-gold">Common Ground</span>?
             </h2>
-            <p className="text-xl text-muted-foreground mb-8 max-w-xl mx-auto">
+            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto">
               Join thousands of professionals already making meaningful connections 
               in their favorite spaces.
             </p>
@@ -90,7 +90,7 @@ const Index = () => {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="btn-gold px-10 py-4 rounded-xl text-lg font-medium inline-flex items-center gap-3"
+                className="btn-gold px-8 md:px-10 py-4 rounded-xl text-base md:text-lg font-medium inline-flex items-center gap-3 min-h-[56px]"
               >
                 Open Dashboard
                 <ArrowRight className="w-5 h-5" />
@@ -102,14 +102,14 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="border-t border-border py-8">
-        <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="container mx-auto px-4 md:px-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
               <Coffee className="w-4 h-4 text-primary" />
             </div>
             <span className="font-serif text-foreground">Common Ground</span>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground text-center md:text-left">
             © 2025 Common Ground. Built for modern professionals.
           </p>
         </div>
