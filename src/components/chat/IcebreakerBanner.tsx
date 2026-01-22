@@ -27,9 +27,18 @@ export const IcebreakerBanner = ({
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ height: 0, opacity: 0 }}
-        animate={{ height: "auto", opacity: 1 }}
-        exit={{ height: 0, opacity: 0 }}
+        initial={{ height: 0, opacity: 0, y: -30 }}
+        animate={{ 
+          height: "auto", 
+          opacity: 1, 
+          y: 0,
+          transition: {
+            height: { duration: 0.3 },
+            opacity: { duration: 0.3 },
+            y: { type: "spring", stiffness: 400, damping: 15, delay: 0.1 }
+          }
+        }}
+        exit={{ height: 0, opacity: 0, y: -20 }}
         className="overflow-hidden"
       >
         {/* Golden border glow */}
@@ -74,12 +83,24 @@ export const IcebreakerBanner = ({
               </motion.div>
               
               <div className="flex-1 min-w-0">
+                {/* Match Found Header */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="flex items-center gap-1.5 mb-1"
+                >
+                  <span className="text-xs font-semibold text-primary uppercase tracking-wide">
+                    ✨ Match gevonden
+                  </span>
+                </motion.div>
+                
                 <p className="text-sm font-medium text-foreground leading-relaxed">
                   {sharedSkillsText ? (
                     <>
-                      Jullie delen een passie voor{" "}
+                      Jullie hebben allebei ervaring met{" "}
                       <span className="text-primary font-semibold">{sharedSkillsText}</span>.
-                      {" "}Een mooi startpunt voor jullie koffie! ☕
+                      {" "}Start hier het gesprek!
                     </>
                   ) : (
                     matchAnalysis.icebreaker || `Start een gesprek met ${partnerName}!`
