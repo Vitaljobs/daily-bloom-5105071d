@@ -7,73 +7,68 @@
 @layer base {
   :root {
     /* Common Ground - Premium Dark Wood Theme */
-    --background: 20 20% 8%;
-    --foreground: 45 30% 95%;
+    --background: 20 25% 6%;
+    --foreground: 35 30% 92%;
 
-    --card: 20 25% 12%;
-    --card-foreground: 45 30% 95%;
+    --card: 20 30% 10%;
+    --card-foreground: 35 30% 92%;
 
-    --popover: 20 25% 10%;
-    --popover-foreground: 45 30% 95%;
+    --popover: 20 30% 8%;
+    --popover-foreground: 35 30% 92%;
 
     /* Warm Gold accent */
-    --primary: 35 80% 55%;
-    --primary-foreground: 20 20% 8%;
+    --primary: 35 85% 58%;
+    --primary-foreground: 20 30% 8%;
 
-    --secondary: 20 15% 18%;
-    --secondary-foreground: 45 25% 90%;
+    --secondary: 25 20% 16%;
+    --secondary-foreground: 35 25% 88%;
 
-    --muted: 20 12% 22%;
-    --muted-foreground: 30 10% 55%;
+    --muted: 25 15% 20%;
+    --muted-foreground: 30 12% 55%;
 
-    --accent: 35 70% 50%;
-    --accent-foreground: 20 20% 8%;
+    --accent: 35 75% 52%;
+    --accent-foreground: 20 30% 8%;
 
     --destructive: 0 62% 50%;
-    --destructive-foreground: 45 30% 95%;
+    --destructive-foreground: 35 30% 95%;
 
-    --border: 20 15% 20%;
-    --input: 20 15% 18%;
-    --ring: 35 80% 55%;
+    --border: 25 20% 18%;
+    --input: 25 18% 16%;
+    --ring: 35 85% 58%;
 
-    --radius: 1rem;
+    --radius: 1.5rem;
 
-    /* Custom Common Ground tokens */
-    --wood-dark: 20 20% 8%;
-    --wood-medium: 20 25% 12%;
-    --wood-light: 20 20% 18%;
-    --cream: 45 50% 96%;
-    --cream-muted: 40 25% 85%;
-    --coffee: 25 40% 25%;
-    --coffee-light: 30 35% 40%;
-    --gold: 35 80% 55%;
-    --gold-light: 38 85% 70%;
-    --gold-dark: 32 75% 40%;
-
-    /* Gradients */
-    --gradient-gold: linear-gradient(135deg, hsl(35 80% 55%), hsl(38 85% 70%));
-    --gradient-wood: linear-gradient(180deg, hsl(20 25% 14%), hsl(20 20% 8%));
-    --gradient-glass: linear-gradient(135deg, hsl(20 25% 15% / 0.8), hsl(20 20% 10% / 0.6));
+    /* Premium Wood tokens */
+    --wood-base: #1a1310;
+    --wood-light: #2a2320;
+    --wood-dark: #0f0b09;
+    --cream: 35 40% 94%;
+    --cream-muted: 32 20% 75%;
+    --coffee: 25 45% 22%;
+    --coffee-light: 28 35% 38%;
+    --gold: 35 85% 58%;
+    --gold-light: 38 90% 72%;
+    --gold-dark: 32 80% 42%;
 
     /* Shadows */
-    --shadow-card: 0 10px 40px hsl(20 30% 5% / 0.5);
-    --shadow-gold: 0 4px 25px hsl(35 80% 55% / 0.25);
-    --shadow-soft: 0 4px 20px hsl(20 30% 5% / 0.3);
+    --shadow-wood: 0 20px 60px hsl(20 40% 4% / 0.6), 0 8px 24px hsl(20 40% 4% / 0.4);
+    --shadow-hover: 0 25px 70px hsl(20 40% 4% / 0.7), 0 12px 30px hsl(20 40% 4% / 0.5);
+    --shadow-glow: 0 0 40px hsl(35 85% 58% / 0.4), 0 0 80px hsl(35 85% 58% / 0.2);
 
     /* Sidebar */
-    --sidebar-background: 20 22% 10%;
-    --sidebar-foreground: 45 25% 90%;
-    --sidebar-primary: 35 80% 55%;
-    --sidebar-primary-foreground: 20 20% 8%;
-    --sidebar-accent: 20 18% 16%;
-    --sidebar-accent-foreground: 45 30% 95%;
-    --sidebar-border: 20 15% 18%;
-    --sidebar-ring: 35 80% 55%;
+    --sidebar-background: 20 28% 8%;
+    --sidebar-foreground: 35 25% 88%;
+    --sidebar-primary: 35 85% 58%;
+    --sidebar-primary-foreground: 20 30% 8%;
+    --sidebar-accent: 25 18% 14%;
+    --sidebar-accent-foreground: 35 30% 92%;
+    --sidebar-border: 25 18% 16%;
+    --sidebar-ring: 35 85% 58%;
   }
 
   .dark {
-    --background: 20 20% 8%;
-    --foreground: 45 30% 95%;
+    --background: 20 25% 6%;
+    --foreground: 35 30% 92%;
   }
 }
 
@@ -95,54 +90,83 @@
 
 @layer components {
   .text-gradient-gold {
-    background: linear-gradient(135deg, hsl(35 80% 55%), hsl(38 85% 70%));
+    background: linear-gradient(135deg, hsl(35 85% 58%), hsl(38 90% 72%));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .glass-panel {
-    background: linear-gradient(135deg, hsl(20 25% 14% / 0.85), hsl(20 20% 10% / 0.75));
-    backdrop-filter: blur(24px);
-    border: 1px solid hsl(20 20% 25% / 0.4);
-    box-shadow: 0 10px 40px hsl(20 30% 5% / 0.4);
+  /* Premium Wood Card */
+  .wood-card {
+    background: linear-gradient(145deg, #1a1310 0%, #0f0b09 100%);
+    border: 1px solid hsl(25 25% 18% / 0.6);
+    border-radius: 1.5rem;
+    box-shadow: var(--shadow-wood);
+    opacity: 0.97;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
   }
 
-  .bento-card {
-    @apply glass-panel rounded-2xl p-6 transition-all duration-300;
+  .wood-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('/wood-texture.jpg') center/cover;
+    opacity: 0.08;
+    pointer-events: none;
   }
 
-  .bento-card:hover {
-    border-color: hsl(35 80% 55% / 0.3);
-    box-shadow: 0 15px 50px hsl(20 30% 5% / 0.5), 0 0 30px hsl(35 80% 55% / 0.1);
+  .wood-card:hover {
     transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    border-color: hsl(25 25% 24% / 0.8);
+    background: linear-gradient(145deg, #1e1714 0%, #12100d 100%);
+  }
+
+  /* Glowing variant for "Open for Coffee" status */
+  .wood-card-glow {
+    box-shadow: var(--shadow-wood), var(--shadow-glow);
+    border-color: hsl(35 85% 58% / 0.5);
+  }
+
+  .wood-card-glow::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 1.5rem;
+    background: linear-gradient(135deg, hsl(35 85% 58% / 0.3), transparent, hsl(35 85% 58% / 0.2));
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Glass panel for inner elements */
+  .glass-inner {
+    background: linear-gradient(135deg, hsl(25 20% 16% / 0.8), hsl(25 20% 12% / 0.6));
+    backdrop-filter: blur(8px);
+    border: 1px solid hsl(25 20% 22% / 0.5);
+    border-radius: 1rem;
   }
 
   .btn-gold {
-    background: linear-gradient(135deg, hsl(35 80% 55%), hsl(32 75% 45%));
-    color: hsl(20 20% 8%);
-    box-shadow: 0 4px 25px hsl(35 80% 55% / 0.3);
+    background: linear-gradient(135deg, hsl(35 85% 58%), hsl(32 80% 48%));
+    color: hsl(20 30% 8%);
+    box-shadow: 0 4px 20px hsl(35 85% 58% / 0.35);
     transition: all 0.3s ease;
   }
 
   .btn-gold:hover {
-    box-shadow: 0 8px 35px hsl(35 80% 55% / 0.5);
+    box-shadow: 0 8px 30px hsl(35 85% 58% / 0.5);
     transform: translateY(-2px);
   }
 
-  .glow-gold {
-    box-shadow: 0 0 50px hsl(35 80% 55% / 0.25);
+  /* Profile avatar styles */
+  .avatar-ring {
+    box-shadow: 0 0 0 2px hsl(35 85% 58% / 0.6);
   }
 
-  .status-focus {
-    background: linear-gradient(135deg, hsl(20 25% 10%), hsl(20 20% 6%));
-    border-color: hsl(20 15% 25%);
-  }
-
-  .status-open {
-    background: linear-gradient(135deg, hsl(35 80% 55% / 0.15), hsl(35 70% 45% / 0.1));
-    border-color: hsl(35 80% 55% / 0.5);
-    box-shadow: 0 0 30px hsl(35 80% 55% / 0.2);
+  .avatar-ring-active {
+    box-shadow: 0 0 0 2px hsl(35 85% 58%), 0 0 20px hsl(35 85% 58% / 0.4);
   }
 }
 
@@ -155,8 +179,8 @@
     animation: slideUp 0.6s ease-out forwards;
   }
 
-  .animate-pulse-slow {
-    animation: pulseSlow 3s ease-in-out infinite;
+  .animate-pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
   }
 
   .animate-float {
@@ -179,19 +203,17 @@
     }
   }
 
-  @keyframes pulseSlow {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
+  @keyframes pulseGlow {
+    0%, 100% { 
+      box-shadow: 0 20px 60px hsl(20 40% 4% / 0.6), 0 0 30px hsl(35 85% 58% / 0.3);
+    }
+    50% { 
+      box-shadow: 0 20px 60px hsl(20 40% 4% / 0.6), 0 0 50px hsl(35 85% 58% / 0.5);
+    }
   }
 
   @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-
-  .bg-cafe-pattern {
-    background-image: 
-      radial-gradient(ellipse at 30% 20%, hsl(35 60% 30% / 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 70% 80%, hsl(20 30% 15% / 0.3) 0%, transparent 50%);
+    50% { transform: translateY(-6px); }
   }
 }
