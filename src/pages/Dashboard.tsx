@@ -5,10 +5,13 @@ import { SmartMatch } from "@/components/dashboard/SmartMatch";
 import { HelpWall } from "@/components/dashboard/HelpWall";
 import { LocationCard } from "@/components/dashboard/LocationCard";
 import { ProfileCard } from "@/components/dashboard/ProfileCard";
+import { CommonGroundProvider, useCommonGround } from "@/contexts/CommonGroundContext";
 import { Coffee, Bell, Search } from "lucide-react";
 import cafeBg from "@/assets/cafe-bg.jpg";
 
-const Dashboard = () => {
+const DashboardContent = () => {
+  const { openUsers } = useCommonGround();
+
   return (
     <div className="min-h-screen bg-background">
       {/* Background */}
@@ -54,7 +57,7 @@ const Dashboard = () => {
             Good afternoon, <span className="text-gradient-gold">Jan</span>
           </h1>
           <p className="text-muted-foreground">
-            23 professionals are working nearby at The Coffee Lab
+            <span className="text-primary font-medium">{openUsers.length} professionals</span> open for coffee at The Coffee Lab
           </p>
         </motion.div>
 
@@ -168,6 +171,14 @@ const Dashboard = () => {
         </div>
       </main>
     </div>
+  );
+};
+
+const Dashboard = () => {
+  return (
+    <CommonGroundProvider>
+      <DashboardContent />
+    </CommonGroundProvider>
   );
 };
 
