@@ -1,17 +1,26 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, X, Coffee, Crown } from "lucide-react";
 import { useCommonGround } from "@/contexts/CommonGroundContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { UserProfile } from "@/types/common-ground";
+import { UserProfile, Industry } from "@/types/common-ground";
+import { IndustryFilter } from "@/components/filters/IndustryFilter";
+import { LocalGuideBadge, isLocalGuide } from "@/components/badges/LocalGuideBadge";
 
 // Mock premium users for demo
-const premiumUserIds = ["emma", "thomas"];
+const premiumUserIds = ["1", "4"];
 
 export const SocialRadar = () => {
   const { checkedInUsers, openUsers, setSelectedUser, selectedUser } = useCommonGround();
   const { t } = useLanguage();
   const [hoveredUser, setHoveredUser] = useState<UserProfile | null>(null);
+  const [selectedIndustry, setSelectedIndustry] = useState<Industry | null>(null);
+
+  // Filter users by industry
+  const filteredUsers = useMemo(() => {
+    if (!selectedIndustry) return checkedInUsers;
+    return checkedInUsers.filter(user => user.industry === selectedIndustry);
+  }, [checkedInUsers, selectedIndustry]);
 
   const handleUserClick = (user: UserProfile) => {
     // Set selected user for Smart Match widget
@@ -21,23 +30,31 @@ export const SocialRadar = () => {
   return (
     <div className="wood-card p-5 h-full relative">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-5 relative z-10">
-        <motion.div
-          animate={{ scale: [1, 1.05, 1] }}
-          transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-          className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center"
-        >
-          <Sparkles className="w-4 h-4 text-primary" />
-        </motion.div>
-        <div>
-          <h3 className="text-base font-serif text-foreground">{t.socialRadar.title}</h3>
-          <p className="text-xs text-muted-foreground">{openUsers.length} {t.socialRadar.availableForCoffee}</p>
+      <div className="flex items-center justify-between mb-4 relative z-10">
+        <div className="flex items-center gap-3">
+          <motion.div
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+            className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center"
+          >
+            <Sparkles className="w-4 h-4 text-primary" />
+          </motion.div>
+          <div>
+            <h3 className="text-base font-serif text-foreground">{t.socialRadar.title}</h3>
+            <p className="text-xs text-muted-foreground">{openUsers.length} {t.socialRadar.availableForCoffee}</p>
+          </div>
         </div>
+        
+        {/* Industry Filter */}
+        <IndustryFilter
+          selectedIndustry={selectedIndustry}
+          onSelectIndustry={setSelectedIndustry}
+        />
       </div>
 
       {/* Profile Grid */}
       <div className="grid grid-cols-4 gap-3 relative z-10">
-        {checkedInUsers.slice(0, 8).map((user, index) => (
+        {filteredUsers.slice(0, 8).map((user, index) => (
           <motion.button
             key={user.id}
             initial={{ opacity: 0, scale: 0.8 }}
@@ -72,7 +89,15 @@ export const SocialRadar = () => {
                 <Crown className="w-2.5 h-2.5 text-primary-foreground" />
               </motion.div>
             )}
-            {user.status === "open" && !premiumUserIds.includes(user.id) && (
+            {/* Local Guide Badge */}
+            {isLocalGuide(user.labVisits) && !premiumUserIds.includes(user.id) && (
+              <LocalGuideBadge 
+                labVisits={user.labVisits || 0} 
+                size="sm" 
+                className="absolute -top-1 -right-1"
+              />
+            )}
+            {user.status === "open" && !premiumUserIds.includes(user.id) && !isLocalGuide(user.labVisits) && (
               <motion.span 
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ repeat: Infinity, duration: 2 }}
