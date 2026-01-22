@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Coffee, X, Users, Sparkles } from "lucide-react";
 import { Lab } from "@/data/labs";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface WelcomeOverlayProps {
   isVisible: boolean;
@@ -15,6 +16,8 @@ export const WelcomeOverlay = ({
   openUsersCount,
   onClose,
 }: WelcomeOverlayProps) => {
+  const { t } = useLanguage();
+  
   if (!lab) return null;
 
   return (
@@ -88,7 +91,7 @@ export const WelcomeOverlay = ({
               transition={{ delay: 0.5 }}
             >
               <h2 className="font-serif text-2xl text-foreground mb-2">
-                Welkom in
+                {t.welcome.welcomeTo}
               </h2>
               <motion.h1
                 animate={{
@@ -119,7 +122,7 @@ export const WelcomeOverlay = ({
                   <span className="font-serif text-xl">{openUsersCount}</span>
                 </div>
                 <span className="text-sm text-muted-foreground">
-                  professionals open voor een gesprek
+                  {t.welcome.professionalsOpen}
                 </span>
               </div>
             </motion.div>
@@ -131,7 +134,7 @@ export const WelcomeOverlay = ({
               transition={{ delay: 0.7 }}
               className="text-sm text-muted-foreground mb-6"
             >
-              Geniet van je koffie en je connecties!
+              {t.welcome.enjoyMessage}
             </motion.p>
 
             {/* CTA Button */}
@@ -145,7 +148,7 @@ export const WelcomeOverlay = ({
               className="btn-gold w-full py-3 flex items-center justify-center gap-2"
             >
               <Coffee className="w-4 h-4" />
-              <span>Begin met netwerken</span>
+              <span>{t.welcome.startNetworking}</span>
               <Sparkles className="w-4 h-4" />
             </motion.button>
           </motion.div>

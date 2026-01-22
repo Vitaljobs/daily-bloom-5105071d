@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, X, Coffee, Crown } from "lucide-react";
 import { useCommonGround } from "@/contexts/CommonGroundContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { UserProfile } from "@/types/common-ground";
 
 // Mock premium users for demo
@@ -9,6 +10,7 @@ const premiumUserIds = ["emma", "thomas"];
 
 export const SocialRadar = () => {
   const { checkedInUsers, openUsers, setSelectedUser, selectedUser } = useCommonGround();
+  const { t } = useLanguage();
   const [hoveredUser, setHoveredUser] = useState<UserProfile | null>(null);
 
   const handleUserClick = (user: UserProfile) => {
@@ -28,8 +30,8 @@ export const SocialRadar = () => {
           <Sparkles className="w-4 h-4 text-primary" />
         </motion.div>
         <div>
-          <h3 className="text-base font-serif text-foreground">Social Radar</h3>
-          <p className="text-xs text-muted-foreground">{openUsers.length} beschikbaar voor koffie</p>
+          <h3 className="text-base font-serif text-foreground">{t.socialRadar.title}</h3>
+          <p className="text-xs text-muted-foreground">{openUsers.length} {t.socialRadar.availableForCoffee}</p>
         </div>
       </div>
 
@@ -154,7 +156,7 @@ export const SocialRadar = () => {
             </div>
 
             <p className="text-xs text-muted-foreground">
-              Klik op <span className="text-primary">Smart Match</span> om uit te nodigen
+              {t.socialRadar.clickSmartMatch}
             </p>
           </motion.div>
         )}
