@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Coffee, Users, Zap } from "lucide-react";
+import { Link } from "react-router-dom";
 import cafeBg from "@/assets/cafe-bg.jpg";
 
 export const Hero = () => {
@@ -51,10 +52,10 @@ export const Hero = () => {
             transition={{ delay: 0.4 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <button className="btn-gold px-8 py-4 rounded-xl text-lg font-medium flex items-center gap-2 group">
+            <Link to="/dashboard" className="btn-gold px-8 py-4 rounded-xl text-lg font-medium flex items-center gap-2 group">
               Check In Now
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </Link>
             <button className="px-8 py-4 rounded-xl text-lg font-medium border border-border hover:border-primary/50 transition-colors flex items-center gap-2">
               <Coffee className="w-5 h-5" />
               Explore Spaces
