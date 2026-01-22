@@ -3,6 +3,7 @@ import { ArrowRight, Coffee, Users, Zap } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import cafeBg from "@/assets/cafe-bg.jpg";
 import { LiveOccupancyBadge } from "./LiveOccupancyBadge";
+import { PersonalizedGreeting } from "./PersonalizedGreeting";
 import { getLabById } from "@/data/labs";
 
 export const Hero = () => {
@@ -33,6 +34,9 @@ export const Hero = () => {
           transition={{ duration: 0.8 }}
           className="max-w-4xl mx-auto"
         >
+          {/* Personalized Time-Based Greeting */}
+          <PersonalizedGreeting labId={labParam} />
+
           {/* Live Occupancy Badge */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
