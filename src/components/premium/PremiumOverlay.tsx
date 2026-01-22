@@ -2,10 +2,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Crown, Sparkles, MessageSquare, Share2, Zap, Check, Languages } from "lucide-react";
 import { usePremium } from "@/contexts/PremiumContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { toast } from "sonner";
 
 export const PremiumOverlay = () => {
-  const { showPremiumOverlay, closePremiumOverlay, setIsPremium } = usePremium();
-  const { t } = useLanguage();
+  const { showPremiumOverlay, closePremiumOverlay } = usePremium();
+  const { t, language } = useLanguage();
 
   const premiumFeatures = [
     {
@@ -36,8 +37,13 @@ export const PremiumOverlay = () => {
   ];
 
   const handleUpgrade = () => {
-    // Simulate premium upgrade
-    setIsPremium(true);
+    // In production this would trigger a payment flow
+    // For now, premium is managed via admin dashboard
+    toast.success(
+      language === "nl" 
+        ? "Neem contact op met een beheerder om Premium te activeren!" 
+        : "Contact an administrator to activate Premium!"
+    );
     closePremiumOverlay();
   };
 
