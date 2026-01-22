@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, CheckCircle } from "lucide-react";
+import { X, Send, CheckCircle, Lightbulb, Share2 } from "lucide-react";
 import { UserProfile } from "@/types/common-ground";
 import { ChatMessage, QuickReply } from "@/types/chat";
 import { ChatBubble } from "./ChatBubble";
@@ -9,8 +9,11 @@ import { QuickRepliesBar } from "./QuickRepliesBar";
 import { IcebreakerBanner } from "./IcebreakerBanner";
 import { SmartTopics } from "./SmartTopics";
 import { MatchScoreBadge } from "./MatchScoreBadge";
+import { ContactShareModal } from "./ContactShareModal";
+import { MeetingCompleteModal } from "./MeetingCompleteModal";
 import { useCommonGround } from "@/contexts/CommonGroundContext";
 import { calculateMatchScore } from "@/lib/match-scoring";
+import { useToast } from "@/hooks/use-toast";
 
 interface ChatOverlayProps {
   isOpen: boolean;
@@ -33,10 +36,14 @@ export const ChatOverlay = ({
   currentLabName,
 }: ChatOverlayProps) => {
   const { endChatSession, currentLocation } = useCommonGround();
+  const { toast } = useToast();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isPartnerTyping, setIsPartnerTyping] = useState(false);
   const [showIcebreaker, setShowIcebreaker] = useState(true);
+  const [showTopicsPopup, setShowTopicsPopup] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [showMeetingComplete, setShowMeetingComplete] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -157,6 +164,24 @@ export const ChatOverlay = ({
   };
 
   const handleEndMeeting = () => {
+    setShowMeetingComplete(true);
+  };
+
+  const handleAddConnection = () => {
+    toast({
+      title: "Connectie toegevoegd! 🤝",
+      description: `${chatPartner?.name} is toegevoegd aan je Eerdere Connecties.`,
+    });
+    setShowMeetingComplete(false);
+    finalizeMeeting();
+  };
+
+  const handleSkipConnection = () => {
+    setShowMeetingComplete(false);
+    finalizeMeeting();
+  };
+
+  const finalizeMeeting = () => {
     setMessages((prev) => [
       ...prev,
       {
@@ -171,7 +196,7 @@ export const ChatOverlay = ({
     setTimeout(() => {
       endChatSession();
       onClose();
-    }, 1500);
+    }, 1000);
   };
 
   if (!chatPartner || !matchAnalysis) return null;
@@ -218,13 +243,22 @@ export const ChatOverlay = ({
                 </div>
               </div>
               
-              {/* Match Score Badge */}
-              <div className="flex items-center gap-3">
+              {/* Match Score Badge & Contact Share */}
+              <div className="flex items-center gap-2">
                 <MatchScoreBadge
                   score={matchAnalysis.score}
                   sharedSkillsCount={matchAnalysis.sharedSkills.length}
                   sameLocation={matchAnalysis.sameLocation}
                 />
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowContactModal(true)}
+                  className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center hover:bg-primary/30 transition-colors"
+                  title="Contact delen"
+                >
+                  <Share2 className="w-4 h-4 text-primary" />
+                </motion.button>
                 <button
                   onClick={onClose}
                   className="w-8 h-8 rounded-full bg-muted/50 flex items-center justify-center hover:bg-muted transition-colors"
@@ -282,9 +316,24 @@ export const ChatOverlay = ({
               />
             </div>
 
-            {/* Input */}
+            {/* Input with Lightbulb */}
             <div className="p-4 border-t border-border/30">
               <div className="flex gap-2">
+                {/* Smart Topics Lightbulb Button */}
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowTopicsPopup(!showTopicsPopup)}
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
+                    showTopicsPopup 
+                      ? "bg-primary text-primary-foreground" 
+                      : "bg-muted/50 text-muted-foreground hover:bg-primary/20 hover:text-primary"
+                  }`}
+                  title="Topic suggesties"
+                >
+                  <Lightbulb className="w-4 h-4" />
+                </motion.button>
+                
                 <input
                   ref={inputRef}
                   type="text"
@@ -304,6 +353,37 @@ export const ChatOverlay = ({
                   <Send className="w-4 h-4" />
                 </motion.button>
               </div>
+              
+              {/* Topics Popup */}
+              <AnimatePresence>
+                {showTopicsPopup && matchAnalysis && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, height: 0 }}
+                    animate={{ opacity: 1, y: 0, height: "auto" }}
+                    exit={{ opacity: 0, y: 10, height: 0 }}
+                    className="mt-3 p-3 rounded-xl bg-muted/30 border border-primary/30 overflow-hidden"
+                  >
+                    <p className="text-xs text-muted-foreground mb-2">💡 AI IJsbrekers:</p>
+                    <div className="space-y-2">
+                      {matchAnalysis.topics.map((topic, index) => (
+                        <motion.button
+                          key={index}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                          onClick={() => {
+                            handleTopicSelect(topic);
+                            setShowTopicsPopup(false);
+                          }}
+                          className="w-full text-left p-2.5 rounded-lg bg-background/50 hover:bg-primary/10 border border-border/30 hover:border-primary/30 text-sm text-foreground transition-all"
+                        >
+                          {topic}
+                        </motion.button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* End Meeting Button */}
@@ -319,6 +399,22 @@ export const ChatOverlay = ({
               </motion.button>
             </div>
           </motion.div>
+          
+          {/* Contact Share Modal */}
+          <ContactShareModal
+            isOpen={showContactModal}
+            onClose={() => setShowContactModal(false)}
+            partnerName={chatPartner.name}
+          />
+          
+          {/* Meeting Complete Modal */}
+          <MeetingCompleteModal
+            isOpen={showMeetingComplete}
+            onClose={() => setShowMeetingComplete(false)}
+            onAddConnection={handleAddConnection}
+            onSkip={handleSkipConnection}
+            partner={chatPartner}
+          />
         </motion.div>
       )}
     </AnimatePresence>
