@@ -1,10 +1,20 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, X, Coffee, Check } from "lucide-react";
+import { Sparkles, X, Coffee, Check, MessageCircle } from "lucide-react";
 import { useCommonGround } from "@/contexts/CommonGroundContext";
 import { useToast } from "@/hooks/use-toast";
 
 export const SmartMatch = () => {
-  const { openUsers, selectedUser, setSelectedUser, sendInvite, lastInvitedUser, triggerMatchReveal } = useCommonGround();
+  const { 
+    openUsers, 
+    selectedUser, 
+    setSelectedUser, 
+    sendInvite, 
+    lastInvitedUser, 
+    triggerMatchReveal,
+    hasActiveChat,
+    chatPartner,
+    openChat,
+  } = useCommonGround();
   const { toast } = useToast();
   
   // Use selected user from Social Radar, or default to first open user
@@ -25,7 +35,77 @@ export const SmartMatch = () => {
     }, 1500);
   };
 
+  const handleOpenChat = () => {
+    if (chatPartner) {
+      openChat(chatPartner);
+    }
+  };
+
   const isInvited = lastInvitedUser?.id === match?.id;
+
+  // Show active chat status
+  if (hasActiveChat && chatPartner) {
+    return (
+      <div className="wood-card p-5 h-full relative">
+        <div className="flex items-center gap-3 mb-4 relative z-10">
+          <motion.div
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ repeat: Infinity, duration: 1.5 }}
+            className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center"
+          >
+            <MessageCircle className="w-4 h-4 text-primary" />
+          </motion.div>
+          <div>
+            <h3 className="text-base font-serif text-foreground">Actieve Chat</h3>
+            <p className="text-xs text-muted-foreground">Gesprek bezig</p>
+          </div>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass-inner p-4 relative z-10 border border-primary/40 shadow-[0_0_20px_hsl(35_85%_58%/0.2)]"
+        >
+          <div className="flex items-center gap-3 mb-3">
+            <motion.div 
+              animate={{ 
+                boxShadow: [
+                  "0 0 10px hsl(35 85% 58% / 0.3)", 
+                  "0 0 25px hsl(35 85% 58% / 0.5)", 
+                  "0 0 10px hsl(35 85% 58% / 0.3)"
+                ] 
+              }}
+              transition={{ repeat: Infinity, duration: 2 }}
+              className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-gold-dark flex items-center justify-center text-sm font-medium text-primary-foreground"
+            >
+              {chatPartner.avatar}
+            </motion.div>
+            <div>
+              <p className="font-medium text-foreground">{chatPartner.name}</p>
+              <p className="text-xs text-primary flex items-center gap-1">
+                <motion.span
+                  animate={{ opacity: [1, 0.5, 1] }}
+                  transition={{ repeat: Infinity, duration: 1.5 }}
+                  className="w-2 h-2 rounded-full bg-primary"
+                />
+                Verbonden
+              </p>
+            </div>
+          </div>
+
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={handleOpenChat}
+            className="w-full py-2.5 rounded-lg btn-gold text-xs font-medium flex items-center justify-center gap-2"
+          >
+            <MessageCircle className="w-4 h-4" />
+            Open Chat
+          </motion.button>
+        </motion.div>
+      </div>
+    );
+  }
 
   if (!match) return null;
 

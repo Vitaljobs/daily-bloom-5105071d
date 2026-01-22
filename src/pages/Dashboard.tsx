@@ -8,6 +8,7 @@ import { SmartMatch } from "@/components/dashboard/SmartMatch";
 import { LocationSelector } from "@/components/dashboard/LocationSelector";
 import { MatchRevealOverlay } from "@/components/dashboard/MatchRevealOverlay";
 import { WelcomeOverlay } from "@/components/dashboard/WelcomeOverlay";
+import { ChatOverlay } from "@/components/chat/ChatOverlay";
 import { CommonGroundProvider, useCommonGround } from "@/contexts/CommonGroundContext";
 
 // Staggered animation for grid items
@@ -63,6 +64,9 @@ const DashboardContent = () => {
     showWelcome,
     closeWelcome,
     openUsers,
+    isChatOpen,
+    chatPartner,
+    closeChat,
   } = useCommonGround();
 
   // Current user mock data
@@ -168,6 +172,14 @@ const DashboardContent = () => {
         currentUser={currentUser}
         matchedUser={matchedUser}
         onClose={closeMatchReveal}
+      />
+
+      {/* Chat Overlay */}
+      <ChatOverlay
+        isOpen={isChatOpen}
+        onClose={closeChat}
+        chatPartner={chatPartner}
+        currentLabName={currentLab?.name}
       />
     </div>
   );

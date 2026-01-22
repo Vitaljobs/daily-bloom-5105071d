@@ -47,6 +47,14 @@ interface CommonGroundContextType {
   showWelcome: boolean;
   closeWelcome: () => void;
   visitedLabs: Set<string>;
+
+  // Chat
+  isChatOpen: boolean;
+  chatPartner: UserProfile | null;
+  openChat: (user: UserProfile) => void;
+  closeChat: () => void;
+  endChatSession: () => void;
+  hasActiveChat: boolean;
 }
 
 const CommonGroundContext = createContext<CommonGroundContextType | undefined>(undefined);
@@ -69,6 +77,11 @@ export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
   // Welcome overlay state
   const [showWelcome, setShowWelcome] = useState(true);
   const [visitedLabs, setVisitedLabs] = useState<Set<string>>(new Set());
+
+  // Chat state
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatPartner, setChatPartner] = useState<UserProfile | null>(null);
+  const [hasActiveChat, setHasActiveChat] = useState(false);
 
   // Current lab
   const currentLab = useMemo(() => getLabById(currentLocation), [currentLocation]);
@@ -143,8 +156,16 @@ export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
 
   const closeMatchReveal = useCallback(() => {
     setShowMatchReveal(false);
-    setTimeout(() => setMatchedUser(null), 500);
-  }, []);
+    setTimeout(() => {
+      setMatchedUser(null);
+      // Open chat after match reveal closes
+      if (matchedUser) {
+        setChatPartner(matchedUser);
+        setIsChatOpen(true);
+        setHasActiveChat(true);
+      }
+    }, 500);
+  }, [matchedUser]);
 
   // Location change with animation trigger and welcome overlay
   const setCurrentLocation = useCallback((locationId: string) => {
@@ -167,6 +188,24 @@ export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
   // Close welcome overlay
   const closeWelcome = useCallback(() => {
     setShowWelcome(false);
+  }, []);
+
+  // Chat functions
+  const openChat = useCallback((user: UserProfile) => {
+    setChatPartner(user);
+    setIsChatOpen(true);
+    setHasActiveChat(true);
+  }, []);
+
+  const closeChat = useCallback(() => {
+    setIsChatOpen(false);
+  }, []);
+
+  const endChatSession = useCallback(() => {
+    setIsChatOpen(false);
+    setChatPartner(null);
+    setHasActiveChat(false);
+    setSelectedUser(null);
   }, []);
 
   return (
@@ -196,6 +235,12 @@ export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
         showWelcome,
         closeWelcome,
         visitedLabs,
+        isChatOpen,
+        chatPartner,
+        openChat,
+        closeChat,
+        endChatSession,
+        hasActiveChat,
       }}
     >
       {children}
