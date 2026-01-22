@@ -7,8 +7,8 @@ import { TableTent } from "@/components/dashboard/TableTent";
 import { SmartMatch } from "@/components/dashboard/SmartMatch";
 import { LocationSelector } from "@/components/dashboard/LocationSelector";
 import { MatchRevealOverlay } from "@/components/dashboard/MatchRevealOverlay";
+import { WelcomeOverlay } from "@/components/dashboard/WelcomeOverlay";
 import { CommonGroundProvider, useCommonGround } from "@/contexts/CommonGroundContext";
-import cafeBg from "@/assets/cafe-bg.jpg";
 
 // Staggered animation for grid items
 const containerVariants = {
@@ -58,6 +58,11 @@ const DashboardContent = () => {
     showMatchReveal,
     matchedUser,
     closeMatchReveal,
+    currentLab,
+    usersPerLab,
+    showWelcome,
+    closeWelcome,
+    openUsers,
   } = useCommonGround();
 
   // Current user mock data
@@ -69,17 +74,21 @@ const DashboardContent = () => {
 
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
-      {/* Blurred Café Background */}
-      <motion.div
-        animate={{ 
-          filter: showMatchReveal ? "blur(24px)" : "blur(8px)",
-        }}
-        transition={{ duration: 0.4 }}
-        className="fixed inset-0 bg-cover bg-center scale-110"
-        style={{ 
-          backgroundImage: `url(${cafeBg})`,
-        }}
-      />
+      {/* Dynamic Lab Background with cross-fade */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentLocation}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8 }}
+          className="fixed inset-0 bg-cover bg-center scale-110"
+          style={{ 
+            backgroundImage: currentLab ? `url(${currentLab.background})` : undefined,
+            filter: showMatchReveal ? "blur(24px)" : "blur(8px)",
+          }}
+        />
+      </AnimatePresence>
       <div className="fixed inset-0 bg-background/60" />
 
       {/* Main Content */}
@@ -88,6 +97,7 @@ const DashboardContent = () => {
         <LocationSelector 
           currentLocation={currentLocation}
           onLocationChange={setCurrentLocation}
+          usersPerLab={usersPerLab}
         />
 
         <AnimatePresence mode="wait">
@@ -143,6 +153,14 @@ const DashboardContent = () => {
           </motion.div>
         </AnimatePresence>
       </main>
+
+      {/* Welcome Overlay */}
+      <WelcomeOverlay
+        isVisible={showWelcome}
+        lab={currentLab || null}
+        openUsersCount={openUsers.length}
+        onClose={closeWelcome}
+      />
 
       {/* Match Reveal Overlay */}
       <MatchRevealOverlay

@@ -1,4 +1,4 @@
-export type UserStatus = "focus" | "open";
+export type UserStatus = "focus" | "open" | "invisible";
 
 export interface UserProfile {
   id: string;
@@ -8,6 +8,7 @@ export interface UserProfile {
   skills: string[];
   status: UserStatus;
   checkedInAt: string;
+  labId?: string;
 }
 
 export interface AggregatedSkill {

@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Coffee, Focus, BellOff, Lightbulb, User } from "lucide-react";
+import { Coffee, Focus, BellOff, Lightbulb, User, EyeOff } from "lucide-react";
 import { useCommonGround } from "@/contexts/CommonGroundContext";
 
 // Enhanced breathing pulse animation
@@ -39,6 +39,26 @@ const borderBreathing = {
 export const TableTent = () => {
   const { currentUserStatus, setCurrentUserStatus, openUsers } = useCommonGround();
   const isOpen = currentUserStatus === "open";
+  const isInvisible = currentUserStatus === "invisible";
+  const isFocus = currentUserStatus === "focus";
+
+  const getStatusIcon = () => {
+    if (isOpen) return <Coffee className="w-4 h-4 text-primary" />;
+    if (isInvisible) return <EyeOff className="w-4 h-4 text-muted-foreground" />;
+    return <BellOff className="w-4 h-4 text-muted-foreground" />;
+  };
+
+  const getStatusText = () => {
+    if (isOpen) return "Open voor koffie";
+    if (isInvisible) return "Onzichtbaar";
+    return "Focus Mode";
+  };
+
+  const getStatusDescription = () => {
+    if (isOpen) return `${openUsers.length} anderen ook beschikbaar`;
+    if (isInvisible) return "Je ziet de radar, maar bent zelf verborgen";
+    return "Je bent niet beschikbaar";
+  };
 
   return (
     <motion.div
@@ -87,11 +107,7 @@ export const TableTent = () => {
             isOpen ? "bg-primary/30" : "bg-muted/50"
           }`}
         >
-          {isOpen ? (
-            <Coffee className="w-4 h-4 text-primary" />
-          ) : (
-            <BellOff className="w-4 h-4 text-muted-foreground" />
-          )}
+          {getStatusIcon()}
         </motion.div>
         <div>
           <h3 className="text-base font-serif text-foreground">Digital Table Tent</h3>
@@ -108,7 +124,7 @@ export const TableTent = () => {
           exit={{ opacity: 0, y: -5 }}
           className={`glass-inner p-4 mb-4 relative z-10 transition-all duration-300 ${
             isOpen ? "border border-primary/30" : ""
-          }`}
+          } ${isInvisible ? "border border-muted/50 opacity-75" : ""}`}
         >
           <div className="flex items-center gap-3">
             <motion.div 
@@ -126,11 +142,15 @@ export const TableTent = () => {
               className={`w-10 h-10 rounded-full flex items-center justify-center ${
                 isOpen 
                   ? "bg-gradient-to-br from-primary to-gold-dark" 
+                  : isInvisible
+                  ? "bg-muted/30 border border-dashed border-muted-foreground/30"
                   : "bg-muted"
               }`}
             >
               {isOpen ? (
                 <User className="w-5 h-5 text-primary-foreground" />
+              ) : isInvisible ? (
+                <EyeOff className="w-5 h-5 text-muted-foreground/50" />
               ) : (
                 <Focus className="w-5 h-5 text-muted-foreground" />
               )}
@@ -147,12 +167,14 @@ export const TableTent = () => {
                   ],
                 } : {}}
                 transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                className={`font-medium ${isOpen ? "text-primary" : "text-foreground"}`}
+                className={`font-medium ${
+                  isOpen ? "text-primary" : isInvisible ? "text-muted-foreground/70" : "text-foreground"
+                }`}
               >
-                {isOpen ? "Open voor koffie" : "Focus Mode"}
+                {getStatusText()}
               </motion.p>
               <p className="text-xs text-muted-foreground">
-                {isOpen ? `${openUsers.length} anderen ook beschikbaar` : "Je bent onzichtbaar"}
+                {getStatusDescription()}
               </p>
             </div>
           </div>
@@ -182,18 +204,18 @@ export const TableTent = () => {
         </motion.div>
       </AnimatePresence>
 
-      {/* Toggle Buttons */}
+      {/* Toggle Buttons - 3 options */}
       <div className="flex gap-2 relative z-10">
         <motion.button
           whileTap={{ scale: 0.98 }}
           onClick={() => setCurrentUserStatus("focus")}
-          className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-medium transition-all ${
-            !isOpen
+          className={`flex-1 py-2.5 px-2 rounded-xl text-xs font-medium transition-all ${
+            isFocus
               ? "bg-muted text-foreground"
               : "bg-transparent text-muted-foreground hover:bg-muted/30"
           }`}
         >
-          <Focus className="w-3 h-3 inline mr-1.5" />
+          <Focus className="w-3 h-3 inline mr-1" />
           Focus
         </motion.button>
         <motion.button
@@ -207,14 +229,26 @@ export const TableTent = () => {
             ],
           } : {}}
           transition={{ repeat: Infinity, duration: 2 }}
-          className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-medium transition-all ${
+          className={`flex-1 py-2.5 px-2 rounded-xl text-xs font-medium transition-all ${
             isOpen
               ? "bg-primary/20 text-primary border border-primary/40"
               : "bg-transparent text-muted-foreground hover:bg-muted/30"
           }`}
         >
-          <Coffee className="w-3 h-3 inline mr-1.5" />
+          <Coffee className="w-3 h-3 inline mr-1" />
           Open
+        </motion.button>
+        <motion.button
+          whileTap={{ scale: 0.98 }}
+          onClick={() => setCurrentUserStatus("invisible")}
+          className={`flex-1 py-2.5 px-2 rounded-xl text-xs font-medium transition-all ${
+            isInvisible
+              ? "bg-muted/50 text-muted-foreground border border-dashed border-muted-foreground/30"
+              : "bg-transparent text-muted-foreground/50 hover:bg-muted/30"
+          }`}
+        >
+          <EyeOff className="w-3 h-3 inline mr-1" />
+          Ghost
         </motion.button>
       </div>
     </motion.div>

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useMemo, ReactNode, useCallback } from "react";
 import { UserProfile, UserStatus, AggregatedSkill } from "@/types/common-ground";
 import { checkedInUsers as mockUsers } from "@/data/mock-users";
+import { labs, Lab, getLabById } from "@/data/labs";
 
 interface CommonGroundContextType {
   // Current user
@@ -10,7 +11,7 @@ interface CommonGroundContextType {
   // Checked-in users
   checkedInUsers: UserProfile[];
   
-  // Skill aggregation
+  // Skill aggregation (filtered by lab)
   aggregatedSkills: AggregatedSkill[];
   
   // Filtering
@@ -18,7 +19,7 @@ interface CommonGroundContextType {
   setSelectedSkill: (skill: string | null) => void;
   filteredUsers: UserProfile[];
   
-  // Open users only
+  // Open users only (filtered by lab)
   openUsers: UserProfile[];
 
   // Selected user for Smart Match
@@ -39,6 +40,13 @@ interface CommonGroundContextType {
   currentLocation: string;
   setCurrentLocation: (locationId: string) => void;
   isChangingLocation: boolean;
+  currentLab: Lab | undefined;
+  usersPerLab: Record<string, number>;
+
+  // Welcome overlay
+  showWelcome: boolean;
+  closeWelcome: () => void;
+  visitedLabs: Set<string>;
 }
 
 const CommonGroundContext = createContext<CommonGroundContextType | undefined>(undefined);
@@ -55,14 +63,39 @@ export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
   const [matchedUser, setMatchedUser] = useState<UserProfile | null>(null);
 
   // Location state
-  const [currentLocation, setCurrentLocationState] = useState("1");
+  const [currentLocation, setCurrentLocationState] = useState("roastery");
   const [isChangingLocation, setIsChangingLocation] = useState(false);
 
-  // Aggregate skills from all checked-in users
+  // Welcome overlay state
+  const [showWelcome, setShowWelcome] = useState(true);
+  const [visitedLabs, setVisitedLabs] = useState<Set<string>>(new Set());
+
+  // Current lab
+  const currentLab = useMemo(() => getLabById(currentLocation), [currentLocation]);
+
+  // Users per lab count
+  const usersPerLab = useMemo(() => {
+    const counts: Record<string, number> = {};
+    labs.forEach((lab) => {
+      counts[lab.id] = checkedInUsers.filter(
+        (user) => user.labId === lab.id && user.status !== "invisible"
+      ).length;
+    });
+    return counts;
+  }, [checkedInUsers]);
+
+  // Users in current lab (excluding invisible)
+  const usersInCurrentLab = useMemo(() => {
+    return checkedInUsers.filter(
+      (user) => user.labId === currentLocation && user.status !== "invisible"
+    );
+  }, [checkedInUsers, currentLocation]);
+
+  // Aggregate skills from users in current lab
   const aggregatedSkills = useMemo(() => {
     const skillMap = new Map<string, { count: number; users: UserProfile[] }>();
     
-    checkedInUsers.forEach((user) => {
+    usersInCurrentLab.forEach((user) => {
       user.skills.forEach((skill) => {
         const existing = skillMap.get(skill) || { count: 0, users: [] };
         skillMap.set(skill, {
@@ -79,21 +112,21 @@ export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
         users: data.users,
       }))
       .sort((a, b) => b.count - a.count);
-  }, [checkedInUsers]);
+  }, [usersInCurrentLab]);
 
-  // Filter users by selected skill and "open" status
+  // Filter users by selected skill and "open" status in current lab
   const filteredUsers = useMemo(() => {
     if (!selectedSkill) return [];
     
-    return checkedInUsers.filter(
+    return usersInCurrentLab.filter(
       (user) => user.skills.includes(selectedSkill) && user.status === "open"
     );
-  }, [checkedInUsers, selectedSkill]);
+  }, [usersInCurrentLab, selectedSkill]);
 
-  // Get only users who are open for coffee
+  // Get only users who are open for coffee in current lab
   const openUsers = useMemo(() => {
-    return checkedInUsers.filter((user) => user.status === "open");
-  }, [checkedInUsers]);
+    return usersInCurrentLab.filter((user) => user.status === "open");
+  }, [usersInCurrentLab]);
 
   // Send invite function
   const sendInvite = (user: UserProfile) => {
@@ -113,15 +146,27 @@ export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
     setTimeout(() => setMatchedUser(null), 500);
   }, []);
 
-  // Location change with animation trigger
+  // Location change with animation trigger and welcome overlay
   const setCurrentLocation = useCallback((locationId: string) => {
     setIsChangingLocation(true);
     setTimeout(() => {
       setCurrentLocationState(locationId);
+      
+      // Show welcome if not visited before
+      if (!visitedLabs.has(locationId)) {
+        setShowWelcome(true);
+        setVisitedLabs((prev) => new Set([...prev, locationId]));
+      }
+      
       setTimeout(() => {
         setIsChangingLocation(false);
       }, 100);
     }, 400);
+  }, [visitedLabs]);
+
+  // Close welcome overlay
+  const closeWelcome = useCallback(() => {
+    setShowWelcome(false);
   }, []);
 
   return (
@@ -146,6 +191,11 @@ export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
         currentLocation,
         setCurrentLocation,
         isChangingLocation,
+        currentLab,
+        usersPerLab,
+        showWelcome,
+        closeWelcome,
+        visitedLabs,
       }}
     >
       {children}
