@@ -2,7 +2,12 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -57,31 +62,34 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        gold: {
-          DEFAULT: "hsl(var(--gold))",
-          light: "hsl(var(--gold-light))",
-          dark: "hsl(var(--gold-dark))",
-        },
-        forest: {
-          DEFAULT: "hsl(var(--forest))",
-          deep: "hsl(var(--forest-deep))",
-          light: "hsl(var(--forest-light))",
+        // Common Ground custom colors
+        wood: {
+          dark: "hsl(20 20% 8%)",
+          medium: "hsl(20 25% 12%)",
+          light: "hsl(20 20% 18%)",
         },
         cream: {
-          DEFAULT: "hsl(var(--cream))",
-          muted: "hsl(var(--cream-muted))",
+          DEFAULT: "hsl(45 50% 96%)",
+          muted: "hsl(40 25% 85%)",
         },
-      },
-      fontFamily: {
-        serif: ["Cormorant Garamond", "serif"],
-        sans: ["Inter", "sans-serif"],
+        coffee: {
+          DEFAULT: "hsl(25 40% 25%)",
+          light: "hsl(30 35% 40%)",
+        },
+        gold: {
+          DEFAULT: "hsl(35 80% 55%)",
+          light: "hsl(38 85% 70%)",
+          dark: "hsl(32 75% 40%)",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
-        xl: "calc(var(--radius) + 4px)",
-        "2xl": "calc(var(--radius) + 8px)",
+      },
+      fontFamily: {
+        serif: ["Playfair Display", "serif"],
+        sans: ["Inter", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {
@@ -96,24 +104,26 @@ export default {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-10px)" },
         },
-        pulse: {
-          "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.7" },
+        "pulse-slow": {
+          "0%, 100%": { opacity: "0.6" },
+          "50%": { opacity: "1" },
         },
         shimmer: {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
+        },
+        glow: {
+          "0%, 100%": { boxShadow: "0 0 20px hsl(35 80% 55% / 0.2)" },
+          "50%": { boxShadow: "0 0 40px hsl(35 80% 55% / 0.4)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         float: "float 6s ease-in-out infinite",
-        "pulse-slow": "pulse 3s ease-in-out infinite",
-        shimmer: "shimmer 2s linear infinite",
-      },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "pulse-slow": "pulse-slow 3s ease-in-out infinite",
+        shimmer: "shimmer 3s ease-in-out infinite",
+        glow: "glow 2s ease-in-out infinite",
       },
     },
   },

@@ -1,201 +1,120 @@
+import { Hero } from "@/components/landing/Hero";
 import { motion } from "framer-motion";
-import { Sidebar } from "@/components/Sidebar";
-import { ExerciseCard } from "@/components/ExerciseCard";
-import { QuickActionCard } from "@/components/QuickActionCard";
-import { MoodCheckIn } from "@/components/MoodCheckIn";
-import { Wind, Moon, Sparkles, Brain, Heart, Waves } from "lucide-react";
-import heroBg from "@/assets/hero-bg.jpg";
+import { Coffee, ArrowRight, Users, Zap, MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 
-const exercises = [
+const features = [
   {
-    icon: Brain,
-    title: "Diepte Meditatie",
-    subtitle: "Guided Audio",
-    duration: "20 min",
+    icon: Users,
+    title: "Skill Pulse Radar",
+    description: "See who's working nearby and what expertise is in the room — in real-time.",
   },
   {
-    icon: Sparkles,
-    title: "Stress Relief Flow",
-    subtitle: "Interactive Exercise",
-    duration: "10 min",
+    icon: Coffee,
+    title: "Digital Table Tent",
+    description: "Toggle between Focus Mode and Open for Coffee — let others know your availability.",
   },
   {
-    icon: Wind,
-    title: "Ademhaling",
-    subtitle: "4-7-8 Techniek",
-    duration: "5 min",
+    icon: Zap,
+    title: "Smart Matching",
+    description: "AI-powered suggestions for complementary connections based on your skills.",
   },
   {
-    icon: Heart,
-    title: "Hartcoherentie",
-    subtitle: "Voice Guide",
-    duration: "8 min",
+    icon: MapPin,
+    title: "Help Wall",
+    description: "Post quick questions and get 5-minute help from professionals around you.",
   },
 ];
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      {/* Background Image */}
-      <div 
-        className="fixed inset-0 bg-cover bg-center bg-no-repeat opacity-40"
-        style={{ backgroundImage: `url(${heroBg})` }}
-      />
-      <div className="fixed inset-0 bg-gradient-to-b from-background/60 via-background/80 to-background" />
+    <main className="min-h-screen bg-background">
+      <Hero />
 
-      {/* Sidebar */}
-      <Sidebar />
-
-      {/* Main Content */}
-      <main className="ml-0 md:ml-64 relative z-10">
-        <div className="container max-w-5xl py-8 px-4 md:px-8 space-y-8">
-          {/* Welcome Header */}
-          <motion.header
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="pt-16 md:pt-8"
-          >
-            <h1 className="text-4xl md:text-5xl font-serif text-foreground mb-2">
-              Welkom bij <span className="text-gradient-gold">MindGarden</span>
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Neem een moment voor jezelf en vind je innerlijke rust
-            </p>
-          </motion.header>
-
-          {/* Daily Check-in */}
-          <section>
-            <MoodCheckIn />
-          </section>
-
-          {/* Featured Exercises */}
-          <section className="space-y-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="flex items-center justify-between"
-            >
-              <h2 className="text-2xl font-serif text-foreground">
-                Aanbevolen Oefeningen
-              </h2>
-              <button className="text-primary text-sm hover:underline underline-offset-4 transition-all">
-                Bekijk alles
-              </button>
-            </motion.div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {exercises.map((exercise, index) => (
-                <ExerciseCard
-                  key={exercise.title}
-                  icon={exercise.icon}
-                  title={exercise.title}
-                  subtitle={exercise.subtitle}
-                  duration={exercise.duration}
-                  delay={0.5 + index * 0.1}
-                  variant={index === 0 ? "featured" : "default"}
-                />
-              ))}
-            </div>
-          </section>
-
-          {/* Quick Actions */}
-          <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-3">
-              <QuickActionCard
-                title="Sleep Stories"
-                variant="secondary"
-                delay={0.8}
-              />
-            </div>
-            <div className="space-y-3">
-              <QuickActionCard
-                title="Daily Check-in"
-                variant="primary"
-                delay={0.9}
-              />
-            </div>
-          </section>
-
-          {/* Evening Wind Down */}
-          <motion.section
+      {/* Features Section */}
+      <section className="relative py-24 bg-background">
+        <div className="container mx-auto px-6">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 }}
-            className="card-glass rounded-2xl p-6 md:p-8"
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
           >
-            <div className="flex flex-col md:flex-row items-center gap-6">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30 flex items-center justify-center flex-shrink-0">
-                <Moon className="w-10 h-10 text-primary" />
-              </div>
-              <div className="flex-1 text-center md:text-left">
-                <h3 className="text-xl font-serif text-foreground mb-2">
-                  Avond Wind Down
-                </h3>
-                <p className="text-muted-foreground mb-4">
-                  Een 15-minuten sessie om je dag rustig af te sluiten met ademhalingsoefeningen en zachte meditatie.
-                </p>
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="btn-gold px-6 py-2 rounded-xl text-sm font-medium"
-                >
-                  Start Sessie
-                </motion.button>
-              </div>
-            </div>
-          </motion.section>
+            <h2 className="text-4xl md:text-5xl font-serif text-foreground mb-4">
+              Networking, <span className="text-gradient-gold">Reimagined</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Built for the way modern professionals actually work — in coffee shops, 
+              co-working spaces, and creative hubs.
+            </p>
+          </motion.div>
 
-          {/* Stats Bar */}
-          <motion.section
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.1 }}
-            className="grid grid-cols-3 gap-4 py-6"
-          >
-            {[
-              { label: "Dagen streak", value: "7" },
-              { label: "Minuten deze week", value: "45" },
-              { label: "Voltooide oefeningen", value: "12" },
-            ].map((stat, index) => (
-              <div key={stat.label} className="text-center">
-                <motion.p
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 1.2 + index * 0.1, type: "spring" }}
-                  className="text-3xl font-serif text-primary mb-1"
-                >
-                  {stat.value}
-                </motion.p>
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="bento-card text-center"
+              >
+                <div className="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center mx-auto mb-4">
+                  <feature.icon className="w-7 h-7 text-primary" />
+                </div>
+                <h3 className="text-xl font-serif text-foreground mb-2">{feature.title}</h3>
+                <p className="text-muted-foreground text-sm">{feature.description}</p>
+              </motion.div>
             ))}
-          </motion.section>
+          </div>
         </div>
-      </main>
+      </section>
 
-      {/* Mobile Navigation Overlay */}
-      <div className="fixed bottom-0 left-0 right-0 md:hidden bg-sidebar/95 backdrop-blur-lg border-t border-sidebar-border p-4 z-50">
-        <div className="flex justify-around">
-          {[
-            { icon: <Waves className="w-6 h-6" />, label: "Home", active: true },
-            { icon: <Wind className="w-6 h-6" />, label: "Explore" },
-            { icon: <Heart className="w-6 h-6" />, label: "Saved" },
-          ].map((item) => (
-            <button
-              key={item.label}
-              className={`flex flex-col items-center gap-1 ${
-                item.active ? "text-primary" : "text-muted-foreground"
-              }`}
-            >
-              {item.icon}
-              <span className="text-xs">{item.label}</span>
-            </button>
-          ))}
+      {/* CTA Section */}
+      <section className="relative py-24">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="glass-panel rounded-3xl p-12 text-center max-w-4xl mx-auto"
+          >
+            <h2 className="text-3xl md:text-5xl font-serif text-foreground mb-4">
+              Ready to find your <span className="text-gradient-gold">Common Ground</span>?
+            </h2>
+            <p className="text-xl text-muted-foreground mb-8 max-w-xl mx-auto">
+              Join thousands of professionals already making meaningful connections 
+              in their favorite spaces.
+            </p>
+            <Link to="/dashboard">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="btn-gold px-10 py-4 rounded-xl text-lg font-medium inline-flex items-center gap-3"
+              >
+                Open Dashboard
+                <ArrowRight className="w-5 h-5" />
+              </motion.button>
+            </Link>
+          </motion.div>
         </div>
-      </div>
-    </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-border py-8">
+        <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
+              <Coffee className="w-4 h-4 text-primary" />
+            </div>
+            <span className="font-serif text-foreground">Common Ground</span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            © 2025 Common Ground. Built for modern professionals.
+          </p>
+        </div>
+      </footer>
+    </main>
   );
 };
 
