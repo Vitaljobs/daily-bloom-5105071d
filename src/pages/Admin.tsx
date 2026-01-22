@@ -41,7 +41,7 @@ const Admin = () => {
     <div className="admin-theme min-h-screen bg-background">
       {/* Subtle grid background */}
       <div 
-        className="fixed inset-0 opacity-[0.03]"
+        className="fixed inset-0 opacity-[0.03] pointer-events-none"
         style={{
           backgroundImage: `
             linear-gradient(to right, hsl(185 100% 50% / 0.3) 1px, transparent 1px),
