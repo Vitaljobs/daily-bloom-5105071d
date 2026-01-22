@@ -20,6 +20,14 @@ interface CommonGroundContextType {
   
   // Open users only
   openUsers: UserProfile[];
+
+  // Selected user for Smart Match
+  selectedUser: UserProfile | null;
+  setSelectedUser: (user: UserProfile | null) => void;
+
+  // Invite functionality
+  sendInvite: (user: UserProfile) => void;
+  lastInvitedUser: UserProfile | null;
 }
 
 const CommonGroundContext = createContext<CommonGroundContextType | undefined>(undefined);
@@ -28,6 +36,8 @@ export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
   const [currentUserStatus, setCurrentUserStatus] = useState<UserStatus>("open");
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
   const [checkedInUsers] = useState<UserProfile[]>(mockUsers);
+  const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
+  const [lastInvitedUser, setLastInvitedUser] = useState<UserProfile | null>(null);
 
   // Aggregate skills from all checked-in users
   const aggregatedSkills = useMemo(() => {
@@ -66,6 +76,13 @@ export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
     return checkedInUsers.filter((user) => user.status === "open");
   }, [checkedInUsers]);
 
+  // Send invite function
+  const sendInvite = (user: UserProfile) => {
+    setLastInvitedUser(user);
+    // Reset after a short delay
+    setTimeout(() => setLastInvitedUser(null), 3000);
+  };
+
   return (
     <CommonGroundContext.Provider
       value={{
@@ -77,6 +94,10 @@ export const CommonGroundProvider = ({ children }: { children: ReactNode }) => {
         setSelectedSkill,
         filteredUsers,
         openUsers,
+        selectedUser,
+        setSelectedUser,
+        sendInvite,
+        lastInvitedUser,
       }}
     >
       {children}
