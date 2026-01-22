@@ -4,18 +4,13 @@ import {
   Settings, 
   Building2, 
   TrendingUp, 
-  Coffee, 
   Users, 
-  Crown,
   Activity,
-  FileText,
-  BarChart3,
-  Zap
 } from "lucide-react";
 import { LabMonitor } from "@/components/admin/LabMonitor";
 import { RevenueTracker } from "@/components/admin/RevenueTracker";
 import { EngagementPulse } from "@/components/admin/EngagementPulse";
-import { ProjectSummary } from "@/components/admin/ProjectSummary";
+import { UserManagement } from "@/components/admin/UserManagement";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 
 const containerVariants = {
@@ -86,9 +81,9 @@ const Admin = () => {
               <LabMonitor />
             </motion.div>
 
-            {/* Project Summary */}
+            {/* User Management */}
             <motion.div variants={itemVariants}>
-              <ProjectSummary />
+              <UserManagement />
             </motion.div>
           </motion.div>
         </main>

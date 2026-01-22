@@ -1,32 +1,22 @@
 import { motion } from "framer-motion";
-import { TrendingUp, Crown, CreditCard, ArrowUpRight } from "lucide-react";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
-
-// Mock revenue data
-const revenueData = [
-  { month: "Jan", premium: 12, dayPass: 45 },
-  { month: "Feb", premium: 18, dayPass: 52 },
-  { month: "Mar", premium: 25, dayPass: 61 },
-  { month: "Apr", premium: 32, dayPass: 58 },
-  { month: "May", premium: 41, dayPass: 72 },
-  { month: "Jun", premium: 48, dayPass: 85 },
-  { month: "Jul", premium: 56, dayPass: 91 },
-];
+import { TrendingUp, Crown, Users, ArrowUpRight, Loader2, Zap } from "lucide-react";
+import { usePremiumStats, useTopSkills } from "@/hooks/useAdminData";
 
 export const RevenueTracker = () => {
-  const totalPremium = revenueData[revenueData.length - 1].premium;
-  const totalDayPass = revenueData[revenueData.length - 1].dayPass;
-  const growthRate = Math.round(
-    ((totalPremium - revenueData[0].premium) / revenueData[0].premium) * 100
-  );
+  const { data: premiumStats, isLoading: premiumLoading } = usePremiumStats();
+  const { data: topSkills, isLoading: skillsLoading } = useTopSkills();
+
+  const isLoading = premiumLoading || skillsLoading;
+
+  if (isLoading) {
+    return (
+      <div className="rounded-2xl bg-card border border-admin-border p-12 flex items-center justify-center h-full">
+        <Loader2 className="w-6 h-6 animate-spin text-neon-cyan" />
+      </div>
+    );
+  }
+
+  const topSkill = topSkills?.[0];
 
   return (
     <div className="rounded-2xl bg-card border border-admin-border overflow-hidden h-full">
@@ -37,102 +27,94 @@ export const RevenueTracker = () => {
               <TrendingUp className="w-5 h-5 text-neon-green" />
             </div>
             <div>
-              <h2 className="text-lg font-sans font-semibold text-foreground">Revenue Tracker</h2>
-              <p className="text-sm text-muted-foreground">Premium & Day Pass growth</p>
+              <h2 className="text-lg font-sans font-semibold text-foreground">Stats Overview</h2>
+              <p className="text-sm text-muted-foreground">Premium leden & populaire skills</p>
             </div>
-          </div>
-
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-neon-green/10 border border-neon-green/30">
-            <ArrowUpRight className="w-4 h-4 text-neon-green" />
-            <span className="text-sm font-bold text-neon-green">+{growthRate}%</span>
           </div>
         </div>
       </div>
 
       <div className="p-6">
-        <div className="flex gap-6 mb-6">
-          <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-admin-elevated border border-admin-border">
-            <Crown className="w-5 h-5 text-neon-cyan" />
-            <div>
-              <p className="text-xs text-muted-foreground">Premium Members</p>
-              <p className="text-2xl font-bold text-neon-cyan">{totalPremium}</p>
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          {/* Total Premium Members */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-5 rounded-xl bg-gradient-to-br from-neon-cyan/10 to-neon-cyan/5 border border-neon-cyan/20"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <Crown className="w-6 h-6 text-neon-cyan" />
+              <span className="text-sm text-muted-foreground">Premium Leden</span>
             </div>
+            <p className="text-4xl font-bold text-neon-cyan">{premiumStats?.paidTotal || 0}</p>
+            <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
+              <span>{premiumStats?.premium || 0} Premium</span>
+              <span>•</span>
+              <span>{premiumStats?.vip || 0} VIP</span>
+            </div>
+          </motion.div>
+
+          {/* Total Users */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="p-5 rounded-xl bg-gradient-to-br from-neon-purple/10 to-neon-purple/5 border border-neon-purple/20"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <Users className="w-6 h-6 text-neon-purple" />
+              <span className="text-sm text-muted-foreground">Totaal Gebruikers</span>
+            </div>
+            <p className="text-4xl font-bold text-neon-purple">{premiumStats?.total || 0}</p>
+            <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
+              <span>{premiumStats?.free || 0} gratis</span>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Top Skills */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="p-5 rounded-xl bg-admin-elevated border border-admin-border"
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <Zap className="w-5 h-5 text-neon-green" />
+            <span className="font-medium text-foreground">Populairste Skills</span>
           </div>
           
-          <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-admin-elevated border border-admin-border">
-            <CreditCard className="w-5 h-5 text-neon-purple" />
-            <div>
-              <p className="text-xs text-muted-foreground">Day Passes Sold</p>
-              <p className="text-2xl font-bold text-neon-purple">{totalDayPass}</p>
+          {topSkill ? (
+            <div className="space-y-3">
+              {/* #1 Skill - Featured */}
+              <div className="flex items-center justify-between p-3 rounded-lg bg-neon-green/10 border border-neon-green/20">
+                <div className="flex items-center gap-3">
+                  <span className="text-lg font-bold text-neon-green">#1</span>
+                  <span className="font-medium text-foreground">{topSkill.skill}</span>
+                </div>
+                <span className="text-sm text-neon-green font-bold">{topSkill.count} experts</span>
+              </div>
+
+              {/* Other top skills */}
+              <div className="grid grid-cols-2 gap-2">
+                {topSkills?.slice(1, 5).map((skill, index) => (
+                  <div 
+                    key={skill.skill}
+                    className="flex items-center justify-between p-2 rounded-lg bg-admin-elevated border border-admin-border"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-muted-foreground">#{index + 2}</span>
+                      <span className="text-sm text-foreground truncate">{skill.skill}</span>
+                    </div>
+                    <span className="text-xs text-muted-foreground">{skill.count}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </div>
-
-        <div className="h-48">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={revenueData}>
-              <defs>
-                <linearGradient id="premiumGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(185 100% 50%)" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="hsl(185 100% 50%)" stopOpacity={0} />
-                </linearGradient>
-                <linearGradient id="dayPassGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(270 100% 65%)" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="hsl(270 100% 65%)" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(220 12% 18%)" />
-              <XAxis 
-                dataKey="month" 
-                stroke="hsl(210 10% 55%)" 
-                fontSize={11}
-                tickLine={false}
-              />
-              <YAxis 
-                stroke="hsl(210 10% 55%)" 
-                fontSize={11}
-                tickLine={false}
-                axisLine={false}
-              />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "hsl(220 15% 11%)",
-                  border: "1px solid hsl(220 12% 18%)",
-                  borderRadius: "12px",
-                  fontSize: "12px",
-                }}
-                labelStyle={{ color: "hsl(210 20% 92%)" }}
-              />
-              <Area
-                type="monotone"
-                dataKey="premium"
-                stroke="hsl(185 100% 50%)"
-                strokeWidth={2}
-                fill="url(#premiumGradient)"
-                name="Premium"
-              />
-              <Area
-                type="monotone"
-                dataKey="dayPass"
-                stroke="hsl(270 100% 65%)"
-                strokeWidth={2}
-                fill="url(#dayPassGradient)"
-                name="Day Pass"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="flex items-center gap-4 mt-4">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-neon-cyan" />
-            <span className="text-xs text-muted-foreground">Premium Members</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-neon-purple" />
-            <span className="text-xs text-muted-foreground">Day Passes</span>
-          </div>
-        </div>
+          ) : (
+            <p className="text-muted-foreground text-sm">Nog geen skills geregistreerd</p>
+          )}
+        </motion.div>
       </div>
     </div>
   );
