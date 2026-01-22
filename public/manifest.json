@@ -1,7 +1,7 @@
 {
-  "name": "Common Ground",
+  "name": "Common Ground | Connections Brewed Locally",
   "short_name": "Common Ground",
-  "description": "Find your Common Ground - Connect with professionals in your space",
+  "description": "The premier networking platform for professionals in local coffee labs. Meet, match, and grow your network where creativity flows.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f0b09",
