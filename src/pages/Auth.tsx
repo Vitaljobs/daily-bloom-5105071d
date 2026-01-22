@@ -106,20 +106,28 @@ const Auth = () => {
     setIsLoading(true);
 
     try {
-      const redirectUrl = `${window.location.origin}/auth?type=recovery`;
+      const redirectUrl = `${window.location.origin}/auth`;
       
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: redirectUrl,
+      // Use custom Resend edge function to bypass rate limits
+      const { data, error } = await supabase.functions.invoke('send-reset-email', {
+        body: { email, redirectUrl },
       });
 
       if (error) {
-        toast.error(error.message);
+        console.error("Edge function error:", error);
+        toast.error("Er is iets misgegaan. Probeer het opnieuw.");
+        return;
+      }
+
+      if (data?.error) {
+        toast.error(data.error);
         return;
       }
 
       toast.success("Check je inbox! We hebben een reset link gestuurd.");
       setShowForgotPassword(false);
     } catch (error) {
+      console.error("Error sending reset email:", error);
       toast.error("Er is iets misgegaan. Probeer het opnieuw.");
     } finally {
       setIsLoading(false);
