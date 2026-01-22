@@ -53,7 +53,7 @@ export const SocialRadar = () => {
       </div>
 
       {/* Profile Grid */}
-      <div className="grid grid-cols-4 gap-3 relative z-10">
+      <div className="grid grid-cols-4 gap-2 md:gap-3 relative z-10">
         {filteredUsers.slice(0, 8).map((user, index) => (
           <motion.button
             key={user.id}
@@ -66,8 +66,8 @@ export const SocialRadar = () => {
             onMouseLeave={() => setHoveredUser(null)}
             onClick={() => handleUserClick(user)}
             className={`
-              relative w-12 h-12 rounded-full flex items-center justify-center
-              text-sm font-medium transition-all duration-300
+              relative w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center
+              text-xs md:text-sm font-medium transition-all duration-300 touch-target
               ${user.status === "open" 
                 ? "bg-gradient-to-br from-primary to-gold-dark text-primary-foreground" 
                 : "bg-muted text-muted-foreground"

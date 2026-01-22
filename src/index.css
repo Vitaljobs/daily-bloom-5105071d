@@ -185,6 +185,27 @@
     border-radius: 1rem;
   }
 
+  /* Glass panel for overlays */
+  .glass-panel {
+    background: linear-gradient(135deg, hsl(25 20% 12% / 0.9), hsl(25 20% 8% / 0.85));
+    backdrop-filter: blur(16px);
+    border: 1px solid hsl(25 20% 22% / 0.4);
+  }
+
+  /* Bento card for feature grids */
+  .bento-card {
+    background: linear-gradient(145deg, hsl(20 30% 10%), hsl(20 25% 8%));
+    border: 1px solid hsl(25 20% 16% / 0.6);
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .bento-card:hover {
+    border-color: hsl(35 85% 58% / 0.3);
+    transform: translateY(-2px);
+  }
+
   .btn-gold {
     background: linear-gradient(135deg, hsl(35 85% 58%), hsl(32 80% 48%));
     color: hsl(20 30% 8%);
@@ -204,6 +225,22 @@
 
   .avatar-ring-active {
     box-shadow: 0 0 0 2px hsl(35 85% 58%), 0 0 20px hsl(35 85% 58% / 0.4);
+  }
+
+  /* Touch-friendly minimum tap targets (44x44px) */
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Mobile-optimized button sizing */
+  @media (max-width: 768px) {
+    .btn-gold,
+    button,
+    a[role="button"],
+    [role="button"] {
+      min-height: 44px;
+    }
   }
 }
 

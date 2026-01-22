@@ -6,16 +6,18 @@ import cafeBg from "@/assets/cafe-bg.jpg";
 export const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
+      {/* Background Image - optimized loading */}
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${cafeBg})` }}
+        style={{ 
+          backgroundImage: `url(${cafeBg})`,
+        }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/85 to-background" />
       <div className="absolute inset-0 bg-cafe-pattern" />
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-6 py-24 text-center">
+      <div className="relative z-10 container mx-auto px-4 md:px-6 py-16 md:py-24 text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -27,36 +29,39 @@ export const Hero = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel mb-8"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel mb-6 md:mb-8"
           >
             <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
-            <span className="text-sm text-cream-muted">Real-time professional networking</span>
+            <span className="text-xs md:text-sm text-cream-muted">Real-time professional networking</span>
           </motion.div>
 
           {/* Title */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-7xl xl:text-8xl font-serif mb-4 md:mb-6 leading-tight">
             Find Your{" "}
             <span className="text-gradient-gold">Common Ground</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-12">
+          <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-8 md:mb-12 px-4">
             Connect with professionals in your space. Real conversations, real connections, 
             brewed in the places where creativity flows.
           </p>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons - Mobile optimized */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center px-4"
           >
-            <Link to="/dashboard" className="btn-gold px-8 py-4 rounded-xl text-lg font-medium flex items-center gap-2 group">
+            <Link 
+              to="/dashboard" 
+              className="btn-gold w-full sm:w-auto px-8 py-4 rounded-xl text-base md:text-lg font-medium flex items-center justify-center gap-2 group min-h-[56px]"
+            >
               Check In Now
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <button className="px-8 py-4 rounded-xl text-lg font-medium border border-border hover:border-primary/50 transition-colors flex items-center gap-2">
+            <button className="w-full sm:w-auto px-8 py-4 rounded-xl text-base md:text-lg font-medium border border-border hover:border-primary/50 transition-colors flex items-center justify-center gap-2 min-h-[56px]">
               <Coffee className="w-5 h-5" />
               Explore Spaces
             </button>
@@ -67,17 +72,17 @@ export const Hero = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="grid grid-cols-3 gap-8 mt-20 max-w-2xl mx-auto"
+            className="grid grid-cols-3 gap-4 md:gap-8 mt-12 md:mt-20 max-w-2xl mx-auto px-4"
           >
             {[
               { icon: Users, value: "2,400+", label: "Active Professionals" },
               { icon: Coffee, value: "180+", label: "Connected Spaces" },
               { icon: Zap, value: "5,000+", label: "Connections Made" },
-            ].map((stat, index) => (
+            ].map((stat) => (
               <div key={stat.label} className="text-center">
-                <stat.icon className="w-6 h-6 text-primary mx-auto mb-2" />
-                <p className="text-2xl md:text-3xl font-serif text-foreground">{stat.value}</p>
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
+                <stat.icon className="w-5 h-5 md:w-6 md:h-6 text-primary mx-auto mb-2" />
+                <p className="text-xl md:text-2xl lg:text-3xl font-serif text-foreground">{stat.value}</p>
+                <p className="text-xs md:text-sm text-muted-foreground">{stat.label}</p>
               </div>
             ))}
           </motion.div>

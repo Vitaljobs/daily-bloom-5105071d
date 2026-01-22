@@ -17,6 +17,7 @@ import { PaywallPopup } from "@/components/premium/PaywallPopup";
 import { UpgradeButton } from "@/components/premium/UpgradeButton";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { AdminLink } from "@/components/admin/AdminLink";
+import { BottomNav } from "@/components/navigation/BottomNav";
 import { CommonGroundProvider, useCommonGround } from "@/contexts/CommonGroundContext";
 import { PremiumProvider } from "@/contexts/PremiumContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
@@ -102,7 +103,7 @@ const DashboardContent = () => {
   };
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden">
+    <div className="min-h-screen w-full relative overflow-hidden pb-20 md:pb-0">
       {/* Dynamic Lab Background with cross-fade */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -219,6 +220,9 @@ const DashboardContent = () => {
       
       {/* Admin Link (for admin users) */}
       <AdminLink />
+      
+      {/* Mobile Bottom Navigation */}
+      <BottomNav />
     </div>
   );
 };
