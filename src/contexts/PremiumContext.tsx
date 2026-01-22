@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 interface PremiumContextType {
   isPremium: boolean;
-  setIsPremium: (value: boolean) => void;
+  premiumTier: "free" | "premium" | "vip";
   showPaywall: boolean;
   paywallFeature: string | null;
   triggerPaywall: (feature: string) => void;
@@ -10,15 +11,20 @@ interface PremiumContextType {
   showPremiumOverlay: boolean;
   openPremiumOverlay: () => void;
   closePremiumOverlay: () => void;
+  isLoading: boolean;
 }
 
 const PremiumContext = createContext<PremiumContextType | undefined>(undefined);
 
 export const PremiumProvider = ({ children }: { children: ReactNode }) => {
-  const [isPremium, setIsPremium] = useState(false);
+  const { profile, isLoading } = useUserProfile();
   const [showPaywall, setShowPaywall] = useState(false);
   const [paywallFeature, setPaywallFeature] = useState<string | null>(null);
   const [showPremiumOverlay, setShowPremiumOverlay] = useState(false);
+
+  // Derive premium status from database
+  const premiumTier = profile?.premium_tier || "free";
+  const isPremium = premiumTier === "premium" || premiumTier === "vip";
 
   const triggerPaywall = (feature: string) => {
     setPaywallFeature(feature);
@@ -42,7 +48,7 @@ export const PremiumProvider = ({ children }: { children: ReactNode }) => {
     <PremiumContext.Provider
       value={{
         isPremium,
-        setIsPremium,
+        premiumTier,
         showPaywall,
         paywallFeature,
         triggerPaywall,
@@ -50,6 +56,7 @@ export const PremiumProvider = ({ children }: { children: ReactNode }) => {
         showPremiumOverlay,
         openPremiumOverlay,
         closePremiumOverlay,
+        isLoading,
       }}
     >
       {children}

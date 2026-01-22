@@ -3,41 +3,14 @@ import { motion } from "framer-motion";
 import { Languages, Loader2 } from "lucide-react";
 import { usePremium } from "@/contexts/PremiumContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface TranslateButtonProps {
   text: string;
   onTranslate: (translatedText: string) => void;
   fromLanguage?: "nl" | "en";
 }
-
-// Mock translation function (in real app, would call AI API)
-const mockTranslate = async (text: string, from: "nl" | "en"): Promise<string> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 800));
-  
-  // Simple mock translations for demo
-  const translations: Record<string, Record<string, string>> = {
-    nl: {
-      "Klinkt goed! Tot zo!": "Sounds good! See you soon!",
-      "Perfect, ik zie je daar!": "Perfect, I'll see you there!",
-      "Super! Ik neem een cappuccino 😊": "Great! I'll have a cappuccino 😊",
-      "Top! Ik kom eraan!": "Great! I'm on my way!",
-      "Interessant! Daar wil ik meer over horen.": "Interesting! I'd like to hear more about that.",
-      "Goed idee, laten we dat bespreken!": "Good idea, let's discuss that!",
-    },
-    en: {
-      "Sounds good! See you soon!": "Klinkt goed! Tot zo!",
-      "Perfect, I'll see you there!": "Perfect, ik zie je daar!",
-      "Great! I'll have a cappuccino 😊": "Super! Ik neem een cappuccino 😊",
-      "Great! I'm on my way!": "Top! Ik kom eraan!",
-      "Interesting! I'd like to hear more about that.": "Interessant! Daar wil ik meer over horen.",
-      "Good idea, let's discuss that!": "Goed idee, laten we dat bespreken!",
-    },
-  };
-
-  // Return mock translation or original with language indicator
-  return translations[from]?.[text] || `[${from === "nl" ? "EN" : "NL"}] ${text}`;
-};
 
 export const TranslateButton = ({ text, onTranslate, fromLanguage = "nl" }: TranslateButtonProps) => {
   const [isTranslating, setIsTranslating] = useState(false);
@@ -55,11 +28,32 @@ export const TranslateButton = ({ text, onTranslate, fromLanguage = "nl" }: Tran
 
     setIsTranslating(true);
     try {
-      const translated = await mockTranslate(text, fromLanguage);
-      onTranslate(translated);
-      setIsTranslated(true);
+      // Determine target language (opposite of source)
+      const toLanguage = fromLanguage === "nl" ? "en" : "nl";
+      
+      const { data, error } = await supabase.functions.invoke("translate-message", {
+        body: { text, fromLanguage, toLanguage },
+      });
+
+      if (error) {
+        console.error("Translation error:", error);
+        if (error.message?.includes("429")) {
+          toast.error(language === "nl" ? "Te veel verzoeken. Probeer later opnieuw." : "Too many requests. Please try again later.");
+        } else if (error.message?.includes("402")) {
+          toast.error(language === "nl" ? "AI-credits op. Voeg credits toe." : "AI credits depleted. Please add credits.");
+        } else {
+          toast.error(language === "nl" ? "Vertaling mislukt" : "Translation failed");
+        }
+        return;
+      }
+
+      if (data?.translatedText) {
+        onTranslate(data.translatedText);
+        setIsTranslated(true);
+      }
     } catch (error) {
       console.error("Translation failed:", error);
+      toast.error(language === "nl" ? "Vertaling mislukt" : "Translation failed");
     } finally {
       setIsTranslating(false);
     }
