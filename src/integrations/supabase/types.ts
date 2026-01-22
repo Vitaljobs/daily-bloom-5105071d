@@ -14,6 +14,56 @@ export type Database = {
   }
   public: {
     Tables: {
+      connections: {
+        Row: {
+          connected_at: string
+          connected_user_id: string
+          created_at: string
+          email_shared: boolean | null
+          id: string
+          lab_id: string | null
+          linkedin_shared: boolean | null
+          private_note: string | null
+          shared_skills: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          connected_at?: string
+          connected_user_id: string
+          created_at?: string
+          email_shared?: boolean | null
+          id?: string
+          lab_id?: string | null
+          linkedin_shared?: boolean | null
+          private_note?: string | null
+          shared_skills?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          connected_at?: string
+          connected_user_id?: string
+          created_at?: string
+          email_shared?: boolean | null
+          id?: string
+          lab_id?: string | null
+          linkedin_shared?: boolean | null
+          private_note?: string | null
+          shared_skills?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "connections_lab_id_fkey"
+            columns: ["lab_id"]
+            isOneToOne: false
+            referencedRelation: "labs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       labs: {
         Row: {
           atmosphere: string | null
@@ -54,7 +104,9 @@ export type Database = {
           id: string
           industry: Database["public"]["Enums"]["industry"] | null
           lab_visits: number | null
+          linkedin_url: string | null
           name: string
+          portfolio_url: string | null
           preferred_language: string | null
           premium_tier: Database["public"]["Enums"]["premium_tier"] | null
           role: string | null
@@ -72,7 +124,9 @@ export type Database = {
           id?: string
           industry?: Database["public"]["Enums"]["industry"] | null
           lab_visits?: number | null
+          linkedin_url?: string | null
           name: string
+          portfolio_url?: string | null
           preferred_language?: string | null
           premium_tier?: Database["public"]["Enums"]["premium_tier"] | null
           role?: string | null
@@ -90,7 +144,9 @@ export type Database = {
           id?: string
           industry?: Database["public"]["Enums"]["industry"] | null
           lab_visits?: number | null
+          linkedin_url?: string | null
           name?: string
+          portfolio_url?: string | null
           preferred_language?: string | null
           premium_tier?: Database["public"]["Enums"]["premium_tier"] | null
           role?: string | null
