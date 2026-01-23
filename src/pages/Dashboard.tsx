@@ -16,6 +16,7 @@ import { BottomNav } from "@/components/navigation/BottomNav";
 import { QRWelcomeAnimation } from "@/components/dashboard/QRWelcomeAnimation";
 import { InterestMatchAlert } from "@/components/dashboard/InterestMatchAlert";
 import { LabLayout } from "@/components/dashboard/LabLayout";
+import { LabAtmosphereOverlay } from "@/components/dashboard/labs/LabAtmosphereOverlay";
 import { CommonGroundProvider, useCommonGround } from "@/contexts/CommonGroundContext";
 import { PremiumProvider } from "@/contexts/PremiumContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
@@ -128,11 +129,15 @@ const DashboardContent = () => {
           className="fixed inset-0 bg-cover bg-center scale-110"
           style={{ 
             backgroundImage: currentLab ? `url(${currentLab.background})` : undefined,
-            filter: showMatchReveal ? "blur(24px)" : "blur(8px)",
+            filter: showMatchReveal ? "blur(24px)" : "blur(12px)",
           }}
         />
       </AnimatePresence>
-      <div className="fixed inset-0 bg-background/60" />
+      
+      {/* Lab-specific Atmosphere Overlay with gradients & particles */}
+      <AnimatePresence mode="wait">
+        <LabAtmosphereOverlay labId={currentLocation} />
+      </AnimatePresence>
 
       {/* Main Content */}
       <main className="relative z-10 min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
