@@ -21,6 +21,9 @@ import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { AdminLink } from "@/components/admin/AdminLink";
 import { BottomNav } from "@/components/navigation/BottomNav";
 import { QRWelcomeAnimation } from "@/components/dashboard/QRWelcomeAnimation";
+import { SkillsInRoomWidget } from "@/components/dashboard/SkillsInRoomWidget";
+import { InterestMatchAlert } from "@/components/dashboard/InterestMatchAlert";
+import { LabAtmosphere } from "@/components/dashboard/LabAtmosphere";
 import { CommonGroundProvider, useCommonGround } from "@/contexts/CommonGroundContext";
 import { PremiumProvider } from "@/contexts/PremiumContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
@@ -176,7 +179,7 @@ const DashboardContent = () => {
               </motion.div>
               
               <motion.div variants={itemVariants}>
-                <UsersWidget />
+                <SkillsInRoomWidget />
               </motion.div>
 
               {/* Row 2 */}
@@ -185,7 +188,7 @@ const DashboardContent = () => {
               </motion.div>
               
               <motion.div variants={itemVariants}>
-                <RecentWidget />
+                <LabAtmosphere />
               </motion.div>
               
               <motion.div variants={itemVariants}>
@@ -198,7 +201,7 @@ const DashboardContent = () => {
               </motion.div>
               
               <motion.div variants={itemVariants}>
-                <TableTent />
+                <RecentWidget />
               </motion.div>
             </div>
           </motion.div>
@@ -235,6 +238,9 @@ const DashboardContent = () => {
         labName={currentLab?.name || ""}
         onComplete={closeQRWelcome}
       />
+
+      {/* Interest Match Alert */}
+      <InterestMatchAlert />
 
       {/* Onboarding Flow */}
       <OnboardingFlow
