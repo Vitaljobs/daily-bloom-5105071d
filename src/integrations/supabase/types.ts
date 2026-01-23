@@ -94,6 +94,30 @@ export type Database = {
         }
         Relationships: []
       }
+      page_views: {
+        Row: {
+          created_at: string
+          id: string
+          page_path: string
+          session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          page_path: string
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          page_path?: string
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -104,6 +128,7 @@ export type Database = {
           id: string
           industry: Database["public"]["Enums"]["industry"] | null
           lab_visits: number | null
+          last_seen: string | null
           linkedin_url: string | null
           name: string
           portfolio_url: string | null
@@ -124,6 +149,7 @@ export type Database = {
           id?: string
           industry?: Database["public"]["Enums"]["industry"] | null
           lab_visits?: number | null
+          last_seen?: string | null
           linkedin_url?: string | null
           name: string
           portfolio_url?: string | null
@@ -144,6 +170,7 @@ export type Database = {
           id?: string
           industry?: Database["public"]["Enums"]["industry"] | null
           lab_visits?: number | null
+          last_seen?: string | null
           linkedin_url?: string | null
           name?: string
           portfolio_url?: string | null
@@ -188,7 +215,15 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      page_view_stats: {
+        Row: {
+          total_views: number | null
+          unique_sessions: number | null
+          unique_users: number | null
+          view_date: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
