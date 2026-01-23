@@ -66,6 +66,47 @@
     --sidebar-ring: 35 85% 58%;
   }
 
+  /* Lab-Specific Themes */
+  .lab-roastery {
+    --primary: 35 85% 58%;
+    --accent: 28 75% 52%;
+    --radius: 1.5rem;
+    --lab-glow: hsl(35 85% 58% / 0.3);
+    --lab-accent-rgb: 217, 142, 64;
+  }
+
+  .lab-library {
+    --primary: 220 25% 55%;
+    --accent: 215 30% 45%;
+    --radius: 0.75rem;
+    --lab-glow: hsl(220 25% 55% / 0.2);
+    --lab-accent-rgb: 128, 143, 166;
+  }
+
+  .lab-espresso {
+    --primary: 30 90% 55%;
+    --accent: 25 85% 50%;
+    --radius: 1.25rem;
+    --lab-glow: hsl(30 90% 55% / 0.35);
+    --lab-accent-rgb: 242, 151, 39;
+  }
+
+  .lab-rooftop {
+    --primary: 15 75% 55%;
+    --accent: 340 65% 55%;
+    --radius: 2rem;
+    --lab-glow: hsl(15 75% 55% / 0.3);
+    --lab-accent-rgb: 209, 107, 80;
+  }
+
+  .lab-greenhouse {
+    --primary: 145 60% 45%;
+    --accent: 155 55% 50%;
+    --radius: 2.5rem;
+    --lab-glow: hsl(145 60% 45% / 0.25);
+    --lab-accent-rgb: 56, 184, 120;
+  }
+
   /* Admin "Clean Tech" Theme */
   .admin-theme {
     --background: 220 15% 8%;
