@@ -65,49 +65,45 @@
     --sidebar-border: 25 18% 16%;
     --sidebar-ring: 35 85% 58%;
   }
+}
 
-  /* Lab-Specific Themes */
-  .lab-roastery {
-    --primary: 35 85% 58%;
-    --accent: 28 75% 52%;
-    --radius: 1.5rem;
-    --lab-glow: hsl(35 85% 58% / 0.3);
-    --lab-accent-rgb: 217, 142, 64;
-  }
+/* Lab-Specific Themes - Must be outside @layer to override properly */
+.lab-roastery {
+  --primary: 35 85% 58%;
+  --accent: 28 75% 52%;
+  --radius: 1.5rem;
+  --shadow-glow: 0 0 40px hsl(35 85% 58% / 0.4), 0 0 80px hsl(35 85% 58% / 0.2);
+}
 
-  .lab-library {
-    --primary: 220 25% 55%;
-    --accent: 215 30% 45%;
-    --radius: 0.75rem;
-    --lab-glow: hsl(220 25% 55% / 0.2);
-    --lab-accent-rgb: 128, 143, 166;
-  }
+.lab-library {
+  --primary: 220 40% 60%;
+  --accent: 215 35% 50%;
+  --radius: 0.75rem;
+  --shadow-glow: 0 0 40px hsl(220 40% 60% / 0.3), 0 0 80px hsl(220 40% 60% / 0.15);
+}
 
-  .lab-espresso {
-    --primary: 30 90% 55%;
-    --accent: 25 85% 50%;
-    --radius: 1.25rem;
-    --lab-glow: hsl(30 90% 55% / 0.35);
-    --lab-accent-rgb: 242, 151, 39;
-  }
+.lab-espresso {
+  --primary: 28 90% 55%;
+  --accent: 22 85% 50%;
+  --radius: 1.25rem;
+  --shadow-glow: 0 0 40px hsl(28 90% 55% / 0.4), 0 0 80px hsl(28 90% 55% / 0.2);
+}
 
-  .lab-rooftop {
-    --primary: 15 75% 55%;
-    --accent: 340 65% 55%;
-    --radius: 2rem;
-    --lab-glow: hsl(15 75% 55% / 0.3);
-    --lab-accent-rgb: 209, 107, 80;
-  }
+.lab-rooftop {
+  --primary: 12 80% 58%;
+  --accent: 340 70% 55%;
+  --radius: 2rem;
+  --shadow-glow: 0 0 40px hsl(12 80% 58% / 0.4), 0 0 80px hsl(340 70% 55% / 0.2);
+}
 
-  .lab-greenhouse {
-    --primary: 145 60% 45%;
-    --accent: 155 55% 50%;
-    --radius: 2.5rem;
-    --lab-glow: hsl(145 60% 45% / 0.25);
-    --lab-accent-rgb: 56, 184, 120;
-  }
+.lab-greenhouse {
+  --primary: 145 65% 42%;
+  --accent: 155 60% 48%;
+  --radius: 2.5rem;
+  --shadow-glow: 0 0 40px hsl(145 65% 42% / 0.35), 0 0 80px hsl(145 65% 42% / 0.2);
+}
 
-  /* Admin "Clean Tech" Theme */
+@layer base {
   .admin-theme {
     --background: 220 15% 8%;
     --foreground: 210 20% 92%;
