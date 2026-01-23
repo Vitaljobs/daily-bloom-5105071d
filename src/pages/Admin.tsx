@@ -5,6 +5,9 @@ import { EngagementPulse } from "@/components/admin/EngagementPulse";
 import { UserManagement } from "@/components/admin/UserManagement";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { QRCodeGenerator } from "@/components/admin/QRCodeGenerator";
+import { PageViewsTracker } from "@/components/admin/PageViewsTracker";
+import { OnlineUsersMonitor } from "@/components/admin/OnlineUsersMonitor";
+import { LabAnalytics } from "@/components/admin/LabAnalytics";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -58,14 +61,29 @@ const Admin = () => {
             animate="visible"
             className="space-y-6"
           >
-            {/* Top Stats Row */}
+            {/* Top Stats Row - 3 columns */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <motion.div variants={itemVariants}>
+                <PageViewsTracker />
+              </motion.div>
+              
               <motion.div variants={itemVariants}>
                 <EngagementPulse />
               </motion.div>
               
-              <motion.div variants={itemVariants} className="md:col-span-2">
+              <motion.div variants={itemVariants}>
                 <RevenueTracker />
+              </motion.div>
+            </div>
+
+            {/* Lab Analytics + Online Users Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <motion.div variants={itemVariants}>
+                <LabAnalytics />
+              </motion.div>
+              
+              <motion.div variants={itemVariants}>
+                <OnlineUsersMonitor />
               </motion.div>
             </div>
 

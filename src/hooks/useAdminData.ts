@@ -15,6 +15,7 @@ export interface ProfileWithStats {
   lab_visits: number | null;
   current_lab_id: string | null;
   checked_in_at: string | null;
+  last_seen: string | null;
   created_at: string;
 }
 
@@ -161,5 +162,114 @@ export const useEngagementStats = () => {
         activeToday: checkedInToday?.length || 0,
       };
     },
+  });
+};
+
+// New hooks for extended admin functionality
+
+export const usePageViewStats = () => {
+  return useQuery({
+    queryKey: ["admin-page-views"],
+    queryFn: async () => {
+      // Get total page views
+      const { count: totalViews, error: countError } = await supabase
+        .from("page_views")
+        .select("*", { count: "exact", head: true });
+
+      if (countError) throw countError;
+
+      // Get today's views
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const { count: todayViews, error: todayError } = await supabase
+        .from("page_views")
+        .select("*", { count: "exact", head: true })
+        .gte("created_at", today.toISOString());
+
+      if (todayError) throw todayError;
+
+      // Get views this week
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+
+      const { count: weekViews, error: weekError } = await supabase
+        .from("page_views")
+        .select("*", { count: "exact", head: true })
+        .gte("created_at", weekAgo.toISOString());
+
+      if (weekError) throw weekError;
+
+      return {
+        total: totalViews || 0,
+        today: todayViews || 0,
+        thisWeek: weekViews || 0,
+      };
+    },
+  });
+};
+
+export const useOnlineUsers = () => {
+  return useQuery({
+    queryKey: ["admin-online-users"],
+    queryFn: async () => {
+      // Get users who were active in the last 15 minutes OR are checked into a lab
+      const fifteenMinutesAgo = new Date();
+      fifteenMinutesAgo.setMinutes(fifteenMinutesAgo.getMinutes() - 15);
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id, name, avatar_url, current_lab_id, last_seen, status, industry")
+        .or(`last_seen.gte.${fifteenMinutesAgo.toISOString()},current_lab_id.not.is.null`)
+        .neq("status", "invisible")
+        .order("last_seen", { ascending: false });
+
+      if (error) throw error;
+
+      return data as Array<{
+        id: string;
+        name: string;
+        avatar_url: string | null;
+        current_lab_id: string | null;
+        last_seen: string | null;
+        status: string | null;
+        industry: string | null;
+      }>;
+    },
+    refetchInterval: 30000, // Refetch every 30 seconds
+  });
+};
+
+export const useLabAnalytics = () => {
+  return useQuery({
+    queryKey: ["admin-lab-analytics"],
+    queryFn: async () => {
+      const { data: profiles, error } = await supabase
+        .from("profiles")
+        .select("current_lab_id, status, premium_tier")
+        .not("current_lab_id", "is", null)
+        .neq("status", "invisible");
+
+      if (error) throw error;
+
+      // Calculate stats per lab
+      const labAnalytics = localLabs.map((lab) => {
+        const usersInLab = profiles?.filter((p) => p.current_lab_id === lab.id) || [];
+        const premiumUsers = usersInLab.filter((p) => p.premium_tier === "premium" || p.premium_tier === "vip");
+        
+        return {
+          id: lab.id,
+          name: lab.name,
+          icon: lab.icon,
+          activeUsers: usersInLab.length,
+          premiumUsers: premiumUsers.length,
+          occupancyPercent: Math.min(100, Math.round((usersInLab.length / 20) * 100)), // Assume max 20 users per lab
+        };
+      });
+
+      // Sort by active users descending
+      return labAnalytics.sort((a, b) => b.activeUsers - a.activeUsers);
+    },
+    refetchInterval: 30000,
   });
 };
