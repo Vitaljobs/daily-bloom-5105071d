@@ -102,71 +102,71 @@ const Upgrade = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="container mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
           <Link to="/dashboard" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="w-5 h-5" />
-            <span>Terug</span>
+            <span className="text-sm sm:text-base">Terug</span>
           </Link>
           <div className="flex items-center gap-2">
             <Crown className="w-5 h-5 text-gold" />
-            <span className="font-serif text-foreground">Premium</span>
+            <span className="font-serif text-foreground text-sm sm:text-base">Premium</span>
           </div>
         </div>
       </header>
 
-      <main className="pt-24 pb-16">
+      <main className="pt-20 sm:pt-24 pb-12 sm:pb-16">
         <div className="container mx-auto px-4">
           {/* Hero */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-12"
           >
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", delay: 0.2 }}
-              className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center mx-auto mb-6"
+              className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center mx-auto mb-4 sm:mb-6"
             >
-              <Crown className="w-10 h-10 text-gold" />
+              <Crown className="w-8 h-8 sm:w-10 sm:h-10 text-gold" />
             </motion.div>
-            <h1 className="text-4xl md:text-5xl font-serif mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif mb-3 sm:mb-4 px-2">
               Upgrade naar <span className="text-gradient-gold">Premium</span>
             </h1>
-            <p className="text-lg text-muted-foreground max-w-xl mx-auto">
+            <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto px-4">
               Ontgrendel de volledige kracht van Common Ground en maak onbeperkt 
               professionele connecties.
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
             {/* Features */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="space-y-4"
+              className="space-y-3 sm:space-y-4"
             >
-              <h2 className="text-2xl font-serif mb-6">Premium Voordelen</h2>
+              <h2 className="text-xl sm:text-2xl font-serif mb-4 sm:mb-6">Premium Voordelen</h2>
               {premiumFeatures.map((feature, index) => (
                 <motion.div
                   key={feature.title}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4 + index * 0.1 }}
-                  className="flex items-start gap-4 p-4 rounded-xl bg-card/50 border border-border hover:border-gold/30 transition-colors"
+                  className="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-card/50 border border-border hover:border-gold/30 transition-colors"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center shrink-0">
-                    <feature.icon className="w-5 h-5 text-gold" />
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-gold/10 flex items-center justify-center shrink-0">
+                    <feature.icon className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
                   </div>
-                  <div>
-                    <h3 className="font-medium text-foreground">{feature.title}</h3>
-                    <p className="text-sm text-muted-foreground">{feature.description}</p>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium text-foreground text-sm sm:text-base">{feature.title}</h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground">{feature.description}</p>
                   </div>
-                  <Check className="w-5 h-5 text-green-500 shrink-0 ml-auto" />
+                  <Check className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 shrink-0" />
                 </motion.div>
               ))}
             </motion.div>
@@ -178,35 +178,35 @@ const Upgrade = () => {
               transition={{ delay: 0.4 }}
               className="lg:sticky lg:top-24 h-fit"
             >
-              <div className="wood-card p-6 md:p-8 rounded-2xl">
+              <div className="wood-card p-5 sm:p-6 md:p-8 rounded-2xl">
                 {/* Pricing */}
-                <div className="text-center mb-8">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/10 text-gold text-sm mb-4">
-                    <Zap className="w-4 h-4" />
+                <div className="text-center mb-6 sm:mb-8">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/10 text-gold text-xs sm:text-sm mb-3 sm:mb-4">
+                    <Zap className="w-3 h-3 sm:w-4 sm:h-4" />
                     Meest Populair
                   </div>
                   <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-4xl font-serif text-foreground">€9,99</span>
-                    <span className="text-muted-foreground">/maand</span>
+                    <span className="text-3xl sm:text-4xl font-serif text-foreground">€9,99</span>
+                    <span className="text-muted-foreground text-sm sm:text-base">/maand</span>
                   </div>
-                  <p className="text-sm text-muted-foreground mt-2">
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-2">
                     Of €89,99/jaar (2 maanden gratis)
                   </p>
                 </div>
 
                 {/* Payment Form */}
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="flex items-center gap-2 mb-4">
-                    <CreditCard className="w-5 h-5 text-muted-foreground" />
-                    <span className="text-sm font-medium text-foreground">Creditcard</span>
-                    <div className="ml-auto flex gap-2">
-                      <div className="w-8 h-5 rounded bg-blue-600 flex items-center justify-center">
-                        <span className="text-white text-[8px] font-bold">VISA</span>
+                <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+                  <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                    <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
+                    <span className="text-xs sm:text-sm font-medium text-foreground">Creditcard</span>
+                    <div className="ml-auto flex gap-1.5 sm:gap-2">
+                      <div className="w-7 h-4 sm:w-8 sm:h-5 rounded bg-[#1434CB] flex items-center justify-center">
+                        <span className="text-white text-[7px] sm:text-[8px] font-bold">VISA</span>
                       </div>
-                      <div className="w-8 h-5 rounded bg-red-500 flex items-center justify-center">
+                      <div className="w-7 h-4 sm:w-8 sm:h-5 rounded bg-[#EB001B] flex items-center justify-center">
                         <div className="flex">
-                          <div className="w-2 h-2 rounded-full bg-red-600 opacity-80" />
-                          <div className="w-2 h-2 rounded-full bg-yellow-500 -ml-1 opacity-80" />
+                          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#EB001B] opacity-80" />
+                          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#F79E1B] -ml-0.5 sm:-ml-1 opacity-80" />
                         </div>
                       </div>
                     </div>
@@ -266,13 +266,13 @@ const Upgrade = () => {
                   <Button
                     type="submit"
                     disabled={isProcessing}
-                    className="w-full btn-gold py-6 text-lg font-medium mt-6"
+                    className="w-full btn-gold py-5 sm:py-6 text-base sm:text-lg font-medium mt-4 sm:mt-6"
                   >
                     {isProcessing ? (
                       <motion.div
                         animate={{ rotate: 360 }}
                         transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                        className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
+                        className="w-5 h-5 border-2 border-foreground/30 border-t-foreground rounded-full"
                       />
                     ) : (
                       <>
@@ -284,7 +284,7 @@ const Upgrade = () => {
                 </form>
 
                 {/* Divider */}
-                <div className="relative my-6">
+                <div className="relative my-5 sm:my-6">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-border" />
                   </div>
@@ -299,9 +299,9 @@ const Upgrade = () => {
                   variant="outline"
                   onClick={handlePayPal}
                   disabled={isProcessing}
-                  className="w-full py-6 border-border hover:border-blue-500/50 hover:bg-blue-500/5"
+                  className="w-full py-5 sm:py-6 border-border hover:border-primary/50 hover:bg-primary/5"
                 >
-                  <svg className="w-20 h-5" viewBox="0 0 101 32" fill="none">
+                  <svg className="w-16 sm:w-20 h-4 sm:h-5" viewBox="0 0 101 32" fill="none">
                     <path d="M12.237 4.178h-7.49c-.512 0-.948.373-1.028.879L1.02 22.657c-.06.377.232.717.614.717h3.58c.512 0 .948-.373 1.028-.879l.727-4.61c.08-.506.516-.879 1.028-.879h2.37c4.934 0 7.78-2.387 8.524-7.12.335-2.07.014-3.699-.956-4.84-1.068-1.254-2.96-1.868-5.698-1.868zm.864 7.013c-.41 2.69-2.463 2.69-4.45 2.69h-1.13l.793-5.022c.047-.302.306-.527.612-.527h.518c1.352 0 2.63 0 3.287.77.393.46.512 1.143.37 2.089z" fill="#253B80"/>
                     <path d="M35.882 11.104h-3.594c-.306 0-.565.225-.612.527l-.158 1.003-.252-.364c-.779-1.13-2.514-1.508-4.246-1.508-3.973 0-7.367 3.01-8.029 7.232-.344 2.104.144 4.116 1.34 5.52 1.098 1.29 2.668 1.828 4.536 1.828 3.208 0 4.988-2.062 4.988-2.062l-.16 1.001c-.06.377.231.716.614.716h3.235c.512 0 .948-.372 1.028-.878l1.94-12.299c.06-.376-.232-.716-.614-.716zm-5.02 6.997c-.347 2.052-1.974 3.43-4.051 3.43-1.043 0-1.878-.335-2.415-.97-.533-.63-.733-1.527-.563-2.524.324-2.035 1.977-3.456 4.021-3.456 1.02 0 1.85.338 2.399.978.55.645.767 1.548.609 2.542z" fill="#253B80"/>
                     <path d="M55.32 11.104h-3.61c-.344 0-.667.168-.864.45l-4.987 7.344-2.114-7.06c-.131-.44-.538-.734-.998-.734h-3.546c-.427 0-.727.42-.585.82l3.985 11.693-3.748 5.29c-.292.413.01.98.505.98h3.606c.342 0 .662-.165.861-.443l12.022-17.36c.288-.41-.015-.98-.527-.98z" fill="#253B80"/>
@@ -312,8 +312,8 @@ const Upgrade = () => {
                 </Button>
 
                 {/* Security Note */}
-                <div className="flex items-center justify-center gap-2 mt-6 text-xs text-muted-foreground">
-                  <Shield className="w-4 h-4" />
+                <div className="flex items-center justify-center gap-2 mt-4 sm:mt-6 text-[10px] sm:text-xs text-muted-foreground">
+                  <Shield className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span>256-bit SSL beveiliging • Test modus actief</span>
                 </div>
               </div>
