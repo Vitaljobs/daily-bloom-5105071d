@@ -84,7 +84,7 @@ export const MatchRevealOverlay = ({
               </div>
             </motion.div>
 
-            {/* Center heart icon */}
+            {/* Center coffee icon - clickable to close */}
             <motion.div
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
@@ -95,7 +95,8 @@ export const MatchRevealOverlay = ({
                 damping: 20,
                 delay: 0.5,
               }}
-              className="relative order-first sm:order-none"
+              onClick={onClose}
+              className="relative order-first sm:order-none cursor-pointer"
             >
               <motion.div
                 animate={{
