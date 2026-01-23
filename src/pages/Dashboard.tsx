@@ -2,17 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { LogOut } from "lucide-react";
-import { SocialRadar } from "@/components/dashboard/SocialRadar";
-import { SkillsWidget } from "@/components/dashboard/SkillsWidget";
-import { UsersWidget } from "@/components/dashboard/UsersWidget";
-import { RecentWidget } from "@/components/dashboard/RecentWidget";
-import { TableTent } from "@/components/dashboard/TableTent";
-import { SmartMatch } from "@/components/dashboard/SmartMatch";
 import { LocationSelector } from "@/components/dashboard/LocationSelector";
 import { MatchRevealOverlay } from "@/components/dashboard/MatchRevealOverlay";
 import { WelcomeOverlay } from "@/components/dashboard/WelcomeOverlay";
 import { ChatOverlay } from "@/components/chat/ChatOverlay";
-import { MyNetworkWidget } from "@/components/dashboard/MyNetworkWidget";
 import { OnboardingFlow } from "@/components/onboarding/OnboardingFlow";
 import { PremiumOverlay } from "@/components/premium/PremiumOverlay";
 import { PaywallPopup } from "@/components/premium/PaywallPopup";
@@ -21,9 +14,8 @@ import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { AdminLink } from "@/components/admin/AdminLink";
 import { BottomNav } from "@/components/navigation/BottomNav";
 import { QRWelcomeAnimation } from "@/components/dashboard/QRWelcomeAnimation";
-import { SkillsInRoomWidget } from "@/components/dashboard/SkillsInRoomWidget";
 import { InterestMatchAlert } from "@/components/dashboard/InterestMatchAlert";
-import { LabAtmosphere } from "@/components/dashboard/LabAtmosphere";
+import { LabLayout } from "@/components/dashboard/LabLayout";
 import { CommonGroundProvider, useCommonGround } from "@/contexts/CommonGroundContext";
 import { PremiumProvider } from "@/contexts/PremiumContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
@@ -113,15 +105,8 @@ const DashboardContent = () => {
     navigate("/auth");
   };
 
-  // Current user mock data
-  const currentUser = {
-    name: "Jij",
-    avatar: "JIJ",
-    role: "Developer",
-  };
-
   return (
-    <div className="min-h-screen w-full relative overflow-hidden pb-24 md:pb-0">
+    <div className={`min-h-screen w-full relative overflow-hidden pb-24 md:pb-0 lab-${currentLocation}`}>
       {/* Logout Button - Desktop only */}
       <Button
         variant="ghost"
@@ -150,7 +135,7 @@ const DashboardContent = () => {
       <div className="fixed inset-0 bg-background/60" />
 
       {/* Main Content */}
-      <main className="relative z-10 min-h-screen flex flex-col items-center justify-center p-8">
+      <main className="relative z-10 min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
         {/* Location Selector */}
         <LocationSelector 
           currentLocation={currentLocation}
@@ -165,45 +150,10 @@ const DashboardContent = () => {
             initial="hidden"
             animate={isChangingLocation ? "exit" : "visible"}
             exit="exit"
-            className="w-full max-w-5xl"
+            className="w-full max-w-6xl"
           >
-            {/* Bento Grid matching reference */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {/* Row 1 */}
-              <motion.div variants={itemVariants}>
-                <SocialRadar />
-              </motion.div>
-              
-              <motion.div variants={itemVariants}>
-                <SkillsWidget />
-              </motion.div>
-              
-              <motion.div variants={itemVariants}>
-                <SkillsInRoomWidget />
-              </motion.div>
-
-              {/* Row 2 */}
-              <motion.div variants={itemVariants}>
-                <SmartMatch />
-              </motion.div>
-              
-              <motion.div variants={itemVariants}>
-                <LabAtmosphere />
-              </motion.div>
-              
-              <motion.div variants={itemVariants}>
-                <TableTent />
-              </motion.div>
-
-              {/* Row 3 - My Network Widget */}
-              <motion.div variants={itemVariants} className="lg:col-span-2">
-                <MyNetworkWidget />
-              </motion.div>
-              
-              <motion.div variants={itemVariants}>
-                <RecentWidget />
-              </motion.div>
-            </div>
+            {/* Dynamic Lab Layout */}
+            <LabLayout labId={currentLocation} itemVariants={itemVariants} />
           </motion.div>
         </AnimatePresence>
       </main>
@@ -219,7 +169,7 @@ const DashboardContent = () => {
       {/* Match Reveal Overlay */}
       <MatchRevealOverlay
         isVisible={showMatchReveal}
-        currentUser={currentUser}
+        currentUser={{ name: "Jij", avatar: "JIJ", role: "Developer" }}
         matchedUser={matchedUser}
         onClose={closeMatchReveal}
       />
