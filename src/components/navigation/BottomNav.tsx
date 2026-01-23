@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LayoutDashboard, Radar, MessageCircle, Shield } from "lucide-react";
+import { LayoutDashboard, Radar, MessageCircle, Shield, LogOut } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface NavItem {
   to: string;
@@ -15,7 +16,13 @@ const navItems: NavItem[] = [
   { to: "/admin", icon: Shield, label: "Admin" },
 ];
 
-export const BottomNav = () => {
+interface BottomNavProps {
+  onLogout?: () => void;
+}
+
+export const BottomNav = ({ onLogout }: BottomNavProps) => {
+  const { language, toggleLanguage } = useLanguage();
+
   return (
     <motion.nav
       initial={{ y: 100 }}
@@ -25,14 +32,24 @@ export const BottomNav = () => {
       {/* Backdrop blur container */}
       <div className="mx-3 mb-3 rounded-2xl overflow-hidden">
         <div className="bg-card/90 backdrop-blur-xl border border-border/50 shadow-lg">
-          <div className="flex items-center justify-around px-2 py-2">
+          <div className="flex items-center justify-around px-1 py-2">
+            {/* Language Toggle */}
+            <button
+              onClick={toggleLanguage}
+              className="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] rounded-xl transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted/50"
+            >
+              <span className="text-xs font-bold text-primary">{language.toUpperCase()}</span>
+              <span className="text-[10px] font-medium">Taal</span>
+            </button>
+
+            {/* Nav Items */}
             {navItems.map((item) => (
               <NavLink
                 key={item.label}
                 to={item.to}
                 className={({ isActive }) => `
                   flex flex-col items-center justify-center
-                  min-w-[56px] min-h-[56px] rounded-xl
+                  min-w-[48px] min-h-[48px] rounded-xl
                   transition-all duration-200
                   ${isActive 
                     ? "bg-primary/20 text-primary" 
@@ -42,7 +59,7 @@ export const BottomNav = () => {
               >
                 {({ isActive }) => (
                   <>
-                    <item.icon className="w-5 h-5 mb-1" />
+                    <item.icon className="w-5 h-5 mb-0.5" />
                     <span className="text-[10px] font-medium">{item.label}</span>
                     {isActive && (
                       <motion.div
@@ -54,6 +71,17 @@ export const BottomNav = () => {
                 )}
               </NavLink>
             ))}
+
+            {/* Logout Button */}
+            {onLogout && (
+              <button
+                onClick={onLogout}
+                className="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] rounded-xl transition-all duration-200 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+              >
+                <LogOut className="w-5 h-5 mb-0.5" />
+                <span className="text-[10px] font-medium">Uit</span>
+              </button>
+            )}
           </div>
         </div>
       </div>

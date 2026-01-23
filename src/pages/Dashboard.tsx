@@ -20,7 +20,6 @@ import { UpgradeButton } from "@/components/premium/UpgradeButton";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { AdminLink } from "@/components/admin/AdminLink";
 import { BottomNav } from "@/components/navigation/BottomNav";
-import { MobileToolbar } from "@/components/navigation/MobileToolbar";
 import { QRWelcomeAnimation } from "@/components/dashboard/QRWelcomeAnimation";
 import { CommonGroundProvider, useCommonGround } from "@/contexts/CommonGroundContext";
 import { PremiumProvider } from "@/contexts/PremiumContext";
@@ -130,9 +129,6 @@ const DashboardContent = () => {
       >
         <LogOut className="h-5 w-5" />
       </Button>
-      
-      {/* Mobile Toolbar */}
-      <MobileToolbar onLogout={handleLogout} />
       {/* Dynamic Lab Background with cross-fade */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -258,7 +254,7 @@ const DashboardContent = () => {
       <AdminLink />
       
       {/* Mobile Bottom Navigation */}
-      <BottomNav />
+      <BottomNav onLogout={handleLogout} />
     </div>
   );
 };
