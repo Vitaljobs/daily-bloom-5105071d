@@ -20,6 +20,7 @@ import { UpgradeButton } from "@/components/premium/UpgradeButton";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { AdminLink } from "@/components/admin/AdminLink";
 import { BottomNav } from "@/components/navigation/BottomNav";
+import { MobileToolbar } from "@/components/navigation/MobileToolbar";
 import { QRWelcomeAnimation } from "@/components/dashboard/QRWelcomeAnimation";
 import { CommonGroundProvider, useCommonGround } from "@/contexts/CommonGroundContext";
 import { PremiumProvider } from "@/contexts/PremiumContext";
@@ -118,17 +119,20 @@ const DashboardContent = () => {
   };
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden pb-20 md:pb-0">
-      {/* Logout Button */}
+    <div className="min-h-screen w-full relative overflow-hidden pb-24 md:pb-0">
+      {/* Logout Button - Desktop only */}
       <Button
         variant="ghost"
         size="icon"
         onClick={handleLogout}
-        className="fixed top-4 right-4 z-50 bg-background/80 backdrop-blur-sm hover:bg-background/90"
+        className="hidden md:flex fixed top-4 right-16 z-50 bg-background/80 backdrop-blur-sm hover:bg-background/90"
         title="Uitloggen"
       >
         <LogOut className="h-5 w-5" />
       </Button>
+      
+      {/* Mobile Toolbar */}
+      <MobileToolbar onLogout={handleLogout} />
       {/* Dynamic Lab Background with cross-fade */}
       <AnimatePresence mode="wait">
         <motion.div
