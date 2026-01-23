@@ -236,15 +236,15 @@ export const ChatOverlay = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-40 flex items-end justify-end p-4 md:p-6 pointer-events-none"
+          className="fixed inset-0 z-40 flex items-end justify-end p-2 sm:p-4 md:p-6 pointer-events-none overflow-hidden"
         >
           {/* Chat Panel */}
           <motion.div
-            initial={{ x: 400, opacity: 0 }}
+            initial={{ x: "100%", opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            exit={{ x: 400, opacity: 0 }}
+            exit={{ x: "100%", opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="w-full max-w-md h-[700px] max-h-[85vh] wood-card flex flex-col pointer-events-auto overflow-hidden"
+            className="w-full max-w-md h-[85vh] sm:h-[700px] sm:max-h-[85vh] wood-card flex flex-col pointer-events-auto overflow-hidden"
           >
             {/* Header with Match Score */}
             <div className="flex items-center justify-between p-4 border-b border-border/30">
