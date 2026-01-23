@@ -75,14 +75,16 @@ export const Hero = () => {
 
           {/* Title */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-serif mb-3 sm:mb-4 md:mb-6 leading-tight px-2">
-            Find Your{" "}
-            <span className="text-gradient-gold">Common Ground</span>
+            <span className="text-gradient-gold">Common Ground Pulse</span>
+            <br />
+            <span className="text-foreground text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
+              Waar koffie en connecties samenkomen
+            </span>
           </h1>
 
           {/* Subtitle */}
           <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 md:mb-12 px-2">
-            Connect with professionals in your space. Real conversations, real connections, 
-            brewed in the places where creativity flows.
+            Ontdek wie er nu naast je werkt. Netwerk live, deel expertise en groei lokaal.
           </p>
 
           {/* CTA Buttons - Mobile optimized */}
@@ -94,14 +96,14 @@ export const Hero = () => {
           >
             <Link 
               to={dashboardLink}
-              className="btn-gold w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl text-base font-medium flex items-center justify-center gap-2 group min-h-[52px] sm:min-h-[56px]"
+              className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 rounded-2xl text-lg sm:text-xl font-semibold flex items-center justify-center gap-3 group min-h-[60px] sm:min-h-[68px] bg-gradient-to-r from-primary via-primary to-accent text-primary-foreground shadow-[0_8px_32px_hsl(var(--primary)/0.4)] hover:shadow-[0_12px_40px_hsl(var(--primary)/0.55)] transition-all duration-300 hover:scale-[1.02]"
             >
               {preselectedLab ? `Check In @ ${preselectedLab.name}` : "Check In Now"}
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <button className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl text-base font-medium border border-border hover:border-primary/50 transition-colors flex items-center justify-center gap-2 min-h-[52px] sm:min-h-[56px]">
+            <button className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl text-base font-medium border border-border hover:border-primary/50 transition-colors flex items-center justify-center gap-2 min-h-[52px] sm:min-h-[56px] bg-card/50 backdrop-blur-sm">
               <Coffee className="w-5 h-5" />
-              Explore Spaces
+              Ontdek Spaces
             </button>
           </motion.div>
 
