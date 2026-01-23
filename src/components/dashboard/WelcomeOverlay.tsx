@@ -28,7 +28,7 @@ export const WelcomeOverlay = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-hidden"
           onClick={onClose}
         >
           {/* Backdrop */}
@@ -52,7 +52,7 @@ export const WelcomeOverlay = ({
               delay: 0.2,
             }}
             onClick={(e) => e.stopPropagation()}
-            className="relative z-10 wood-card p-8 max-w-md w-full text-center"
+            className="relative z-10 wood-card p-6 sm:p-8 max-w-md w-full text-center"
           >
             {/* Close button */}
             <button
@@ -67,7 +67,7 @@ export const WelcomeOverlay = ({
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.4, type: "spring" as const }}
-              className="mx-auto mb-6"
+              className="mx-auto mb-4 sm:mb-6"
             >
               <motion.div
                 animate={{
@@ -78,7 +78,7 @@ export const WelcomeOverlay = ({
                   ],
                 }}
                 transition={{ repeat: Infinity, duration: 2 }}
-                className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-gold-dark flex items-center justify-center text-4xl"
+                className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-primary to-gold-dark flex items-center justify-center text-3xl sm:text-4xl"
               >
                 {lab.icon}
               </motion.div>
@@ -90,7 +90,7 @@ export const WelcomeOverlay = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <h2 className="font-serif text-2xl text-foreground mb-2">
+              <h2 className="font-serif text-xl sm:text-2xl text-foreground mb-2">
                 {t.welcome.welcomeTo}
               </h2>
               <motion.h1
@@ -102,11 +102,11 @@ export const WelcomeOverlay = ({
                   ],
                 }}
                 transition={{ repeat: Infinity, duration: 3 }}
-                className="font-serif text-3xl text-primary mb-2"
+                className="font-serif text-2xl sm:text-3xl text-primary mb-2"
               >
                 {lab.name}
               </motion.h1>
-              <p className="text-sm text-muted-foreground mb-6">{lab.tagline}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6">{lab.tagline}</p>
             </motion.div>
 
             {/* Stats */}
@@ -114,14 +114,14 @@ export const WelcomeOverlay = ({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="glass-inner p-4 mb-6"
+              className="glass-inner p-3 sm:p-4 mb-4 sm:mb-6"
             >
               <div className="flex items-center justify-center gap-3">
                 <div className="flex items-center gap-2 text-primary">
-                  <Users className="w-5 h-5" />
-                  <span className="font-serif text-xl">{openUsersCount}</span>
+                  <Users className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="font-serif text-lg sm:text-xl">{openUsersCount}</span>
                 </div>
-                <span className="text-sm text-muted-foreground">
+                <span className="text-xs sm:text-sm text-muted-foreground">
                   {t.welcome.professionalsOpen}
                 </span>
               </div>
@@ -132,7 +132,7 @@ export const WelcomeOverlay = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7 }}
-              className="text-sm text-muted-foreground mb-6"
+              className="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6"
             >
               {t.welcome.enjoyMessage}
             </motion.p>
@@ -145,7 +145,7 @@ export const WelcomeOverlay = ({
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={onClose}
-              className="btn-gold w-full py-3 flex items-center justify-center gap-2"
+              className="btn-gold w-full py-3 flex items-center justify-center gap-2 text-sm sm:text-base"
             >
               <Coffee className="w-4 h-4" />
               <span>{t.welcome.startNetworking}</span>
@@ -153,26 +153,28 @@ export const WelcomeOverlay = ({
             </motion.button>
           </motion.div>
 
-          {/* Decorative sparkles */}
-          {[...Array(8)].map((_, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{
-                opacity: [0, 1, 0],
-                scale: [0.5, 1, 0.5],
-                x: Math.cos((i * 45 * Math.PI) / 180) * 200,
-                y: Math.sin((i * 45 * Math.PI) / 180) * 200,
-              }}
-              transition={{
-                repeat: Infinity,
-                duration: 3,
-                delay: i * 0.2,
-              }}
-              className="absolute top-1/2 left-1/2 w-3 h-3 rounded-full bg-primary/60"
-              style={{ marginLeft: -6, marginTop: -6 }}
-            />
-          ))}
+          {/* Decorative sparkles - reduced radius for mobile */}
+          <div className="hidden sm:block">
+            {[...Array(8)].map((_, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  scale: [0.5, 1, 0.5],
+                  x: Math.cos((i * 45 * Math.PI) / 180) * 150,
+                  y: Math.sin((i * 45 * Math.PI) / 180) * 150,
+                }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 3,
+                  delay: i * 0.2,
+                }}
+                className="absolute top-1/2 left-1/2 w-3 h-3 rounded-full bg-primary/60"
+                style={{ marginLeft: -6, marginTop: -6 }}
+              />
+            ))}
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
