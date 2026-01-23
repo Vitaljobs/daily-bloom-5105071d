@@ -198,39 +198,49 @@ export const LabAtmosphereOverlay = ({ labId }: LabAtmosphereOverlayProps) => {
   const getOverlayStyles = () => {
     switch (labId) {
       case "roastery":
+        // Warm copper/orange industrial overlay with smoky depth
         return {
           background: `
-            linear-gradient(135deg, hsl(var(--background) / 0.9) 0%, hsl(var(--card) / 0.85) 50%, hsl(var(--background) / 0.9) 100%),
-            radial-gradient(ellipse at bottom, hsl(var(--accent) / 0.3) 0%, transparent 60%)
+            linear-gradient(135deg, hsla(20, 30%, 5%, 0.92) 0%, hsla(25, 35%, 8%, 0.88) 50%, hsla(15, 25%, 4%, 0.94) 100%),
+            radial-gradient(ellipse at bottom center, hsla(28, 75%, 35%, 0.35) 0%, transparent 55%),
+            radial-gradient(ellipse at top left, hsla(35, 60%, 20%, 0.25) 0%, transparent 45%)
           `,
         };
       case "library":
+        // Deep midnight blue with paper/parchment warmth
         return {
           background: `
-            linear-gradient(180deg, hsl(var(--background) / 0.95) 0%, hsl(var(--card) / 0.9) 50%, hsl(var(--background) / 0.95) 100%),
-            radial-gradient(ellipse at top, hsl(var(--primary) / 0.1) 0%, transparent 50%)
+            linear-gradient(180deg, hsla(220, 35%, 8%, 0.94) 0%, hsla(215, 30%, 12%, 0.9) 50%, hsla(225, 40%, 6%, 0.95) 100%),
+            radial-gradient(ellipse at top center, hsla(210, 50%, 25%, 0.2) 0%, transparent 50%),
+            radial-gradient(ellipse at bottom, hsla(40, 30%, 20%, 0.15) 0%, transparent 40%)
           `,
         };
       case "espresso":
+        // Neon-lit dark with cyan/magenta energy accents
         return {
           background: `
-            linear-gradient(135deg, hsl(var(--background) / 0.85) 0%, hsl(var(--card) / 0.8) 30%, hsl(var(--background) / 0.85) 100%),
-            radial-gradient(circle at 30% 70%, hsl(var(--primary) / 0.15) 0%, transparent 40%),
-            radial-gradient(circle at 70% 30%, hsl(var(--accent) / 0.1) 0%, transparent 35%)
+            linear-gradient(135deg, hsla(220, 30%, 6%, 0.88) 0%, hsla(260, 25%, 10%, 0.85) 40%, hsla(200, 30%, 8%, 0.88) 100%),
+            radial-gradient(circle at 20% 80%, hsla(190, 100%, 50%, 0.15) 0%, transparent 35%),
+            radial-gradient(circle at 80% 20%, hsla(320, 100%, 50%, 0.12) 0%, transparent 30%),
+            radial-gradient(circle at 50% 50%, hsla(270, 80%, 40%, 0.08) 0%, transparent 50%)
           `,
         };
       case "rooftop":
+        // Golden hour with purple/orange sunset gradient - lighter, more open
         return {
           background: `
-            linear-gradient(180deg, hsl(var(--primary) / 0.1) 0%, hsl(var(--accent) / 0.15) 50%, hsl(var(--background) / 0.7) 100%),
-            radial-gradient(ellipse at top right, hsl(var(--primary) / 0.25) 0%, transparent 50%)
+            linear-gradient(180deg, hsla(270, 40%, 25%, 0.6) 0%, hsla(30, 80%, 50%, 0.35) 40%, hsla(35, 70%, 40%, 0.5) 100%),
+            radial-gradient(ellipse at top center, hsla(40, 100%, 60%, 0.25) 0%, transparent 50%),
+            radial-gradient(ellipse at bottom, hsla(280, 50%, 30%, 0.2) 0%, transparent 60%)
           `,
         };
       case "greenhouse":
+        // Fresh botanical green with light, airy feel
         return {
           background: `
-            linear-gradient(160deg, hsl(var(--background) / 0.85) 0%, hsl(var(--card) / 0.8) 50%, hsl(var(--background) / 0.9) 100%),
-            radial-gradient(ellipse at bottom left, hsl(var(--primary) / 0.15) 0%, transparent 50%)
+            linear-gradient(160deg, hsla(140, 30%, 10%, 0.85) 0%, hsla(130, 25%, 15%, 0.8) 50%, hsla(150, 35%, 8%, 0.88) 100%),
+            radial-gradient(ellipse at bottom left, hsla(120, 50%, 35%, 0.2) 0%, transparent 50%),
+            radial-gradient(ellipse at top right, hsla(90, 40%, 40%, 0.15) 0%, transparent 45%)
           `,
         };
       default:
