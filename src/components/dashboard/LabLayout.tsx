@@ -8,6 +8,7 @@ import { TableTent } from "@/components/dashboard/TableTent";
 import { MyNetworkWidget } from "@/components/dashboard/MyNetworkWidget";
 import { SkillsInRoomWidget } from "@/components/dashboard/SkillsInRoomWidget";
 import { LabAtmosphere } from "@/components/dashboard/LabAtmosphere";
+import { ProfileCard } from "@/components/dashboard/ProfileCard";
 
 // Lab-specific components
 import { SilentModeIndicator } from "@/components/dashboard/labs/SilentModeIndicator";
@@ -53,6 +54,9 @@ const RoasteryLayout = ({ itemVariants }: { itemVariants: Variants }) => (
     </MotionItem>
 
     {/* Row 3: Network overview */}
+    <MotionItem variants={itemVariants}>
+      <ProfileCard />
+    </MotionItem>
     <motion.div variants={itemVariants} className="lg:col-span-2">
       <MyNetworkWidget />
     </motion.div>
@@ -88,7 +92,10 @@ const LibraryLayout = ({ itemVariants }: { itemVariants: Variants }) => (
     </MotionItem>
 
     {/* Row 3: Focus on deep work */}
-    <motion.div variants={itemVariants} className="lg:col-span-3">
+    <MotionItem variants={itemVariants}>
+      <ProfileCard />
+    </MotionItem>
+    <motion.div variants={itemVariants} className="lg:col-span-2">
       <MyNetworkWidget />
     </motion.div>
   </div>
@@ -120,6 +127,9 @@ const EspressoLayout = ({ itemVariants }: { itemVariants: Variants }) => (
     </MotionItem>
 
     {/* Row 3: Recent activity */}
+    <MotionItem variants={itemVariants}>
+      <ProfileCard />
+    </MotionItem>
     <motion.div variants={itemVariants} className="lg:col-span-2">
       <MyNetworkWidget />
     </motion.div>
@@ -158,7 +168,10 @@ const RooftopLayout = ({ itemVariants }: { itemVariants: Variants }) => (
     </MotionItem>
 
     {/* Row 3: Full width network */}
-    <motion.div variants={itemVariants} className="lg:col-span-4">
+    <MotionItem variants={itemVariants}>
+      <ProfileCard />
+    </MotionItem>
+    <motion.div variants={itemVariants} className="lg:col-span-3">
       <MyNetworkWidget />
     </motion.div>
   </div>
@@ -195,7 +208,10 @@ const GreenhouseLayout = ({ itemVariants }: { itemVariants: Variants }) => (
     </motion.div>
 
     {/* Row 4: Full width for connections */}
-    <motion.div variants={itemVariants} className="md:col-span-6">
+    <motion.div variants={itemVariants} className="md:col-span-2">
+      <ProfileCard />
+    </motion.div>
+    <motion.div variants={itemVariants} className="md:col-span-4">
       <MyNetworkWidget />
     </motion.div>
   </div>

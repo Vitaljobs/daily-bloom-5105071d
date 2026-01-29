@@ -12,6 +12,8 @@ import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
 import Auth from "./pages/Auth";
 import Upgrade from "./pages/Upgrade";
+import Profile from "./pages/Profile";
+import PublicProfile from "./pages/PublicProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,6 +43,22 @@ const App = () => (
                   <AdminRoute>
                     <Admin />
                   </AdminRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile/:userId"
+                element={
+                  <ProtectedRoute>
+                    <PublicProfile />
+                  </ProtectedRoute>
                 }
               />
               <Route path="/upgrade" element={<Upgrade />} />

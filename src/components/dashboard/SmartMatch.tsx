@@ -4,31 +4,31 @@ import { useCommonGround } from "@/contexts/CommonGroundContext";
 import { useToast } from "@/hooks/use-toast";
 
 export const SmartMatch = () => {
-  const { 
-    openUsers, 
-    selectedUser, 
-    setSelectedUser, 
-    sendInvite, 
-    lastInvitedUser, 
+  const {
+    openUsers,
+    selectedUser,
+    setSelectedUser,
+    sendInvite,
+    lastInvitedUser,
     triggerMatchReveal,
     hasActiveChat,
     chatPartner,
     openChat,
   } = useCommonGround();
   const { toast } = useToast();
-  
+
   // Use selected user from Social Radar, or default to first open user
   const match = selectedUser || openUsers[0];
 
   const handleInvite = () => {
     if (!match) return;
-    
+
     sendInvite(match);
     toast({
       title: "☕ Koffie-uitnodiging verzonden!",
       description: `Je uitnodiging is verzonden naar ${match.name}`,
     });
-    
+
     // Trigger the match reveal animation after a short delay (simulating acceptance)
     setTimeout(() => {
       triggerMatchReveal(match);
@@ -67,13 +67,13 @@ export const SmartMatch = () => {
           className="glass-inner p-4 relative z-10 border border-primary/40 shadow-[0_0_20px_hsl(35_85%_58%/0.2)]"
         >
           <div className="flex items-center gap-3 mb-3">
-            <motion.div 
-              animate={{ 
+            <motion.div
+              animate={{
                 boxShadow: [
-                  "0 0 10px hsl(35 85% 58% / 0.3)", 
-                  "0 0 25px hsl(35 85% 58% / 0.5)", 
+                  "0 0 10px hsl(35 85% 58% / 0.3)",
+                  "0 0 25px hsl(35 85% 58% / 0.5)",
                   "0 0 10px hsl(35 85% 58% / 0.3)"
-                ] 
+                ]
               }}
               transition={{ repeat: Infinity, duration: 2 }}
               className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-gold-dark flex items-center justify-center text-sm font-medium text-primary-foreground"
@@ -133,20 +133,23 @@ export const SmartMatch = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          className={`glass-inner p-4 relative z-10 transition-all duration-300 ${
-            selectedUser ? "border border-primary/40 shadow-[0_0_20px_hsl(35_85%_58%/0.2)]" : ""
-          }`}
+          className={`glass-inner p-4 relative z-10 transition-all duration-300 ${selectedUser ? "border border-primary/40 shadow-[0_0_20px_hsl(35_85%_58%/0.2)]" : ""
+            }`}
         >
           <div className="flex items-center gap-3 mb-3">
-            <motion.div 
-              animate={selectedUser ? { boxShadow: ["0 0 10px hsl(35 85% 58% / 0.3)", "0 0 25px hsl(35 85% 58% / 0.5)", "0 0 10px hsl(35 85% 58% / 0.3)"] } : {}}
-              transition={{ repeat: Infinity, duration: 2 }}
-              className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-gold-dark flex items-center justify-center text-sm font-medium text-primary-foreground"
+            <button
+              onClick={() => window.location.href = `/profile/${match.id}`}
+              className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-gold-dark flex items-center justify-center text-sm font-medium text-primary-foreground hover:ring-2 hover:ring-primary transition-all cursor-pointer"
             >
               {match.avatar}
-            </motion.div>
-            <div>
-              <p className="font-medium text-foreground">{match.name}</p>
+            </button>
+            <div className="flex-1">
+              <button
+                onClick={() => window.location.href = `/profile/${match.id}`}
+                className="font-medium text-foreground hover:text-primary transition-colors text-left"
+              >
+                {match.name}
+              </button>
               <p className="text-xs text-muted-foreground">{match.role}</p>
             </div>
           </div>
@@ -176,16 +179,15 @@ export const SmartMatch = () => {
 
           {/* Action buttons */}
           <div className="flex gap-2">
-            <motion.button 
+            <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={handleInvite}
               disabled={isInvited}
-              className={`flex-1 py-2 rounded-lg text-xs font-medium flex items-center justify-center gap-2 transition-all ${
-                isInvited 
-                  ? "bg-primary/30 text-primary cursor-default" 
+              className={`flex-1 py-2 rounded-lg text-xs font-medium flex items-center justify-center gap-2 transition-all ${isInvited
+                  ? "bg-primary/30 text-primary cursor-default"
                   : "btn-gold"
-              }`}
+                }`}
             >
               {isInvited ? (
                 <>
@@ -199,7 +201,7 @@ export const SmartMatch = () => {
                 </>
               )}
             </motion.button>
-            <button 
+            <button
               onClick={() => setSelectedUser(null)}
               className="p-2 rounded-lg border border-border hover:bg-muted/30 transition-colors"
             >

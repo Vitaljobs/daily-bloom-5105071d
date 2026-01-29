@@ -1,0 +1,152 @@
+import { motion } from "framer-motion";
+import { Camera, MapPin, Briefcase, Edit2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { UserProfile } from "@/hooks/useUserProfile";
+
+interface ProfileHeaderProps {
+    profile: UserProfile;
+    isOwnProfile: boolean;
+    onEditClick?: () => void;
+    onMessageClick?: () => void;
+    onAvatarUpload?: (file: File) => void;
+    onCoverUpload?: (file: File) => void;
+}
+
+export const ProfileHeader = ({
+    profile,
+    isOwnProfile,
+    onEditClick,
+    onMessageClick,
+    onAvatarUpload,
+    onCoverUpload,
+}: ProfileHeaderProps) => {
+    const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file && onAvatarUpload) {
+            onAvatarUpload(file);
+        }
+    };
+
+    const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file && onCoverUpload) {
+            onCoverUpload(file);
+        }
+    };
+
+    return (
+        <div className="bento-card overflow-hidden p-0">
+            {/* Cover Image */}
+            <div className="relative h-48 bg-gradient-to-br from-primary/20 via-accent/10 to-background overflow-hidden">
+                {profile.cover_image_url ? (
+                    <img
+                        src={profile.cover_image_url}
+                        alt="Cover"
+                        className="w-full h-full object-cover"
+                    />
+                ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-gold/20 via-coffee/30 to-wood-dark" />
+                )}
+
+                {isOwnProfile && (
+                    <label className="absolute top-4 right-4 cursor-pointer">
+                        <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={handleCoverChange}
+                        />
+                        <div className="glass-panel p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                            <Camera className="w-5 h-5 text-foreground" />
+                        </div>
+                    </label>
+                )}
+            </div>
+
+            {/* Profile Info */}
+            <div className="p-6 relative">
+                {/* Avatar */}
+                <div className="absolute -top-16 left-6">
+                    <div className="relative">
+                        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary to-gold-dark flex items-center justify-center text-4xl font-medium text-primary-foreground avatar-ring-active overflow-hidden">
+                            {profile.avatar_url ? (
+                                <img
+                                    src={profile.avatar_url}
+                                    alt={profile.name}
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                profile.name.substring(0, 2).toUpperCase()
+                            )}
+                        </div>
+
+                        {isOwnProfile && (
+                            <label className="absolute bottom-0 right-0 cursor-pointer">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={handleAvatarChange}
+                                />
+                                <div className="glass-panel p-2 rounded-full hover:bg-muted/50 transition-colors">
+                                    <Camera className="w-4 h-4 text-foreground" />
+                                </div>
+                            </label>
+                        )}
+                    </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex justify-end gap-2 mb-4">
+                    {isOwnProfile ? (
+                        <Button onClick={onEditClick} variant="outline" className="gap-2">
+                            <Edit2 className="w-4 h-4" />
+                            Edit Profile
+                        </Button>
+                    ) : (
+                        <Button onClick={onMessageClick} className="btn-gold gap-2">
+                            Send Message
+                        </Button>
+                    )}
+                </div>
+
+                {/* Name & Headline */}
+                <div className="mt-12">
+                    <h1 className="font-serif text-3xl text-foreground mb-2">
+                        {profile.name}
+                    </h1>
+
+                    {profile.headline && (
+                        <p className="text-lg text-muted-foreground mb-3">
+                            {profile.headline}
+                        </p>
+                    )}
+
+                    {/* Meta Info */}
+                    <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                        {profile.role && (
+                            <div className="flex items-center gap-1">
+                                <Briefcase className="w-4 h-4" />
+                                {profile.role}
+                            </div>
+                        )}
+
+                        {profile.location && (
+                            <div className="flex items-center gap-1">
+                                <MapPin className="w-4 h-4" />
+                                {profile.location}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Bio */}
+                    {profile.bio && (
+                        <p className="mt-4 text-foreground/80 leading-relaxed">
+                            {profile.bio}
+                        </p>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};

@@ -129,8 +129,13 @@ export const pulseApi = {
      */
     trackPageView: async (pagePath: string, labId?: string) => {
         try {
+            console.log('[Pulse API] trackPageView called', { pagePath, labId });
             const { data: { user } } = await supabase.auth.getUser();
-            if (!user) return null;
+            console.log('[Pulse API] User:', user?.id || 'No user');
+            if (!user) {
+                console.warn('[Pulse API] No authenticated user, skipping tracking');
+                return null;
+            }
 
             // Check if there's an active session
             const { data: existingSessions } = await supabase

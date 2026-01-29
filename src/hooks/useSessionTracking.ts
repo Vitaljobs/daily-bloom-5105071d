@@ -22,15 +22,23 @@ export const useSessionTracking = ({
     const sessionIdRef = useRef<string | null>(null);
 
     useEffect(() => {
-        if (!enabled) return;
+        console.log('[useSessionTracking] Hook called', { enabled, pagePath, labId });
+
+        if (!enabled) {
+            console.log('[useSessionTracking] Tracking disabled');
+            return;
+        }
 
         // Start tracking
         const startTracking = async () => {
+            console.log('[useSessionTracking] Starting tracking...');
             const sessionId = await pulseApi.trackPageView(pagePath, labId);
+            console.log('[useSessionTracking] Session ID:', sessionId);
             sessionIdRef.current = sessionId;
 
             // Setup heartbeat (every 30 seconds)
             heartbeatInterval.current = setInterval(() => {
+                console.log('[useSessionTracking] Sending heartbeat...');
                 pulseApi.heartbeat();
             }, 30000); // 30 seconds
         };
@@ -39,6 +47,7 @@ export const useSessionTracking = ({
 
         // Cleanup on unmount
         return () => {
+            console.log('[useSessionTracking] Cleaning up...');
             if (heartbeatInterval.current) {
                 clearInterval(heartbeatInterval.current);
             }

@@ -10,6 +10,9 @@ export interface UserProfile {
   avatar_url: string | null;
   bio: string | null;
   role: string | null;
+  headline: string | null;
+  location: string | null;
+  cover_image_url: string | null;
   skills: string[];
   industry: string | null;
   status: "open" | "focused" | "invisible" | null;
