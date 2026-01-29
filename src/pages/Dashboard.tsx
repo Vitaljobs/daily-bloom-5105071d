@@ -23,6 +23,7 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { PulseIndicator } from "@/components/dashboard/PulseIndicator";
 
 // Staggered animation for grid items
 const containerVariants = {
@@ -67,10 +68,10 @@ const itemVariants = {
 const DashboardContent = () => {
   const navigate = useNavigate();
   const [showOnboarding, setShowOnboarding] = useState(false);
-  
-  const { 
-    currentLocation, 
-    setCurrentLocation, 
+
+  const {
+    currentLocation,
+    setCurrentLocation,
     isChangingLocation,
     showMatchReveal,
     matchedUser,
@@ -127,13 +128,13 @@ const DashboardContent = () => {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8 }}
           className="fixed inset-0 bg-cover bg-center scale-110"
-          style={{ 
+          style={{
             backgroundImage: currentLab ? `url(${currentLab.background})` : undefined,
             filter: showMatchReveal ? "blur(24px)" : "blur(12px)",
           }}
         />
       </AnimatePresence>
-      
+
       {/* Lab-specific Atmosphere Overlay with gradients & particles */}
       <AnimatePresence mode="wait">
         <LabAtmosphereOverlay labId={currentLocation} />
@@ -141,8 +142,11 @@ const DashboardContent = () => {
 
       {/* Main Content */}
       <main className="relative z-10 min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
+        {/* Pulse Indicator */}
+        <PulseIndicator />
+
         {/* Location Selector */}
-        <LocationSelector 
+        <LocationSelector
           currentLocation={currentLocation}
           onLocationChange={setCurrentLocation}
           usersPerLab={usersPerLab}
@@ -207,13 +211,13 @@ const DashboardContent = () => {
       <UpgradeButton />
       <PremiumOverlay />
       <PaywallPopup />
-      
+
       {/* Language Toggle */}
       <LanguageToggle />
-      
+
       {/* Admin Link (for admin users) */}
       <AdminLink />
-      
+
       {/* Mobile Bottom Navigation */}
       <BottomNav onLogout={handleLogout} />
     </div>
