@@ -24,6 +24,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { PulseIndicator } from "@/components/dashboard/PulseIndicator";
+import { useSessionTracking } from "@/hooks/useSessionTracking";
 
 // Staggered animation for grid items
 const containerVariants = {
@@ -95,6 +96,13 @@ const DashboardContent = () => {
       setShowOnboarding(true);
     }
   }, []);
+
+  // Track user session
+  useSessionTracking({
+    pagePath: '/dashboard',
+    labId: currentLab?.id,
+    enabled: true
+  });
 
   const handleOnboardingClose = () => {
     setShowOnboarding(false);
