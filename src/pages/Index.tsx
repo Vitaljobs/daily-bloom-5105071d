@@ -44,7 +44,7 @@ const Index = () => {
               Networking, <span className="text-gradient-gold">Reimagined</span>
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
-              Built for the way modern professionals actually work — in coffee shops, 
+              Built for the way modern professionals actually work — in coffee shops,
               co-working spaces, and creative hubs.
             </p>
           </motion.div>
@@ -83,7 +83,7 @@ const Index = () => {
               Ready to find your <span className="text-gradient-gold">Common Ground</span>?
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-xl mx-auto px-2">
-              Join thousands of professionals already making meaningful connections 
+              Join thousands of professionals already making meaningful connections
               in their favorite spaces.
             </p>
             <Link to="/dashboard">
@@ -109,6 +109,12 @@ const Index = () => {
             </div>
             <span className="font-serif text-foreground">Common Ground</span>
           </div>
+
+          <div className="flex gap-6 text-sm text-muted-foreground">
+            <Link to="/about" className="hover:text-primary transition-colors">Over Ons</Link>
+            <Link to="/contact" className="hover:text-primary transition-colors">Contact</Link>
+          </div>
+
           <p className="text-xs sm:text-sm text-muted-foreground text-center md:text-left">
             © 2025 Common Ground. Built for modern professionals.
           </p>
