@@ -7,6 +7,7 @@ import { useUserProfile } from "@/hooks/useUserProfile";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { UserProfile } from "@/hooks/useUserProfile";
+import { ProfileSkeleton } from "@/components/skeletons/ProfileSkeleton";
 
 export default function PublicProfile() {
     const { userId } = useParams<{ userId: string }>();
@@ -50,11 +51,7 @@ export default function PublicProfile() {
             : [];
 
     if (isLoading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            </div>
-        );
+        return <ProfileSkeleton />;
     }
 
     if (!targetProfile) {

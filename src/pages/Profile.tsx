@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Loader2, X } from "lucide-react";
+import { Loader2, Camera, MapPin, Briefcase, Link as LinkIcon, Edit2, Check, X, LogOut } from "lucide-react";
+import { ProfileSkeleton } from "@/components/skeletons/ProfileSkeleton";
 import { ProfileHeader } from "@/components/profile/ProfileHeader";
 import { SkillsSection } from "@/components/profile/SkillsSection";
 import { Button } from "@/components/ui/button";
@@ -180,11 +181,7 @@ export default function Profile() {
     };
 
     if (isLoading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            </div>
-        );
+        return <ProfileSkeleton />;
     }
 
     if (!profile) {
