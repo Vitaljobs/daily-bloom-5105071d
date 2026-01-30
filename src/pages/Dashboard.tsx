@@ -258,7 +258,7 @@ const DashboardContent = () => {
           <button onClick={() => navigate("/about")} className="hover:text-primary transition-colors">Over Ons</button>
           <button onClick={() => navigate("/contact")} className="hover:text-primary transition-colors">Contact</button>
         </div>
-        <p>© 2025 MindGarden</p>
+        <p>© 2025 CommonGround</p>
       </footer>
 
       {/* Mobile Bottom Navigation */}

@@ -8,6 +8,7 @@ import { QRCodeGenerator } from "@/components/admin/QRCodeGenerator";
 import { PageViewsTracker } from "@/components/admin/PageViewsTracker";
 import { OnlineUsersMonitor } from "@/components/admin/OnlineUsersMonitor";
 import { LabAnalytics } from "@/components/admin/LabAnalytics";
+import { UserGrowthChart } from "@/components/admin/UserGrowthChart";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -36,7 +37,7 @@ const Admin = () => {
   return (
     <div className="admin-theme min-h-screen bg-background">
       {/* Subtle grid background */}
-      <div 
+      <div
         className="fixed inset-0 opacity-[0.03] pointer-events-none"
         style={{
           backgroundImage: `
@@ -46,7 +47,7 @@ const Admin = () => {
           backgroundSize: '60px 60px'
         }}
       />
-      
+
       {/* Gradient orbs */}
       <div className="fixed top-0 left-1/4 w-96 h-96 rounded-full bg-neon-cyan/5 blur-[120px] pointer-events-none" />
       <div className="fixed bottom-0 right-1/4 w-96 h-96 rounded-full bg-neon-purple/5 blur-[120px] pointer-events-none" />
@@ -61,16 +62,23 @@ const Admin = () => {
             animate="visible"
             className="space-y-6"
           >
-            {/* Top Stats Row - 3 columns */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <motion.div variants={itemVariants}>
+            {/* Charts Row - 2 columns */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <motion.div variants={itemVariants} className="min-h-[400px]">
                 <PageViewsTracker />
               </motion.div>
-              
+
+              <motion.div variants={itemVariants} className="min-h-[400px]">
+                <UserGrowthChart />
+              </motion.div>
+            </div>
+
+            {/* Stats Row - 2 columns */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <motion.div variants={itemVariants}>
                 <EngagementPulse />
               </motion.div>
-              
+
               <motion.div variants={itemVariants}>
                 <RevenueTracker />
               </motion.div>
@@ -81,7 +89,7 @@ const Admin = () => {
               <motion.div variants={itemVariants}>
                 <LabAnalytics />
               </motion.div>
-              
+
               <motion.div variants={itemVariants}>
                 <OnlineUsersMonitor />
               </motion.div>

@@ -43,7 +43,7 @@ const About = () => {
                     {/* Header */}
                     <motion.div variants={itemVariants} className="text-center space-y-4">
                         <h1 className="text-4xl md:text-5xl font-serif font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-amber-200 to-amber-500">
-                            Over MindGarden
+                            Over CommonGround
                         </h1>
                         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                             Waar ambitie en ontspanning samenkomen in de perfecte balans.
@@ -59,7 +59,7 @@ const About = () => {
                             <div className="space-y-4 text-center md:text-left">
                                 <h3 className="text-2xl font-semibold text-foreground">Onze Missie</h3>
                                 <p className="text-muted-foreground leading-relaxed">
-                                    MindGarden is meer dan alleen een werkplek. Het is een levend ecosysteem voor creatieven, denkers en doeners. Wij geloven dat de beste ideeën ontstaan in een omgeving die rust uitstraalt, maar tegelijkertijd bruist van de energie.
+                                    CommonGround is meer dan alleen een werkplek. Het is een levend ecosysteem voor creatieven, denkers en doeners. Wij geloven dat de beste ideeën ontstaan in een omgeving die rust uitstraalt, maar tegelijkertijd bruist van de energie.
                                 </p>
                             </div>
                         </div>
@@ -88,7 +88,7 @@ const About = () => {
                     <motion.div variants={itemVariants} className="space-y-6 text-center md:text-left">
                         <h3 className="text-2xl font-serif font-semibold text-center">Het Verhaal</h3>
                         <p className="text-muted-foreground leading-relaxed text-center max-w-2xl mx-auto">
-                            Begonnen als een droom om de traditionele kantoorcultuur te doorbreken, is MindGarden uitgegroeid tot een toevluchtsoord voor professionals die geloven in "het nieuwe werken". Geen systeemplafonds en TL-buizen, maar natuurlijk licht, verse koffiebonen en inspirerende gesprekken.
+                            Begonnen als een droom om de traditionele kantoorcultuur te doorbreken, is CommonGround uitgegroeid tot een toevluchtsoord voor professionals die geloven in "het nieuwe werken". Geen systeemplafonds en TL-buizen, maar natuurlijk licht, verse koffiebonen en inspirerende gesprekken.
                         </p>
                     </motion.div>
 

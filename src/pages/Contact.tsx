@@ -54,9 +54,9 @@ const Contact = () => {
 
                         <div className="space-y-6">
                             {[
-                                { icon: MapPin, label: "Locatie", value: "MindGarden Hub, Amsterdam" },
-                                { icon: Mail, label: "Email", value: "hello@mindgarden.nl" },
-                                { icon: Phone, label: "Telefoon", value: "+31 (0) 20 123 4567" }
+                                { icon: MapPin, label: "Locatie", value: "CommonGround Hub, Amsterdam" },
+                                { icon: Mail, label: "Email", value: "hello@commonground.nl" },
+                                { icon: Phone, label: "Telefoon", value: "+31 20 123 4567" }
                             ].map((item, index) => (
                                 <div key={index} className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/5">
                                     <item.icon className="w-5 h-5 text-amber-400" />
