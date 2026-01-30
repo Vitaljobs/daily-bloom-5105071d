@@ -21,44 +21,46 @@ const Messages = () => {
 
     return (
         <div className="container max-w-7xl mx-auto py-6 h-[calc(100vh-80px)] relative">
-            {/* Close Button */}
-            <Button
-                variant="outline"
-                size="icon"
-                className="absolute -top-12 right-4 md:right-0 md:-top-10 z-50 rounded-full bg-background shadow-sm hover:bg-muted animate-in fade-in"
-                onClick={() => navigate("/")}
-                title="Sluiten"
-            >
-                <X className="w-4 h-4" />
-            </Button>
+            <div className="bg-card border rounded-xl shadow-sm overflow-hidden h-full flex relative">
+                {/* Close Button */}
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute top-2 right-2 z-50 rounded-full hover:bg-muted"
+                    onClick={() => navigate("/")}
+                    title="Sluiten"
+                >
+                    <X className="w-5 h-5 text-muted-foreground" />
+                </Button>
 
-            <div className="bg-card border rounded-xl shadow-sm overflow-hidden h-full flex">
                 {isMobile ? (
-                    selectedConversationId ? (
-                        <ChatWindow
-                            conversationId={selectedConversationId}
-                            onBack={() => setSelectedConversationId(null)}
-                        />
-                    ) : (
+                    {
+                        isMobile?(
+                            selectedConversationId? (
+                                <ChatWindow
+                                    conversationId={selectedConversationId}
+                                    onBack={() => setSelectedConversationId(null)}
+                                />
+                            ) : (
+                    <ConversationList
+                        onSelectConversation={setSelectedConversationId}
+                        selectedId={selectedConversationId}
+                    />
+                )
+                ) : (
+                <>
+                    <div className="w-1/3 border-r min-w-[300px]">
                         <ConversationList
                             onSelectConversation={setSelectedConversationId}
                             selectedId={selectedConversationId}
                         />
-                    )
-                ) : (
-                    <>
-                        <div className="w-1/3 border-r min-w-[300px]">
-                            <ConversationList
-                                onSelectConversation={setSelectedConversationId}
-                                selectedId={selectedConversationId}
-                            />
-                        </div>
-                        <div className="flex-1">
-                            <ChatWindow
-                                conversationId={selectedConversationId}
-                            />
-                        </div>
-                    </>
+                    </div>
+                    <div className="flex-1">
+                        <ChatWindow
+                            conversationId={selectedConversationId}
+                        />
+                    </div>
+                </>
                 )}
             </div>
         </div>

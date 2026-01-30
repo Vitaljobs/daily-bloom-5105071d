@@ -102,7 +102,7 @@ export const ChatWindow = ({ conversationId, onBack }: ChatWindowProps) => {
 
             if (unreadMessages.length > 0) {
                 await supabase
-                    .from("messages")
+                    .from("messages" as any)
                     .update({ read: true })
                     .in("id", unreadMessages.map((msg) => msg.id));
 
