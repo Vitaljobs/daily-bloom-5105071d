@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Users, Crown, MapPin, Search, Loader2 } from "lucide-react";
+import { Users, Crown, MapPin, Search, Loader2, Download } from "lucide-react";
 import { useProfiles, ProfileWithStats } from "@/hooks/useAdminData";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
@@ -8,7 +8,9 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { exportToCSV } from "@/utils/exportUtils";
 
 export const UserManagement = () => {
   const { data: profiles, isLoading, error } = useProfiles();
@@ -21,11 +23,30 @@ export const UserManagement = () => {
     profile.industry?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleExport = () => {
+    if (!profiles) return;
+
+    // Format data for export (cleaner output)
+    const exportData = profiles.map(p => ({
+      Name: p.name,
+      Email: "Protected", // Or p.email if available in type
+      Industry: p.industry || "N/A",
+      Status: p.status,
+      Premium_Tier: p.premium_tier || "Free",
+      Lab_Visits: p.lab_visits || 0,
+      Last_Seen: p.last_seen ? new Date(p.last_seen).toLocaleDateString() : "Never",
+      Joined: new Date(p.created_at).toLocaleDateString()
+    }));
+
+    exportToCSV(exportData, "commonground_users");
+    toast.success("Gebruikerslijst gedownload");
+  };
+
   const handlePremiumToggle = async (profile: ProfileWithStats) => {
     setUpdatingUser(profile.id);
-    
-    const newTier = profile.premium_tier === "premium" || profile.premium_tier === "vip" 
-      ? "free" 
+
+    const newTier = profile.premium_tier === "premium" || profile.premium_tier === "vip"
+      ? "free"
       : "premium";
 
     const { error } = await supabase
@@ -47,7 +68,7 @@ export const UserManagement = () => {
 
   const handleLocalGuideToggle = async (profile: ProfileWithStats) => {
     setUpdatingUser(profile.id);
-    
+
     // Local Guide is indicated by 30+ lab visits
     const newVisits = (profile.lab_visits || 0) >= 30 ? 0 : 30;
 
@@ -99,14 +120,25 @@ export const UserManagement = () => {
             </div>
           </div>
 
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder="Zoek gebruiker..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 w-64 bg-admin-elevated border-admin-border"
-            />
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Zoek gebruiker..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 w-64 bg-admin-elevated border-admin-border"
+              />
+            </div>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handleExport}
+              className="border-admin-border hover:bg-admin-elevated/50"
+              title="Export CSV"
+            >
+              <Download className="w-4 h-4 text-muted-foreground" />
+            </Button>
           </div>
         </div>
       </div>
@@ -217,8 +249,8 @@ export const UserManagement = () => {
                       profile.status === "open"
                         ? "bg-neon-green/20 text-neon-green border-neon-green/30"
                         : profile.status === "focused"
-                        ? "bg-amber-500/20 text-amber-400 border-amber-500/30"
-                        : "bg-muted text-muted-foreground"
+                          ? "bg-amber-500/20 text-amber-400 border-amber-500/30"
+                          : "bg-muted text-muted-foreground"
                     }
                   >
                     {profile.status || "invisible"}
