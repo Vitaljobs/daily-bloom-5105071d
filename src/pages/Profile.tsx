@@ -1,15 +1,61 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader2, X } from "lucide-react";
 import { ProfileHeader } from "@/components/profile/ProfileHeader";
 import { SkillsSection } from "@/components/profile/SkillsSection";
 import { Button } from "@/components/ui/button";
-import { useUserProfile } from "@/hooks/useUserProfile";
+import { useUserProfile, UserProfile } from "@/hooks/useUserProfile";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 export default function Profile() {
     const navigate = useNavigate();
     const { profile, isLoading, refetch } = useUserProfile();
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedValues, setEditedValues] = useState<Partial<UserProfile>>({});
+
+    const handleEditClick = () => {
+        if (profile) {
+            setEditedValues({
+                name: profile.name,
+                headline: profile.headline,
+                bio: profile.bio,
+                role: profile.role,
+                location: profile.location,
+                linkedin_url: profile.linkedin_url,
+            });
+            setIsEditing(true);
+        }
+    };
+
+    const handleEditChange = (field: keyof UserProfile, value: string) => {
+        setEditedValues((prev) => ({ ...prev, [field]: value }));
+    };
+
+    const handleCancel = () => {
+        setIsEditing(false);
+        setEditedValues({});
+    };
+
+    const handleSave = async () => {
+        if (!profile) return;
+
+        try {
+            const { error } = await supabase
+                .from("profiles")
+                .update(editedValues as any)
+                .eq("id", profile.id);
+
+            if (error) throw error;
+
+            toast.success("Profile updated!");
+            setIsEditing(false);
+            refetch();
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            toast.error("Failed to update profile");
+        }
+    };
 
     const handleAddSkill = async (skill: string) => {
         if (!profile) return;
@@ -168,6 +214,12 @@ export default function Profile() {
                 <ProfileHeader
                     profile={profile}
                     isOwnProfile={true}
+                    isEditing={isEditing}
+                    editedValues={editedValues}
+                    onEditChange={handleEditChange}
+                    onSave={handleSave}
+                    onCancel={handleCancel}
+                    onEditClick={handleEditClick}
                     onAvatarUpload={handleAvatarUpload}
                     onCoverUpload={handleCoverUpload}
                 />

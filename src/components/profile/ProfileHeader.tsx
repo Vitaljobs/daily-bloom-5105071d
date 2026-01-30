@@ -3,9 +3,17 @@ import { Camera, MapPin, Briefcase, Edit2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { UserProfile } from "@/hooks/useUserProfile";
 
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
 interface ProfileHeaderProps {
     profile: UserProfile;
     isOwnProfile: boolean;
+    isEditing?: boolean;
+    editedValues?: Partial<UserProfile>;
+    onEditChange?: (field: keyof UserProfile, value: string) => void;
+    onSave?: () => void;
+    onCancel?: () => void;
     onEditClick?: () => void;
     onMessageClick?: () => void;
     onAvatarUpload?: (file: File) => void;
@@ -15,6 +23,11 @@ interface ProfileHeaderProps {
 export const ProfileHeader = ({
     profile,
     isOwnProfile,
+    isEditing,
+    editedValues,
+    onEditChange,
+    onSave,
+    onCancel,
     onEditClick,
     onMessageClick,
     onAvatarUpload,
@@ -99,10 +112,21 @@ export const ProfileHeader = ({
                 {/* Action Buttons */}
                 <div className="flex justify-end gap-2 mb-4">
                     {isOwnProfile ? (
-                        <Button onClick={onEditClick} variant="outline" className="gap-2">
-                            <Edit2 className="w-4 h-4" />
-                            Edit Profile
-                        </Button>
+                        isEditing ? (
+                            <>
+                                <Button onClick={onCancel} variant="ghost">
+                                    Cancel
+                                </Button>
+                                <Button onClick={onSave} className="btn-gold">
+                                    Save Changes
+                                </Button>
+                            </>
+                        ) : (
+                            <Button onClick={onEditClick} variant="outline" className="gap-2">
+                                <Edit2 className="w-4 h-4" />
+                                Edit Profile
+                            </Button>
+                        )
                     ) : (
                         <Button onClick={onMessageClick} className="btn-gold gap-2">
                             Send Message
@@ -111,39 +135,107 @@ export const ProfileHeader = ({
                 </div>
 
                 {/* Name & Headline */}
-                <div className="mt-12">
-                    <h1 className="font-serif text-3xl text-foreground mb-2">
-                        {profile.name}
-                    </h1>
-
-                    {profile.headline && (
-                        <p className="text-lg text-muted-foreground mb-3">
-                            {profile.headline}
-                        </p>
+                <div className="mt-12 space-y-4">
+                    {isEditing ? (
+                        <>
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium">Name</label>
+                                <Input
+                                    value={editedValues?.name || ""}
+                                    onChange={(e) => onEditChange?.("name", e.target.value)}
+                                    className="font-serif text-xl"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium">Headline</label>
+                                <Input
+                                    value={editedValues?.headline || ""}
+                                    onChange={(e) => onEditChange?.("headline", e.target.value)}
+                                    placeholder="Add a headline..."
+                                />
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <h1 className="font-serif text-3xl text-foreground mb-2">
+                                {profile.name}
+                            </h1>
+                            {profile.headline && (
+                                <p className="text-lg text-muted-foreground mb-3">
+                                    {profile.headline}
+                                </p>
+                            )}
+                        </>
                     )}
 
                     {/* Meta Info */}
                     <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                        {profile.role && (
-                            <div className="flex items-center gap-1">
-                                <Briefcase className="w-4 h-4" />
-                                {profile.role}
+                        {isEditing ? (
+                            <div className="flex gap-4 w-full">
+                                <div className="flex-1 space-y-2">
+                                    <label className="text-sm font-medium">Role</label>
+                                    <Input
+                                        value={editedValues?.role || ""}
+                                        onChange={(e) => onEditChange?.("role", e.target.value)}
+                                        placeholder="e.g. Software Engineer"
+                                    />
+                                </div>
+                                <div className="flex-1 space-y-2">
+                                    <label className="text-sm font-medium">Location</label>
+                                    <Input
+                                        value={editedValues?.location || ""}
+                                        onChange={(e) => onEditChange?.("location", e.target.value)}
+                                        placeholder="e.g. Amsterdam"
+                                    />
+                                </div>
                             </div>
-                        )}
-
-                        {profile.location && (
-                            <div className="flex items-center gap-1">
-                                <MapPin className="w-4 h-4" />
-                                {profile.location}
-                            </div>
+                        ) : (
+                            <>
+                                {profile.role && (
+                                    <div className="flex items-center gap-1">
+                                        <Briefcase className="w-4 h-4" />
+                                        {profile.role}
+                                    </div>
+                                )}
+                                {profile.location && (
+                                    <div className="flex items-center gap-1">
+                                        <MapPin className="w-4 h-4" />
+                                        {profile.location}
+                                    </div>
+                                )}
+                            </>
                         )}
                     </div>
 
+                    {/* Social Links Edit */}
+                    {isEditing && (
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium">LinkedIn URL</label>
+                            <Input
+                                value={editedValues?.linkedin_url || ""}
+                                onChange={(e) => onEditChange?.("linkedin_url", e.target.value)}
+                                placeholder="https://linkedin.com/in/..."
+                            />
+                        </div>
+                    )}
+
                     {/* Bio */}
-                    {profile.bio && (
-                        <p className="mt-4 text-foreground/80 leading-relaxed">
-                            {profile.bio}
-                        </p>
+                    {isEditing ? (
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium">Bio</label>
+                            <Textarea
+                                value={editedValues?.bio || ""}
+                                onChange={(e) => onEditChange?.("bio", e.target.value)}
+                                placeholder="Tell us about yourself..."
+                                className="min-h-[100px]"
+                            />
+                        </div>
+                    ) : (
+                        profile.bio && (
+                            <p className="mt-4 text-foreground/80 leading-relaxed">
+                                {profile.bio}
+                            </p>
+                        )
                     )}
                 </div>
             </div>
