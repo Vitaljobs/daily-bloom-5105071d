@@ -20,31 +20,24 @@ const Messages = () => {
     }, [searchParams]);
 
     return (
-        <div className="container max-w-7xl mx-auto py-6 h-[calc(100vh-80px)] relative">
-            <div className="bg-card border rounded-xl shadow-sm overflow-hidden h-full flex relative">
-                {/* Close Button */}
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute top-2 right-2 z-50 rounded-full hover:bg-muted"
-                    onClick={() => navigate("/")}
-                    title="Sluiten"
-                >
-                    <X className="w-5 h-5 text-muted-foreground" />
-                </Button>
+        <div className="container max-w-7xl mx-auto py-6 h-[calc(100vh-80px)] relative group">
+            {/* Close Button - Floating on the edge */}
+            <Button
+                variant="secondary"
+                size="icon"
+                className="absolute top-2 right-4 md:top-4 md:right-6 z-[60] rounded-full shadow-lg border border-border hover:bg-destructive hover:text-destructive-foreground transition-colors"
+                onClick={() => navigate("/")}
+                title="Sluiten"
+            >
+                <X className="w-5 h-5" />
+            </Button>
 
+            <div className="bg-card border rounded-xl shadow-sm overflow-hidden h-full flex relative z-0">
                 {isMobile ? (
-                    {
-                        isMobile?(
-                            selectedConversationId? (
-                                <ChatWindow
-                                    conversationId={selectedConversationId}
-                                    onBack={() => setSelectedConversationId(null)}
-                                />
-                            ) : (
-                    <ConversationList
-                        onSelectConversation={setSelectedConversationId}
-                        selectedId={selectedConversationId}
+                ): (
+                        <ConversationList
+                        onSelectConversation = { setSelectedConversationId }
+                        selectedId = { selectedConversationId }
                     />
                 )
                 ) : (
