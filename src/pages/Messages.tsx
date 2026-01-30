@@ -21,7 +21,7 @@ const Messages = () => {
 
     return (
         <div className="container max-w-7xl mx-auto py-6 h-[calc(100vh-80px)] relative group">
-            {/* Close Button - Floating on the edge */}
+            {/* Close Button - Floating that leads to dashboard */}
             <Button
                 variant="secondary"
                 size="icon"
@@ -34,26 +34,31 @@ const Messages = () => {
 
             <div className="bg-card border rounded-xl shadow-sm overflow-hidden h-full flex relative z-0">
                 {isMobile ? (
-                ): (
-                        <ConversationList
-                        onSelectConversation = { setSelectedConversationId }
-                        selectedId = { selectedConversationId }
-                    />
-                )
-                ) : (
-                <>
-                    <div className="w-1/3 border-r min-w-[300px]">
+                    selectedConversationId ? (
+                        <ChatWindow
+                            conversationId={selectedConversationId}
+                            onBack={() => setSelectedConversationId(null)}
+                        />
+                    ) : (
                         <ConversationList
                             onSelectConversation={setSelectedConversationId}
                             selectedId={selectedConversationId}
                         />
-                    </div>
-                    <div className="flex-1">
-                        <ChatWindow
-                            conversationId={selectedConversationId}
-                        />
-                    </div>
-                </>
+                    )
+                ) : (
+                    <>
+                        <div className="w-1/3 border-r min-w-[300px]">
+                            <ConversationList
+                                onSelectConversation={setSelectedConversationId}
+                                selectedId={selectedConversationId}
+                            />
+                        </div>
+                        <div className="flex-1">
+                            <ChatWindow
+                                conversationId={selectedConversationId}
+                            />
+                        </div>
+                    </>
                 )}
             </div>
         </div>
