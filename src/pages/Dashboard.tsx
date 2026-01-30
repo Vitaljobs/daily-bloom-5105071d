@@ -130,10 +130,9 @@ const DashboardContent = () => {
           variant="ghost"
           size="icon"
           onClick={() => navigate("/messages")}
-          className="bg-blue-500 hover:bg-blue-600 text-white border border-border/50 rounded-full relative shadow-sm px-4 w-auto"
+          className="bg-card/80 backdrop-blur-sm hover:bg-card/90 border border-border/50 rounded-full relative shadow-sm"
           title="Berichten"
         >
-          <span className="font-bold mr-1">CHAT</span>
           <MessageCircle className="h-5 w-5" />
           {unreadCount > 0 && (
             <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-sm animate-in zoom-in">
