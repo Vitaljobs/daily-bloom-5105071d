@@ -70,8 +70,8 @@ const itemVariants = {
 const DashboardContent = () => {
   const navigate = useNavigate();
   const [showOnboarding, setShowOnboarding] = useState(false);
-  // const { unreadCount } = useUnreadMessages();
-  const unreadCount = 1; // DEBUG: Force unread count for testing
+  const { unreadCount } = useUnreadMessages();
+  // const unreadCount = 1; // DEBUG: Force unread count for testing
 
   const {
     currentLocation,
