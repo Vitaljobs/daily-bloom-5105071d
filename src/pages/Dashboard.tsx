@@ -121,17 +121,19 @@ const DashboardContent = () => {
     <div className={`min-h-screen w-full relative overflow-hidden pb-24 md:pb-0 lab-${currentLocation}`}>
       {/* Logout Button - Desktop only */}
       {/* Top Right Desktop Navigation */}
-      <div className="hidden md:flex fixed top-4 right-4 z-50 items-center gap-2">
-        <LanguageToggle variant="inline" />
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-2">
+          <LanguageToggle variant="inline" />
+        </div>
 
         <Button
           variant="ghost"
           size="icon"
           onClick={() => navigate("/messages")}
-          className="bg-card/80 backdrop-blur-sm hover:bg-card/90 border border-border/50 rounded-full relative"
+          className="bg-card/80 backdrop-blur-sm hover:bg-card/90 border border-border/50 rounded-full relative shadow-sm"
           title="Berichten"
         >
-          <MessageCircle className="h-4 w-4" />
+          <MessageCircle className="h-5 w-5" />
           {unreadCount > 0 && (
             <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-sm animate-in zoom-in">
               {unreadCount > 9 ? "9+" : unreadCount}
@@ -143,113 +145,124 @@ const DashboardContent = () => {
           variant="ghost"
           size="icon"
           onClick={handleLogout}
-          className="bg-card/80 backdrop-blur-sm hover:bg-card/90 border border-border/50 rounded-full"
+          className="hidden md:flex bg-card/80 backdrop-blur-sm hover:bg-card/90 border border-border/50 rounded-full"
           title="Uitloggen"
         >
           <LogOut className="h-4 w-4" />
         </Button>
       </div>
-      {/* Dynamic Lab Background with cross-fade */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentLocation}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
-          className="fixed inset-0 bg-cover bg-center scale-110"
-          style={{
-            backgroundImage: currentLab ? `url(${currentLab.background})` : undefined,
-            filter: showMatchReveal ? "blur(24px)" : "blur(12px)",
-          }}
-        />
-      </AnimatePresence>
 
-      {/* Lab-specific Atmosphere Overlay with gradients & particles */}
-      <AnimatePresence mode="wait">
-        <LabAtmosphereOverlay labId={currentLocation} />
-      </AnimatePresence>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={handleLogout}
+        className="bg-card/80 backdrop-blur-sm hover:bg-card/90 border border-border/50 rounded-full"
+        title="Uitloggen"
+      >
+        <LogOut className="h-4 w-4" />
+      </Button>
+    </div>
+      {/* Dynamic Lab Background with cross-fade */ }
+  <AnimatePresence mode="wait">
+    <motion.div
+      key={currentLocation}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.8 }}
+      className="fixed inset-0 bg-cover bg-center scale-110"
+      style={{
+        backgroundImage: currentLab ? `url(${currentLab.background})` : undefined,
+        filter: showMatchReveal ? "blur(24px)" : "blur(12px)",
+      }}
+    />
+  </AnimatePresence>
 
-      {/* Main Content */}
-      <main className="relative z-10 min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
-        {/* Pulse Indicator */}
-        <PulseIndicator />
+  {/* Lab-specific Atmosphere Overlay with gradients & particles */ }
+  <AnimatePresence mode="wait">
+    <LabAtmosphereOverlay labId={currentLocation} />
+  </AnimatePresence>
 
-        {/* Location Selector */}
-        <LocationSelector
-          currentLocation={currentLocation}
-          onLocationChange={setCurrentLocation}
-          usersPerLab={usersPerLab}
-        />
+  {/* Main Content */ }
+  <main className="relative z-10 min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
+    {/* Pulse Indicator */}
+    <PulseIndicator />
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentLocation}
-            variants={containerVariants}
-            initial="hidden"
-            animate={isChangingLocation ? "exit" : "visible"}
-            exit="exit"
-            className="w-full max-w-6xl"
-          >
-            {/* Dynamic Lab Layout */}
-            <LabLayout labId={currentLocation} itemVariants={itemVariants} />
-          </motion.div>
-        </AnimatePresence>
-      </main>
+    {/* Location Selector */}
+    <LocationSelector
+      currentLocation={currentLocation}
+      onLocationChange={setCurrentLocation}
+      usersPerLab={usersPerLab}
+    />
 
-      {/* Welcome Overlay */}
-      <WelcomeOverlay
-        isVisible={showWelcome}
-        lab={currentLab || null}
-        openUsersCount={openUsers.length}
-        onClose={closeWelcome}
-      />
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={currentLocation}
+        variants={containerVariants}
+        initial="hidden"
+        animate={isChangingLocation ? "exit" : "visible"}
+        exit="exit"
+        className="w-full max-w-6xl"
+      >
+        {/* Dynamic Lab Layout */}
+        <LabLayout labId={currentLocation} itemVariants={itemVariants} />
+      </motion.div>
+    </AnimatePresence>
+  </main>
 
-      {/* Match Reveal Overlay */}
-      <MatchRevealOverlay
-        isVisible={showMatchReveal}
-        currentUser={{ name: "Jij", avatar: "JIJ", role: "Developer" }}
-        matchedUser={matchedUser}
-        onClose={closeMatchReveal}
-      />
+  {/* Welcome Overlay */ }
+  <WelcomeOverlay
+    isVisible={showWelcome}
+    lab={currentLab || null}
+    openUsersCount={openUsers.length}
+    onClose={closeWelcome}
+  />
 
-      {/* Chat Overlay */}
-      <ChatOverlay
-        isOpen={isChatOpen}
-        onClose={closeChat}
-        chatPartner={chatPartner}
-        currentLabName={currentLab?.name}
-      />
+  {/* Match Reveal Overlay */ }
+  <MatchRevealOverlay
+    isVisible={showMatchReveal}
+    currentUser={{ name: "Jij", avatar: "JIJ", role: "Developer" }}
+    matchedUser={matchedUser}
+    onClose={closeMatchReveal}
+  />
 
-      {/* QR Check-in Welcome Animation */}
-      <QRWelcomeAnimation
-        isVisible={showQRWelcome}
-        labName={currentLab?.name || ""}
-        onComplete={closeQRWelcome}
-      />
+  {/* Chat Overlay */ }
+  <ChatOverlay
+    isOpen={isChatOpen}
+    onClose={closeChat}
+    chatPartner={chatPartner}
+    currentLabName={currentLab?.name}
+  />
 
-      {/* Interest Match Alert */}
-      <InterestMatchAlert />
+  {/* QR Check-in Welcome Animation */ }
+  <QRWelcomeAnimation
+    isVisible={showQRWelcome}
+    labName={currentLab?.name || ""}
+    onComplete={closeQRWelcome}
+  />
 
-      {/* Onboarding Flow */}
-      <OnboardingFlow
-        isOpen={showOnboarding}
-        onClose={handleOnboardingClose}
-      />
+  {/* Interest Match Alert */ }
+  <InterestMatchAlert />
 
-      {/* Premium Components */}
+  {/* Onboarding Flow */ }
+  <OnboardingFlow
+    isOpen={showOnboarding}
+    onClose={handleOnboardingClose}
+  />
+
+  {/* Premium Components */ }
       <UpgradeButton />
       <PremiumOverlay />
       <PaywallPopup />
 
-      {/* Language Toggle moved to top right group */}
+  {/* Language Toggle moved to top right group */ }
 
-      {/* Admin Link (for admin users) */}
-      <AdminLink />
+  {/* Admin Link (for admin users) */ }
+  <AdminLink />
 
-      {/* Mobile Bottom Navigation */}
-      <BottomNav onLogout={handleLogout} />
-    </div>
+  {/* Mobile Bottom Navigation */ }
+  <BottomNav onLogout={handleLogout} />
+    </div >
   );
 };
 
