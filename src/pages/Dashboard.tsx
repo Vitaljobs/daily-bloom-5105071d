@@ -152,107 +152,107 @@ const DashboardContent = () => {
         </Button>
       </div>
 
-    </div>
-      {/* Dynamic Lab Background with cross-fade */ }
-  <AnimatePresence mode="wait">
-    <motion.div
-      key={currentLocation}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.8 }}
-      className="fixed inset-0 bg-cover bg-center scale-110"
-      style={{
-        backgroundImage: currentLab ? `url(${currentLab.background})` : undefined,
-        filter: showMatchReveal ? "blur(24px)" : "blur(12px)",
-      }}
-    />
-  </AnimatePresence>
 
-  {/* Lab-specific Atmosphere Overlay with gradients & particles */ }
-  <AnimatePresence mode="wait">
-    <LabAtmosphereOverlay labId={currentLocation} />
-  </AnimatePresence>
+      {/* Dynamic Lab Background with cross-fade */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentLocation}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8 }}
+          className="fixed inset-0 bg-cover bg-center scale-110"
+          style={{
+            backgroundImage: currentLab ? `url(${currentLab.background})` : undefined,
+            filter: showMatchReveal ? "blur(24px)" : "blur(12px)",
+          }}
+        />
+      </AnimatePresence>
 
-  {/* Main Content */ }
-  <main className="relative z-10 min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
-    {/* Pulse Indicator */}
-    <PulseIndicator />
+      {/* Lab-specific Atmosphere Overlay with gradients & particles */}
+      <AnimatePresence mode="wait">
+        <LabAtmosphereOverlay labId={currentLocation} />
+      </AnimatePresence>
 
-    {/* Location Selector */}
-    <LocationSelector
-      currentLocation={currentLocation}
-      onLocationChange={setCurrentLocation}
-      usersPerLab={usersPerLab}
-    />
+      {/* Main Content */}
+      <main className="relative z-10 min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
+        {/* Pulse Indicator */}
+        <PulseIndicator />
 
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={currentLocation}
-        variants={containerVariants}
-        initial="hidden"
-        animate={isChangingLocation ? "exit" : "visible"}
-        exit="exit"
-        className="w-full max-w-6xl"
-      >
-        {/* Dynamic Lab Layout */}
-        <LabLayout labId={currentLocation} itemVariants={itemVariants} />
-      </motion.div>
-    </AnimatePresence>
-  </main>
+        {/* Location Selector */}
+        <LocationSelector
+          currentLocation={currentLocation}
+          onLocationChange={setCurrentLocation}
+          usersPerLab={usersPerLab}
+        />
 
-  {/* Welcome Overlay */ }
-  <WelcomeOverlay
-    isVisible={showWelcome}
-    lab={currentLab || null}
-    openUsersCount={openUsers.length}
-    onClose={closeWelcome}
-  />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentLocation}
+            variants={containerVariants}
+            initial="hidden"
+            animate={isChangingLocation ? "exit" : "visible"}
+            exit="exit"
+            className="w-full max-w-6xl"
+          >
+            {/* Dynamic Lab Layout */}
+            <LabLayout labId={currentLocation} itemVariants={itemVariants} />
+          </motion.div>
+        </AnimatePresence>
+      </main>
 
-  {/* Match Reveal Overlay */ }
-  <MatchRevealOverlay
-    isVisible={showMatchReveal}
-    currentUser={{ name: "Jij", avatar: "JIJ", role: "Developer" }}
-    matchedUser={matchedUser}
-    onClose={closeMatchReveal}
-  />
+      {/* Welcome Overlay */}
+      <WelcomeOverlay
+        isVisible={showWelcome}
+        lab={currentLab || null}
+        openUsersCount={openUsers.length}
+        onClose={closeWelcome}
+      />
 
-  {/* Chat Overlay */ }
-  <ChatOverlay
-    isOpen={isChatOpen}
-    onClose={closeChat}
-    chatPartner={chatPartner}
-    currentLabName={currentLab?.name}
-  />
+      {/* Match Reveal Overlay */}
+      <MatchRevealOverlay
+        isVisible={showMatchReveal}
+        currentUser={{ name: "Jij", avatar: "JIJ", role: "Developer" }}
+        matchedUser={matchedUser}
+        onClose={closeMatchReveal}
+      />
 
-  {/* QR Check-in Welcome Animation */ }
-  <QRWelcomeAnimation
-    isVisible={showQRWelcome}
-    labName={currentLab?.name || ""}
-    onComplete={closeQRWelcome}
-  />
+      {/* Chat Overlay */}
+      <ChatOverlay
+        isOpen={isChatOpen}
+        onClose={closeChat}
+        chatPartner={chatPartner}
+        currentLabName={currentLab?.name}
+      />
 
-  {/* Interest Match Alert */ }
-  <InterestMatchAlert />
+      {/* QR Check-in Welcome Animation */}
+      <QRWelcomeAnimation
+        isVisible={showQRWelcome}
+        labName={currentLab?.name || ""}
+        onComplete={closeQRWelcome}
+      />
 
-  {/* Onboarding Flow */ }
-  <OnboardingFlow
-    isOpen={showOnboarding}
-    onClose={handleOnboardingClose}
-  />
+      {/* Interest Match Alert */}
+      <InterestMatchAlert />
 
-  {/* Premium Components */ }
+      {/* Onboarding Flow */}
+      <OnboardingFlow
+        isOpen={showOnboarding}
+        onClose={handleOnboardingClose}
+      />
+
+      {/* Premium Components */}
       <UpgradeButton />
       <PremiumOverlay />
       <PaywallPopup />
 
-  {/* Language Toggle moved to top right group */ }
+      {/* Language Toggle moved to top right group */}
 
-  {/* Admin Link (for admin users) */ }
-  <AdminLink />
+      {/* Admin Link (for admin users) */}
+      <AdminLink />
 
-  {/* Mobile Bottom Navigation */ }
-  <BottomNav onLogout={handleLogout} />
+      {/* Mobile Bottom Navigation */}
+      <BottomNav onLogout={handleLogout} />
     </div >
   );
 };
