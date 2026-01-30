@@ -15,6 +15,8 @@ import Upgrade from "./pages/Upgrade";
 import Profile from "./pages/Profile";
 import PublicProfile from "./pages/PublicProfile";
 import Messages from "./pages/Messages";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
 import { UnreadMessagesProvider } from "@/contexts/UnreadMessagesContext";
@@ -74,6 +76,8 @@ const App = () => (
                   }
                 />
                 <Route path="/upgrade" element={<Upgrade />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
