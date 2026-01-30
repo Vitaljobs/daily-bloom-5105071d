@@ -152,15 +152,6 @@ const DashboardContent = () => {
         </Button>
       </div>
 
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={handleLogout}
-        className="bg-card/80 backdrop-blur-sm hover:bg-card/90 border border-border/50 rounded-full"
-        title="Uitloggen"
-      >
-        <LogOut className="h-4 w-4" />
-      </Button>
     </div>
       {/* Dynamic Lab Background with cross-fade */ }
   <AnimatePresence mode="wait">
