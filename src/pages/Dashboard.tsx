@@ -26,6 +26,8 @@ import { toast } from "sonner";
 import { PulseIndicator } from "@/components/dashboard/PulseIndicator";
 import { useSessionTracking } from "@/hooks/useSessionTracking";
 import { useUnreadMessages } from "@/contexts/UnreadMessagesContext";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
+import { Settings } from "lucide-react";
 
 // Staggered animation for grid items
 const containerVariants = {
@@ -71,6 +73,7 @@ const DashboardContent = () => {
   const navigate = useNavigate();
   const [showOnboarding, setShowOnboarding] = useState(false);
   const { unreadCount } = useUnreadMessages();
+  const { isAdmin } = useIsAdmin();
   // const unreadCount = 1; // DEBUG: Force unread count for testing
 
   const {
@@ -127,6 +130,18 @@ const DashboardContent = () => {
           <LanguageToggle variant="inline" />
         </div>
 
+        {isAdmin && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/admin")}
+            className="bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 border border-amber-500/30 rounded-full relative shadow-md backdrop-blur-sm"
+            title="Admin Dashboard"
+          >
+            <Settings className="h-5 w-5" />
+          </Button>
+        )}
+
         <Button
           variant="ghost"
           size="icon"
@@ -152,6 +167,11 @@ const DashboardContent = () => {
           <LogOut className="h-4 w-4" />
         </Button>
       </div>
+
+      {/* Admin Button - Floating Top Left for visibility or Top Right grouping? 
+          User asked for "button at top". Let's put it in the Top Right group for consistency. 
+      */}
+      {/* We need to use the hook inside the component first */}
 
 
       {/* Dynamic Lab Background with cross-fade */}
@@ -250,7 +270,7 @@ const DashboardContent = () => {
       {/* Language Toggle moved to top right group */}
 
       {/* Admin Link (for admin users) */}
-      <AdminLink />
+      {/* Moved to Header */}
 
       {/* Dashboard Footer */}
       <footer className="py-8 text-center text-xs text-muted-foreground/50 pb-24 md:pb-8">
