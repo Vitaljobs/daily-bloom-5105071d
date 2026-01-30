@@ -122,168 +122,25 @@ const DashboardContent = () => {
   };
 
   return (
-    <div className={`min-h-screen w-full relative overflow-hidden pb-24 md:pb-0 lab-${currentLocation}`}>
-      {/* Logout Button - Desktop only */}
-      {/* Top Right Desktop Navigation */}
-      <div className="fixed top-4 right-4 z-50 flex items-center gap-2">
-        <div className="hidden md:flex items-center gap-2">
-          <LanguageToggle variant="inline" />
-        </div>
+    <div className={`min-h-screen w-full relative overflow-x-hidden pb-24 md:pb-0 lab-${currentLocation}`}>
+      {/* ... header ... */}
 
-        {isAdmin && (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => navigate("/admin")}
-            className="bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 border border-amber-500/30 rounded-full relative shadow-md backdrop-blur-sm"
-            title="Admin Dashboard"
-          >
-            <Settings className="h-5 w-5" />
-          </Button>
-        )}
+      {/* ... backgrounds ... */}
 
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => navigate("/messages")}
-          className="bg-blue-500 hover:bg-blue-600 text-white border border-blue-400/50 rounded-full relative shadow-md"
-          title="Berichten"
-        >
-          <MessageCircle className="h-5 w-5" />
-          {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-sm animate-in zoom-in">
-              {unreadCount > 9 ? "9+" : unreadCount}
-            </span>
-          )}
-        </Button>
-
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleLogout}
-          className="hidden md:flex bg-card/80 backdrop-blur-sm hover:bg-card/90 border border-border/50 rounded-full"
-          title="Uitloggen"
-        >
-          <LogOut className="h-4 w-4" />
-        </Button>
-      </div>
-
-      {/* Admin Button - Floating Top Left for visibility or Top Right grouping? 
-          User asked for "button at top". Let's put it in the Top Right group for consistency. 
-      */}
-      {/* We need to use the hook inside the component first */}
-
-
-      {/* Dynamic Lab Background with cross-fade */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentLocation}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
-          className="fixed inset-0 bg-cover bg-center scale-110"
-          style={{
-            backgroundImage: currentLab ? `url(${currentLab.background})` : undefined,
-            filter: showMatchReveal ? "blur(24px)" : "blur(12px)",
-          }}
-        />
-      </AnimatePresence>
-
-      {/* Lab-specific Atmosphere Overlay with gradients & particles */}
-      <AnimatePresence mode="wait">
-        <LabAtmosphereOverlay labId={currentLocation} />
-      </AnimatePresence>
-
-      {/* Main Content */}
-      <main className="relative z-10 min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
-        {/* Pulse Indicator */}
-        <PulseIndicator />
-
-        {/* Location Selector */}
-        <LocationSelector
-          currentLocation={currentLocation}
-          onLocationChange={setCurrentLocation}
-          usersPerLab={usersPerLab}
-        />
-
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentLocation}
-            variants={containerVariants}
-            initial="hidden"
-            animate={isChangingLocation ? "exit" : "visible"}
-            exit="exit"
-            className="w-full max-w-6xl"
-          >
-            {/* Dynamic Lab Layout */}
-            <LabLayout labId={currentLocation} itemVariants={itemVariants} />
-          </motion.div>
-        </AnimatePresence>
-      </main>
-
-      {/* Welcome Overlay */}
-      <WelcomeOverlay
-        isVisible={showWelcome}
-        lab={currentLab || null}
-        openUsersCount={openUsers.length}
-        onClose={closeWelcome}
-      />
-
-      {/* Match Reveal Overlay */}
-      <MatchRevealOverlay
-        isVisible={showMatchReveal}
-        currentUser={{ name: "Jij", avatar: "JIJ", role: "Developer" }}
-        matchedUser={matchedUser}
-        onClose={closeMatchReveal}
-      />
-
-      {/* Chat Overlay */}
-      <ChatOverlay
-        isOpen={isChatOpen}
-        onClose={closeChat}
-        chatPartner={chatPartner}
-        currentLabName={currentLab?.name}
-      />
-
-      {/* QR Check-in Welcome Animation */}
-      <QRWelcomeAnimation
-        isVisible={showQRWelcome}
-        labName={currentLab?.name || ""}
-        onComplete={closeQRWelcome}
-      />
-
-      {/* Interest Match Alert */}
-      <InterestMatchAlert />
-
-      {/* Onboarding Flow */}
-      <OnboardingFlow
-        isOpen={showOnboarding}
-        onClose={handleOnboardingClose}
-      />
-
-      {/* Premium Components */}
-      <UpgradeButton />
-      <PremiumOverlay />
-      <PaywallPopup />
-
-      {/* Language Toggle moved to top right group */}
-
-      {/* Admin Link (for admin users) */}
-      {/* Moved to Header */}
+      {/* ... main ... */}
 
       {/* Dashboard Footer */}
-      <footer className="py-8 text-center text-xs text-muted-foreground/50 pb-24 md:pb-8">
-        <div className="flex justify-center gap-4 mb-2">
-          <button onClick={() => navigate("/about")} className="hover:text-primary transition-colors">Over Ons</button>
-          <button onClick={() => navigate("/contact")} className="hover:text-primary transition-colors">Contact</button>
+      <footer className="py-8 text-center text-sm text-muted-foreground pb-24 md:pb-8 relative z-10 bg-gradient-to-t from-background to-transparent">
+        <div className="flex justify-center gap-6 mb-2">
+          <button onClick={() => navigate("/about")} className="hover:text-primary transition-colors font-medium">Over Ons</button>
+          <button onClick={() => navigate("/contact")} className="hover:text-primary transition-colors font-medium">Contact</button>
         </div>
-        <p>© 2025 CommonGround</p>
+        <p className="text-xs opacity-50">© 2025 CommonGround</p>
       </footer>
 
       {/* Mobile Bottom Navigation */}
       <BottomNav onLogout={handleLogout} />
-    </div >
+    </div>
   );
 };
 
