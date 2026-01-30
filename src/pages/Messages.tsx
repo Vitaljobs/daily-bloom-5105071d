@@ -26,7 +26,7 @@ const Messages = () => {
                 variant="secondary"
                 size="icon"
                 className="absolute top-2 right-4 md:top-4 md:right-6 z-[60] rounded-full shadow-lg border border-border hover:bg-destructive hover:text-destructive-foreground transition-colors"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/dashboard")}
                 title="Sluiten"
             >
                 <X className="w-5 h-5" />
