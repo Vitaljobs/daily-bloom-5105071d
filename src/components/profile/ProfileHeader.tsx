@@ -1,8 +1,7 @@
 import { motion } from "framer-motion";
-import { Camera, MapPin, Briefcase, Edit2 } from "lucide-react";
+import { Camera, MapPin, Briefcase, Edit2, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { UserProfile } from "@/hooks/useUserProfile";
-
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -62,15 +61,16 @@ export const ProfileHeader = ({
                 )}
 
                 {isOwnProfile && (
-                    <label className="absolute top-4 right-4 cursor-pointer">
+                    <label className="absolute bottom-4 right-4 cursor-pointer group">
                         <input
                             type="file"
                             accept="image/*"
                             className="hidden"
                             onChange={handleCoverChange}
                         />
-                        <div className="glass-panel p-2 rounded-lg hover:bg-muted/50 transition-colors">
-                            <Camera className="w-5 h-5 text-foreground" />
+                        <div className="glass-panel px-4 py-2 rounded-lg hover:bg-white/20 transition-all flex items-center gap-2 text-white/90 group-hover:text-white shadow-lg backdrop-blur-md border border-white/10">
+                            <Camera className="w-5 h-5" />
+                            <span className="font-medium text-sm">Edit Cover Photo</span>
                         </div>
                     </label>
                 )}
@@ -202,6 +202,17 @@ export const ProfileHeader = ({
                                         <MapPin className="w-4 h-4" />
                                         {profile.location}
                                     </div>
+                                )}
+                                {profile.linkedin_url && (
+                                    <a
+                                        href={profile.linkedin_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-1 hover:text-primary transition-colors"
+                                    >
+                                        <Linkedin className="w-4 h-4" />
+                                        LinkedIn Profile
+                                    </a>
                                 )}
                             </>
                         )}

@@ -30,14 +30,15 @@ export default function PublicProfile() {
                 throw error;
             }
 
-            return data as UserProfile;
+            return data as unknown as UserProfile;
         },
         enabled: !!userId,
     });
 
     const handleMessageClick = () => {
-        // TODO: Integrate with ChatOverlay
-        console.log("Open chat with user:", userId);
+        if (userId) {
+            navigate(`/messages?userId=${userId}`);
+        }
     };
 
     // Calculate shared skills

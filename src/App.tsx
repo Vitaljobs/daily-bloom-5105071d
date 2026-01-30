@@ -14,6 +14,7 @@ import Auth from "./pages/Auth";
 import Upgrade from "./pages/Upgrade";
 import Profile from "./pages/Profile";
 import PublicProfile from "./pages/PublicProfile";
+import Messages from "./pages/Messages";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -58,6 +59,14 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <PublicProfile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/messages"
+                element={
+                  <ProtectedRoute>
+                    <Messages />
                   </ProtectedRoute>
                 }
               />
