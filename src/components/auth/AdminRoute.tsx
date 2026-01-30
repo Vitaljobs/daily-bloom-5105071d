@@ -11,33 +11,35 @@ interface AdminRouteProps {
 const AdminRoute = ({ children }: AdminRouteProps) => {
   const { user, isLoading: authLoading } = useAuth();
 
-  queryFn: async () => {
-    if (!user?.email) return false;
+  const { data: isAdmin, isLoading: roleLoading } = useQuery({
+    queryKey: ["user-role", user?.id],
+    queryFn: async () => {
+      if (!user?.email) return false;
 
-    // Allow specific admin emails
-    const allowedEmails = ["james@live.nl", "privemail@gmail.com"];
-    return allowedEmails.includes(user.email.toLowerCase());
-  },
+      // Allow specific admin emails
+      const allowedEmails = ["james@live.nl", "privemail@gmail.com"];
+      return allowedEmails.includes(user.email.toLowerCase());
+    },
     enabled: !!user?.email,
   });
 
-if (authLoading || roleLoading) {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <Loader2 className="h-8 w-8 animate-spin text-primary" />
-    </div>
-  );
-}
+  if (authLoading || roleLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
-if (!user) {
-  return <Navigate to="/auth" replace />;
-}
+  if (!user) {
+    return <Navigate to="/auth" replace />;
+  }
 
-if (!isAdmin) {
-  return <Navigate to="/dashboard" replace />;
-}
+  if (!isAdmin) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
-return <>{children}</>;
+  return <>{children}</>;
 };
 
 export default AdminRoute;
