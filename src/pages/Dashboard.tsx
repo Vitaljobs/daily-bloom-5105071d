@@ -130,7 +130,7 @@ const DashboardContent = () => {
           variant="ghost"
           size="icon"
           onClick={() => navigate("/messages")}
-          className="bg-card/80 backdrop-blur-sm hover:bg-card/90 border border-border/50 rounded-full relative shadow-sm"
+          className="bg-blue-500 hover:bg-blue-600 text-white border border-blue-400/50 rounded-full relative shadow-md"
           title="Berichten"
         >
           <MessageCircle className="h-5 w-5" />
