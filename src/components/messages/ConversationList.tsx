@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { formatDistanceToNow } from "date-fns";
+import { ConversationListSkeleton } from "@/components/skeletons/ChatSkeleton";
 
 interface ConversationListProps {
     onSelectConversation: (id: string) => void;
@@ -86,7 +87,7 @@ export const ConversationList = ({ onSelectConversation, selectedId }: Conversat
     });
 
     if (isLoading) {
-        return <div className="p-4 text-center text-muted-foreground">Loading chats...</div>;
+        return <ConversationListSkeleton />;
     }
 
     return (

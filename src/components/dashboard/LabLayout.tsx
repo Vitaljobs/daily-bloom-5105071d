@@ -9,6 +9,7 @@ import { MyNetworkWidget } from "@/components/dashboard/MyNetworkWidget";
 import { SkillsInRoomWidget } from "@/components/dashboard/SkillsInRoomWidget";
 import { LabAtmosphere } from "@/components/dashboard/LabAtmosphere";
 import { ProfileCard } from "@/components/dashboard/ProfileCard";
+import { ProfileCompleteness } from "@/components/dashboard/ProfileCompleteness";
 
 // Lab-specific components
 import { SilentModeIndicator } from "@/components/dashboard/labs/SilentModeIndicator";
@@ -33,6 +34,7 @@ const RoasteryLayout = ({ itemVariants }: { itemVariants: Variants }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
     {/* Row 1: Focus on productivity tools */}
     <MotionItem variants={itemVariants}>
+      <ProfileCompleteness />
       <ProductivityPulse />
     </MotionItem>
     <MotionItem variants={itemVariants}>

@@ -7,6 +7,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { ChatWindowSkeleton } from "@/components/skeletons/ChatSkeleton";
 
 interface ChatWindowProps {
     conversationId: string | null;
@@ -44,7 +45,7 @@ export const ChatWindow = ({ conversationId, onBack }: ChatWindowProps) => {
     });
 
     // Fetch messages
-    const { data: messages = [] } = useQuery({
+    const { data: messages = [], isLoading: isLoadingMessages } = useQuery({
         queryKey: ['messages', conversationId],
         queryFn: async () => {
             if (!user?.id || !conversationId) return [];
@@ -144,6 +145,10 @@ export const ChatWindow = ({ conversationId, onBack }: ChatWindowProps) => {
             toast.error("Failed to send message");
         }
     };
+
+    if (isLoadingMessages && conversationId) {
+        return <ChatWindowSkeleton />;
+    }
 
     if (!conversationId) {
         return (
