@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { LogOut } from "lucide-react";
+import { LogOut, MessageCircle } from "lucide-react";
 import { LocationSelector } from "@/components/dashboard/LocationSelector";
 import { MatchRevealOverlay } from "@/components/dashboard/MatchRevealOverlay";
 import { WelcomeOverlay } from "@/components/dashboard/WelcomeOverlay";
@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { PulseIndicator } from "@/components/dashboard/PulseIndicator";
 import { useSessionTracking } from "@/hooks/useSessionTracking";
+import { useUnreadMessages } from "@/contexts/UnreadMessagesContext";
 
 // Staggered animation for grid items
 const containerVariants = {
@@ -69,6 +70,7 @@ const itemVariants = {
 const DashboardContent = () => {
   const navigate = useNavigate();
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const { unreadCount } = useUnreadMessages();
 
   const {
     currentLocation,
@@ -118,15 +120,35 @@ const DashboardContent = () => {
   return (
     <div className={`min-h-screen w-full relative overflow-hidden pb-24 md:pb-0 lab-${currentLocation}`}>
       {/* Logout Button - Desktop only */}
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={handleLogout}
-        className="hidden md:flex fixed top-4 right-16 z-50 bg-background/80 backdrop-blur-sm hover:bg-background/90"
-        title="Uitloggen"
-      >
-        <LogOut className="h-5 w-5" />
-      </Button>
+      {/* Top Right Desktop Navigation */}
+      <div className="hidden md:flex fixed top-4 right-4 z-50 items-center gap-2">
+        <LanguageToggle variant="inline" />
+
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => navigate("/messages")}
+          className="bg-card/80 backdrop-blur-sm hover:bg-card/90 border border-border/50 rounded-full relative"
+          title="Berichten"
+        >
+          <MessageCircle className="h-4 w-4" />
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-sm animate-in zoom-in">
+              {unreadCount > 9 ? "9+" : unreadCount}
+            </span>
+          )}
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleLogout}
+          className="bg-card/80 backdrop-blur-sm hover:bg-card/90 border border-border/50 rounded-full"
+          title="Uitloggen"
+        >
+          <LogOut className="h-4 w-4" />
+        </Button>
+      </div>
       {/* Dynamic Lab Background with cross-fade */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -220,8 +242,7 @@ const DashboardContent = () => {
       <PremiumOverlay />
       <PaywallPopup />
 
-      {/* Language Toggle */}
-      <LanguageToggle />
+      {/* Language Toggle moved to top right group */}
 
       {/* Admin Link (for admin users) */}
       <AdminLink />

@@ -19,6 +19,7 @@ interface Message {
     created_at: string;
     sender_id: string;
     receiver_id: string;
+    read: boolean;
 }
 
 export const ChatWindow = ({ conversationId, onBack }: ChatWindowProps) => {
@@ -88,6 +89,31 @@ export const ChatWindow = ({ conversationId, onBack }: ChatWindowProps) => {
             supabase.removeChannel(channel);
         };
     }, [conversationId, user?.id, queryClient]);
+
+    // Mark messages as read when conversation opens or new messages arrive
+    useEffect(() => {
+        const markAsRead = async () => {
+            if (!user?.id || !conversationId || messages.length === 0) return;
+
+            const unreadMessages = messages.filter(
+                (msg) => msg.receiver_id === user.id && !msg.read
+            );
+
+            if (unreadMessages.length > 0) {
+                await supabase
+                    .from("messages")
+                    .update({ read: true })
+                    .in("id", unreadMessages.map((msg) => msg.id));
+
+                // Refresh global counter
+                queryClient.invalidateQueries({ queryKey: ['conversations'] });
+                // We could also refresh the context if we exposed a refresh function, 
+                // but the realtime listener in context might catch the UPDATE event automatically.
+            }
+        };
+
+        markAsRead();
+    }, [conversationId, messages, user?.id, queryClient]);
 
     // Auto-scroll to bottom
     useEffect(() => {
@@ -172,9 +198,20 @@ export const ChatWindow = ({ conversationId, onBack }: ChatWindowProps) => {
                                     : "bg-card border text-foreground rounded-tl-sm"
                                     } shadow-sm`}>
                                     <p className="text-sm">{msg.content}</p>
-                                    <span className="text-[10px] opacity-70 block text-right mt-1">
-                                        {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                    </span>
+                                    <div className="flex items-center justify-end gap-1 mt-1">
+                                        <span className="text-[10px] opacity-70">
+                                            {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </span>
+                                        {isMe && (
+                                            <span className="text-xs">
+                                                {msg.read ? (
+                                                    <span className="text-blue-100 font-bold">✓✓</span>
+                                                ) : (
+                                                    <span className="opacity-70">✓</span>
+                                                )}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         );

@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import { LayoutDashboard, Radar, MessageCircle, Shield, LogOut } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useUnreadMessages } from "@/contexts/UnreadMessagesContext";
 
 interface NavItem {
   to: string;
@@ -12,7 +13,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { to: "/dashboard", icon: Radar, label: "Radar" },
-  { to: "/dashboard", icon: MessageCircle, label: "Chat" },
+  { to: "/messages", icon: MessageCircle, label: "Chat" },
   { to: "/admin", icon: Shield, label: "Admin" },
 ];
 
@@ -22,6 +23,7 @@ interface BottomNavProps {
 
 export const BottomNav = ({ onLogout }: BottomNavProps) => {
   const { language, toggleLanguage } = useLanguage();
+  const { unreadCount } = useUnreadMessages();
 
   return (
     <motion.nav
@@ -51,15 +53,23 @@ export const BottomNav = ({ onLogout }: BottomNavProps) => {
                   flex flex-col items-center justify-center
                   min-w-[48px] min-h-[48px] rounded-xl
                   transition-all duration-200
-                  ${isActive 
-                    ? "bg-primary/20 text-primary" 
+                  relative
+                  ${isActive
+                    ? "bg-primary/20 text-primary"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                   }
                 `}
               >
                 {({ isActive }) => (
                   <>
-                    <item.icon className="w-5 h-5 mb-0.5" />
+                    <div className="relative">
+                      <item.icon className="w-5 h-5 mb-0.5" />
+                      {item.label === "Chat" && unreadCount > 0 && (
+                        <span className="absolute -top-1 -right-1.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white shadow-sm ring-2 ring-card animate-in zoom-in">
+                          {unreadCount > 9 ? "9+" : unreadCount}
+                        </span>
+                      )}
+                    </div>
                     <span className="text-[10px] font-medium">{item.label}</span>
                     {isActive && (
                       <motion.div

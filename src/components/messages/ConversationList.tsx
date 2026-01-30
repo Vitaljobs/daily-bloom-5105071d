@@ -128,15 +128,22 @@ export const ConversationList = ({ onSelectConversation, selectedId }: Conversat
 
                                 <div className="flex-1 min-w-0">
                                     <div className="flex justify-between items-baseline mb-1">
-                                        <h3 className="font-medium truncate text-foreground">{conv.name}</h3>
+                                        <h3 className={`truncate ${!conv.lastMessage.read && conv.lastMessage.receiver_id === user?.id ? "font-bold text-foreground" : "font-medium text-foreground/80"}`}>
+                                            {conv.name}
+                                        </h3>
                                         <span className="text-xs text-muted-foreground whitespace-nowrap ml-2">
                                             {formatDistanceToNow(new Date(conv.lastMessage.created_at), { addSuffix: true })}
                                         </span>
                                     </div>
-                                    <p className={`text-sm truncate ${!conv.lastMessage.read && conv.lastMessage.receiver_id === user?.id ? "font-semibold text-foreground" : "text-muted-foreground"}`}>
-                                        {conv.lastMessage.sender_id === user?.id && "You: "}
-                                        {conv.lastMessage.content}
-                                    </p>
+                                    <div className="flex justify-between items-center">
+                                        <p className={`text-sm truncate pr-2 ${!conv.lastMessage.read && conv.lastMessage.receiver_id === user?.id ? "font-semibold text-foreground" : "text-muted-foreground"}`}>
+                                            {conv.lastMessage.sender_id === user?.id && "You: "}
+                                            {conv.lastMessage.content}
+                                        </p>
+                                        {!conv.lastMessage.read && conv.lastMessage.receiver_id === user?.id && (
+                                            <div className="h-2.5 w-2.5 rounded-full bg-primary flex-shrink-0" />
+                                        )}
+                                    </div>
                                 </div>
                             </button>
                         ))
