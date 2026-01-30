@@ -252,6 +252,15 @@ const DashboardContent = () => {
       {/* Admin Link (for admin users) */}
       <AdminLink />
 
+      {/* Dashboard Footer */}
+      <footer className="py-8 text-center text-xs text-muted-foreground/50 pb-24 md:pb-8">
+        <div className="flex justify-center gap-4 mb-2">
+          <button onClick={() => navigate("/about")} className="hover:text-primary transition-colors">Over Ons</button>
+          <button onClick={() => navigate("/contact")} className="hover:text-primary transition-colors">Contact</button>
+        </div>
+        <p>© 2025 MindGarden</p>
+      </footer>
+
       {/* Mobile Bottom Navigation */}
       <BottomNav onLogout={handleLogout} />
     </div >
